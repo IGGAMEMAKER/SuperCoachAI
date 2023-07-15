@@ -7,6 +7,7 @@ const renderSPA = (req, res) => {
   res.sendFile(appPath);
 }
 
+
 // ROUTES
 app.get('/', renderSPA)
 
