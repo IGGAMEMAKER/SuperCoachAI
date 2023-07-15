@@ -1,4 +1,5 @@
-const {app} = require('./expressGenerator')(3000);
+const {PORT_FRONTEND} = require("../CD/Configs/servers");
+const {app} = require('./expressGenerator')(PORT_FRONTEND);
 
 // const {UserModel} = require('./Models')
 
@@ -16,11 +17,6 @@ const customErrorHandler = (err, req, res, next) => {
   console.error('custom error handler', req.url, req.method)
   if (err) {
     console.log(err, {err})
-  }
-
-  if (err === AUTHENTICATION_FAILED_ERROR) {
-    res.redirect('/login')
-    return
   }
 
   next(err)
