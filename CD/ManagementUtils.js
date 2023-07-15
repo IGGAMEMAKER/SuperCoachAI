@@ -490,7 +490,7 @@ const RunSystem = async () => {
   // await sleep(3)
 
   // DB
-  await RunService(servers.DB_IP, 'app/my-app/server/server', 'DB');
+  await RunService(servers.DB_IP, 'SuperCoachAI/server/server', 'DB');
   // await sleep(10);
 
   // FRONTEND
