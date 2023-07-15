@@ -1,5 +1,4 @@
-const {PORT_FRONTEND} = require("../CD/Configs/servers");
-const {app} = require('./expressGenerator')(PORT_FRONTEND);
+const {app} = require('./expressGenerator')(3333);
 
 // const {UserModel} = require('./Models')
 
