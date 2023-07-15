@@ -7,11 +7,12 @@ const {NodeSSH} = require('node-ssh')
 const open = require('open')
 const {isLogger} = require("./Configs/servers");
 
-const projectDir = '/usr/marketing/';
-const projectName = 'IndieMarketingTool'
+const projectDir = '/usr/projects/';
+const projectName = 'SuperCoachAI'
 const gitPath = `${projectDir}${projectName}`;
 
-const frontendURL = 'http://www.indiemarketingtool.com'
+// const frontendURL = 'http://www.indiemarketingtool.com'
+const frontendURL = ''
 
 const {gitUsername, gitToken} = require('./Configs/Passwords');
 
@@ -445,12 +446,14 @@ const RestartFrontend = async () => {
     })
 
   const url = frontendURL
-  console.log('Trying to open', url);
+  if (url) {
+    console.log('Trying to open', url);
 
-  await countdown(2);
+    await countdown(2);
 
-  console.log('You can start using website');
-  await open(url);
+    console.log('You can start using website');
+    await open(url);
+  }
 }
 
 const countdown = async seconds => {
