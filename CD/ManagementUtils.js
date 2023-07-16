@@ -12,7 +12,7 @@ const projectName = 'SuperCoachAI'
 const gitPath = `${projectDir}${projectName}`;
 
 // const frontendURL = 'http://www.indiemarketingtool.com'
-const frontendURL = ''
+const frontendURL = 'http://supercoach.site/'
 
 const {gitUsername, gitToken} = require('./Configs/Passwords');
 
