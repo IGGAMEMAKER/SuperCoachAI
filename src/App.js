@@ -40,7 +40,7 @@ function MainPage({}) {
 
   var offset = 3;
   var days = []
-  for (var i = -offset; i < offset; i++) {
+  for (var i = -6; i <= 0; i++) {
     days.push(new Date(Date.now() + i * 24 * 3600 * 1000))
   }
 
@@ -57,13 +57,6 @@ function MainPage({}) {
             var isToday = day === new Date().getDate()
             return <td style={{backgroundColor: isToday ? 'yellow' : 'white'}}>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</td>
           })}
-          {/*<td>{dow('MON', 1)}</td>*/}
-          {/*<td>{dow('TUE', 2)}</td>*/}
-          {/*<td>{dow('WED', 3)}</td>*/}
-          {/*<td>{dow('THU', 4)}</td>*/}
-          {/*<td>{dow('FRI', 5)}</td>*/}
-          {/*<td>{dow('SAT', 6)}</td>*/}
-          {/*<td>{dow('SUN', 7)}</td>*/}
         </tr>
         <tr></tr>
         {habits.map(h => {
