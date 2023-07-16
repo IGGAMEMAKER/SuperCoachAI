@@ -1,11 +1,17 @@
 .App {
   text-align: center;
   width: 400px;
+  background-color: white;
+  color: lightgray;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.calendar-day {
+  color: black;
 }
 
 @media (prefers-reduced-motion: no-preference) {
