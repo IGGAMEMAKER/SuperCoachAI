@@ -34,7 +34,8 @@ function MainPage({}) {
   var habits = [
     {name: 'Cold shower', progress: seq([true, false, true, false]), color: clr(0, 255, 0)  },
     {name: 'Breathing',   progress: seq([true, true, true, true])  , color: clr(0, 0, 255)   },
-    {name: 'Workout',     progress: seq([true, false, true, false]), color: clr(255, 0, 0)   }
+    {name: 'Workout',     progress: seq([true, false, true, false]), color: clr(255, 0, 0)   },
+    {name: 'Super long habit description for test, omg why',     progress: seq([true, false, true, false]), color: clr(255, 0, 0)   }
   ]
 
   var offset = 3;
