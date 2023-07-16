@@ -16,13 +16,18 @@ const getLiteralDayOfWeek = (val) => {
 }
 
 function MainPage({}) {
-  const dow = (name, number) => <div>
-    {/*<b>{name}</b>*/}
-    {name}
-    <br />
-    <span className="calendar-day">{number}</span>
-    <br />
-  </div>
+
+  const dow = (name, number) => {
+    var isToday = number === new Date().getDate()
+
+    return <div>
+      {/*<b>{name}</b>*/}
+      {name}
+      <br/>
+      <span className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</span>
+      <br/>
+    </div>
+  }
 
   var seq = (progress) => progress.map((p, i) => ({
     date: new Date(Date.now() - i * 24 * 3600 * 1000),
@@ -55,7 +60,8 @@ function MainPage({}) {
             var day = d.getDate()
 
             var isToday = day === new Date().getDate()
-            return <td style={{backgroundColor: isToday ? 'yellow' : 'white'}}>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</td>
+            // style={{backgroundColor: isToday ? 'yellow' : 'white'}}
+            return <td>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</td>
           })}
         </tr>
         <tr></tr>
