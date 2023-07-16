@@ -2,6 +2,10 @@ import './App.css';
 import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
+import storage from "./Storage";
+import actions from "./actions";
+import {FieldAdder} from "./UI/FieldAdder";
+
 
 const getLiteralDayOfWeek = (val) => {
   switch (val) {
@@ -15,76 +19,71 @@ const getLiteralDayOfWeek = (val) => {
   }
 }
 
-function MainPage({}) {
 
-  const dow = (name, number) => {
-    var isToday = number === new Date().getDate()
+class MainPage extends Component {
+  state = {
+    habits: []
+  }
+
+  saveHabits() {
+    this.setState({
+      habits: storage.getHabits()
+    })
+  }
+
+  componentWillMount() {
+    storage.addChangeListener(() => {
+      console.log('store listener')
+      this.saveHabits()
+    })
+
+    this.saveHabits()
+  }
+
+  render() {
+    const dow = (name, number) => {
+      var isToday = number === new Date().getDate()
+
+      return <div>
+        {name}
+        <br/>
+        <span className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</span>
+        <br/>
+      </div>
+    }
+
+    var {habits} = this.state
+
+    var days = []
+    for (var i = -4; i <= 0; i++) {
+      days.push(new Date(Date.now() + i * 24 * 3600 * 1000))
+    }
+
+    var habitsMapped = []
+    habits.forEach(h => {
+      habitsMapped.push(<div className="left">{h.name}</div>)
+      days.forEach(d => {
+        habitsMapped.push(<div><input className="habit-checkbox" type="checkbox"/></div>)
+      })
+    })
 
     return <div>
-      {/*<b>{name}</b>*/}
-      {name}
-      <br/>
-      <span className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</span>
-      <br/>
+      <div className="habits-table">
+        <div className="left">HABITS</div>
+        {days.map(d => {
+          var dayOfWeek = d.getDay()
+          var day = d.getDate()
+
+          return <div>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</div>
+        })}
+        {habitsMapped}
+        <div className="left">
+          <FieldAdder placeholder="add new habit" onAdd={val => actions.addHabit(val)} defaultButtonClass="new-habit-button" defaultWord={"+ new habit"}/>
+        </div>
+        {days.map(d => <div></div>)}
+      </div>
     </div>
   }
-
-  var seq = (progress) => progress.map((p, i) => ({
-    date: new Date(Date.now() - i * 24 * 3600 * 1000),
-    progress: p
-  }))
-
-  var clr = (r, g, b) => ({r, g, b})
-
-  var habits = [
-    {name: 'Cold shower', progress: seq([true, false, true, false]), color: clr(0, 255, 0)  },
-    {name: 'Breathing',   progress: seq([true, true, true, true])  , color: clr(0, 0, 255)   },
-    {name: 'Workout',     progress: seq([true, false, true, false]), color: clr(255, 0, 0)   },
-    {name: 'Super long habit description for test, omg why',     progress: seq([true, false, true, false]), color: clr(255, 0, 0)   }
-  ]
-
-  var offset = 3;
-  var days = []
-  for (var i = -6; i <= 0; i++) {
-    days.push(new Date(Date.now() + i * 24 * 3600 * 1000))
-  }
-
-  return <div>
-    {/*<div>Main page</div>*/}
-    <table>
-      <tbody>
-        <tr>
-          <td className="left" style={{width: '150px'}}>HABITS</td>
-          {days.map(d => {
-            var dayOfWeek = d.getDay()
-            var day = d.getDate()
-
-            var isToday = day === new Date().getDate()
-            // style={{backgroundColor: isToday ? 'yellow' : 'white'}}
-            return <td>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</td>
-          })}
-        </tr>
-        <tr></tr>
-        {habits.map(h => {
-          var progressMappedToDays = days.map(d => {
-
-          })
-          return <tr>
-            <td className="left">{h.name}</td>
-            {days.map(d => <td><input type="checkbox" /></td>)}
-            {/*{h.progress}*/}
-            {/*<td style={{backgroundColor: `rgba(1,1,1,0.49)`}}>{}</td>*/}
-          </tr>
-        })}
-        {/*<tr>*/}
-        {/*  <td>Cold shower</td>*/}
-        {/*  <td style={{backgroundColor: 'green'}}></td>*/}
-        {/*  <td style={{backgroundColor: 'lime'}}></td>*/}
-        {/*  <td style={{backgroundColor: 'limegreen'}}></td>*/}
-        {/*</tr>*/}
-      </tbody>
-    </table>
-  </div>
 }
 
 function App() {

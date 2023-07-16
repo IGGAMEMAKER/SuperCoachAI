@@ -1,0 +1,1 @@
+export const HABITS_ADD = 'HABITS_ADD'
