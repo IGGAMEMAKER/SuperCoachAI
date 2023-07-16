@@ -48,7 +48,7 @@ function MainPage({}) {
     <table>
       <tbody>
         <tr>
-          <td style={{width: '150px'}}>HABITS</td>
+          <td className="left" style={{width: '150px'}}>HABITS</td>
           {days.map(d => {
             var dayOfWeek = d.getDay()
             var day = d.getDate()
@@ -70,7 +70,7 @@ function MainPage({}) {
 
           })
           return <tr>
-            <td>{h.name}</td>
+            <td className="left">{h.name}</td>
             {days.map(d => <td><input type="checkbox" /></td>)}
             {/*{h.progress}*/}
             {/*<td style={{backgroundColor: `rgba(1,1,1,0.49)`}}>{}</td>*/}

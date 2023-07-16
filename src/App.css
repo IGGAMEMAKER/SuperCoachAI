@@ -10,6 +10,11 @@
   pointer-events: none;
 }
 
+.left {
+  text-align: left;
+  padding-left: 10px;
+}
+
 .calendar-day {
   color: black;
 }
