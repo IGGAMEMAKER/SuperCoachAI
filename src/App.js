@@ -1,25 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import {Component, useEffect, useState} from 'react';
+// import { BrowserRouter } from 'react-router-dom';
+import {Link, Route, Routes} from 'react-router-dom';
+
+function MainPage({}) {
+  const dow = (name, number) => <div>
+    <b>{name}</b>
+    <br />
+    {number}
+  </div>
+
+  return <div>
+    {/*<div>Main page</div>*/}
+    <table>
+      <tbody>
+        <tr>
+          <td style={{width: '150px'}}>HABITS</td>
+          <td>{dow('MON', 1)}</td>
+          <td>{dow('TUE', 2)}</td>
+          <td>{dow('WED', 3)}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+}
 
 function App() {
-  return (
+  return <div>
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <header className="App-header" style={{height: '100%', minHeight: '100vh'}}>
+        <Routes>
+          <Route path='/'                     element={<MainPage/>}/>
+        </Routes>
       </header>
     </div>
-  );
+  </div>
 }
 
 export default App;
