@@ -3,6 +3,11 @@
   max-width: 420px;
   width: 100%;
   background-color: white;
+  color: #898989;
+  /*color: lightgray;*/
+}
+
+.habit-date {
   color: lightgray;
 }
 
@@ -44,7 +49,7 @@
   /*grid-template-columns: 150px 20% 20% 20% 20% 20%;*/
   grid-template-columns: 150px repeat(5, 1fr);
   gap: 10px;
-  padding: 10px;
+  /*padding: 10px;*/
 }
 .habit-checkbox {
   width: 25px;

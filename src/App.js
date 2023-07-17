@@ -59,15 +59,24 @@ class MainPage extends Component {
       days.push(new Date(Date.now() + i * 24 * 3600 * 1000))
     }
 
+    const twoDigit = num => num < 10 ? '0'+num : num
+
     var habitsMapped = []
     habits.forEach(h => {
-      habitsMapped.push(<div className="left">{h.name}</div>)
+      habitsMapped.push(<div className="left">
+        {h.name}
+        <br />
+        <div className="habit-date">
+          {twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}
+        </div>
+      </div>)
       days.forEach(d => {
         habitsMapped.push(<div><input className="habit-checkbox" type="checkbox"/></div>)
       })
     })
 
     return <div>
+      <h1>Your daily routine</h1>
       <div className="habits-table">
         <div className="left">HABITS</div>
         {days.map(d => {
