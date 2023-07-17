@@ -119,15 +119,16 @@ class MainPage extends Component {
     }
 
     const twoDigit = num => num < 10 ? '0'+num : num
-    // const timeFormat = time => {
-    //   var splFrom = time.split(':')
-    //   var fromHour = splFrom
-    // }
 
     var habitsMapped = []
-    habits.forEach(h => {
-      var splFrom = h.from.split(':')
-      var fromHour = splFrom
+    var getHour = h => {
+      var sp = h.from.split(':')
+
+      return parseInt(sp[0]) * 10000 + parseInt(sp[1])
+    }
+    habits
+      .sort((h1, h2) => getHour(h1) - getHour(h2))
+      .forEach(h => {
       habitsMapped.push(<div className="left">
         {h.name}
         <br />
