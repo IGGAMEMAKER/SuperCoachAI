@@ -19,6 +19,65 @@ const getLiteralDayOfWeek = (val) => {
   }
 }
 
+function HabitAdder({}) {
+  var [expanded, expandHabit] = useState(false)
+  var [text, setText] = useState("")
+  var [time, setTime] = useState("11:00")
+  var [timeTo, setTimeTo] = useState("12:00")
+
+  var hasText = text.length
+  var hasFromTime = time.length
+  var canSave = hasText && hasFromTime && timeTo.length
+
+  if (!expanded) {
+    return <button onClick={() => expandHabit(true)}>+ new habit</button>
+  }
+
+  var onFromChange = ev => {
+    var v = ev.target.value;
+    console.log(v, typeof (v))
+    setTime(v)
+  }
+
+  var onToChange = ev => {
+    var v = ev.target.value;
+    console.log(v, typeof (v))
+    setTimeTo(v)
+  }
+
+  var fromForm;
+  var toForm;
+  if (hasText) {
+    fromForm = <div>
+      <label>From</label>
+      <input className="new-habit-input" type="time" value={time} required onChange={onFromChange} />
+    </div>
+  }
+
+  if (hasText && hasFromTime) {
+    toForm = <div>
+      <label>To</label>
+      <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange} />
+    </div>
+  }
+
+  var onTextChange = ev => setText(ev.target.value)
+  // {/*min="09:00" max="18:00"*/}
+  return <div>
+    <input className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
+    {fromForm}
+    {toForm}
+    {/*<FieldAdder*/}
+    {/*  placeholder="add new habit"*/}
+    {/*  onAdd={val => actions.addHabit(val)}*/}
+    {/*  defaultButtonClass="new-habit-button"*/}
+    {/*  defaultWord={"+ new habit"}*/}
+    {/*  defaultState={true}*/}
+    {/*/>*/}
+
+    <button className={"new-habit-button"} onClick={() => {actions.addHabit(text, time, timeTo)}} disabled={!canSave}>Add habit</button>
+  </div>
+}
 
 class MainPage extends Component {
   state = {
@@ -60,14 +119,21 @@ class MainPage extends Component {
     }
 
     const twoDigit = num => num < 10 ? '0'+num : num
+    // const timeFormat = time => {
+    //   var splFrom = time.split(':')
+    //   var fromHour = splFrom
+    // }
 
     var habitsMapped = []
     habits.forEach(h => {
+      var splFrom = h.from.split(':')
+      var fromHour = splFrom
       habitsMapped.push(<div className="left">
         {h.name}
         <br />
         <div className="habit-date">
-          {twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}
+          {/*{twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}*/}
+          {h.from} -- {h.to}
         </div>
       </div>)
       days.forEach(d => {
@@ -87,7 +153,7 @@ class MainPage extends Component {
         })}
         {habitsMapped}
         <div className="left">
-          <FieldAdder placeholder="add new habit" onAdd={val => actions.addHabit(val)} defaultButtonClass="new-habit-button" defaultWord={"+ new habit"}/>
+          <HabitAdder />
         </div>
         {days.map(d => <div></div>)}
       </div>

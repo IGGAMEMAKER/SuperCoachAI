@@ -16,10 +16,12 @@ var seq = (progress) => progress.map((p, i) => ({
 }))
 
 var habits = [
-  {name: 'Cold shower', progress: seq([true, false, true, false]), fromHour: 8, fromMinutes: 45, toHour: 9, toMinutes: 25},
-  {name: 'Breathing',   progress: seq([true, true, true, true]), fromHour: 9, fromMinutes: 35, toHour: 9, toMinutes: 45},
-  {name: 'Workout',     progress: seq([true, false, true, false]), fromHour: 10, fromMinutes: 0, toHour: 11, toMinutes: 35},
-  {name: 'Super long habit description for markup test, omg why',     progress: seq([true, false, true, false]), fromHour: 12, fromMinutes: 5, toHour: 15, toMinutes: 25}
+  {name: 'Cold shower', progress: seq([true, false, true, false]), from: '8:45', to: '9:25'},
+  {name: 'Breathing',   progress: seq([true, true, true, true]),   from: '9:35', to: '9:45'},
+  // {name: 'Cold shower', progress: seq([true, false, true, false]), fromHour: 8, fromMinutes: 45, toHour: 9, toMinutes: 25},
+  // {name: 'Breathing',   progress: seq([true, true, true, true]), fromHour: 9, fromMinutes: 35, toHour: 9, toMinutes: 45},
+  // {name: 'Workout',     progress: seq([true, false, true, false]), fromHour: 10, fromMinutes: 0, toHour: 11, toMinutes: 35},
+  // {name: 'Super long habit description for markup test, omg why',     progress: seq([true, false, true, false]), fromHour: 12, fromMinutes: 5, toHour: 15, toMinutes: 25}
 ]
 
 
@@ -53,7 +55,7 @@ Dispatcher.register((p) => {
   switch (p.actionType) {
     case HABITS_ADD:
       console.log(HABITS_ADD, {p})
-      pusher(habits, {name: p.text, progress: []})
+      pusher(habits, {name: p.text, progress: [], from: p.from, to: p.to })
 
       saveProjectChanges()
       break
