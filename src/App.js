@@ -143,7 +143,7 @@ class MainPage extends Component {
     })
 
     return <div>
-      <h1>Your daily routine!</h1>
+      <h1>Your daily routine</h1>
       <div className="habits-table">
         <div className="left">HABITS</div>
         {days.map(d => {
