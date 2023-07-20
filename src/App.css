@@ -11,6 +11,17 @@
   color: lightgray;
 }
 
+.habit-container {}
+.habit-container.intersects {
+  background-color: pink;
+}
+
+.habit-date-error {
+  color: red;
+  font-weight: bold;
+}
+
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -59,6 +70,9 @@
 .habit-checkbox {
   width: 25px;
   height: 25px;
+}
+.intersecting-habits-warning {
+  color: red;
 }
 
 @media (prefers-reduced-motion: no-preference) {

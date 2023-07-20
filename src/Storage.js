@@ -3,7 +3,7 @@ import Dispatcher from './Dispatcher';
 import {
   HABITS_ADD
 } from "./constants/actionConstants";
-import {pusher} from "./utils";
+import {patchWithIDs, pusher} from "./utils";
 // import {ping, post, remove, update} from "./PingBrowser";
 // import {getIndexByID, getNextID} from "./utils";
 
@@ -23,6 +23,8 @@ var habits = [
   // {name: 'Workout',     progress: seq([true, false, true, false]), fromHour: 10, fromMinutes: 0, toHour: 11, toMinutes: 35},
   // {name: 'Super long habit description for markup test, omg why',     progress: seq([true, false, true, false]), fromHour: 12, fromMinutes: 5, toHour: 15, toMinutes: 25}
 ]
+
+patchWithIDs(habits)
 
 
 class Storage extends EventEmitter {

@@ -21,7 +21,7 @@ const swap = (i1, i2, array) => {
   return array
 }
 
-const patchWithIDs = (list, tagName = '', printOnly = true) => {
+export const patchWithIDs = (list, tagName = '', printOnly = true) => {
   var undefinedCount = 0;
 
   for (var i = 0; i < list.length; i++) {
