@@ -304,8 +304,10 @@ class MainPage extends Component {
         })
     })
 
-    var hasIntersectingHabits = true;
-    var intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
+    var hasIntersectingHabits = !!Object.keys(errorStats).length;
+    var intersectingHabitsWarning;
+    if (hasIntersectingHabits)
+      intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
     return <div>
       <h1>Your daily routine</h1>
       <div className="habits-table">
