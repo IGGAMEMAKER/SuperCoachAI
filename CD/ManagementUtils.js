@@ -10,6 +10,9 @@ const {isLogger} = require("./Configs/servers");
 const projectDir = '/usr/projects/';
 const projectName = 'SuperCoachAI'
 const gitPath = `${projectDir}${projectName}`;
+// const pathToConfigs = gitPath + '/app/my-app/CD'
+const pathToConfigs = gitPath + '/CD'
+
 
 // const frontendURL = 'http://www.indiemarketingtool.com'
 const frontendURL = 'http://supercoach.site/'
@@ -38,27 +41,6 @@ const conn = async ip => {
   try {
     console.log(`CONNECTED to ${ip}!`);
     return ssh.connect(getSSHConfig(ip));
-
-    return ssh;
-  } catch (err) {
-    console.error('Connection failed', err);
-
-    return null;
-  }
-}
-
-const conn2 = async (ip, username, password) => {
-  const ssh = new NodeSSH()
-
-  var conf2 = {
-    host: ip,
-    username,
-    password,
-  }
-
-  try {
-    console.log(`CONNECTED to ${ip}!`);
-    return ssh.connect(conf2);
 
     return ssh;
   } catch (err) {
@@ -161,7 +143,6 @@ const uploadAndLog = async (ssh, local, remote, filename) => {
 }
 
 const uploadConfigs = async (ssh, ip, check = {}) => {
-  var pathToConfigs = gitPath + '/app/my-app/CD'
   // Main Configs
   await uploadAndLog(ssh, './Configs/confs.json', pathToConfigs + '/Configs/confs.json', 'confs.json')
 
@@ -469,34 +450,12 @@ const countdown = async seconds => {
 }
 
 const RunFullSystem = async () => {
-  /*await RunService(servers.SERVER_MANAGER_IP, 'ManagementUtils', 'Core');
-  await sleep(2);*/
-
-  // LOGGER (Which is MANAGER SERVER, actually)
-  // await RunService(servers.LOGGER_IP, 'LogServer', 'LG');
-  // await sleep(2);
-
   await RunSystem();
 }
 
 const RunSystem = async () => {
-  /*// LOGGER
-  await RunService(servers.LOGGER_IP, 'LogServer', 'LG');
-  await sleep(2);*/
-
-  // FLOOR TRACKER
-  // await RunService(servers.FLOOR_TRACKER_IP, 'FloorTracker', 'TR')
-
-  // WORKERS
-  // servers.WORKERS_IP.forEach(ip => {
-  //   RunService(ip, 'Worker', 'WK')
-  // })
-
-  // await sleep(3)
-
   // DB
   await RunService(servers.DB_IP, 'server/server', 'DB');
-  // await sleep(10);
 
   // FRONTEND
   await RestartFrontend();
