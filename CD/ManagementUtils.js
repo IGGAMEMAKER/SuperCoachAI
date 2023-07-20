@@ -171,6 +171,11 @@ const uploadConfigs = async (ssh, ip, check = {}) => {
   // hosts.json
   await uploadAndLog(ssh, './Configs/hosts.json', pathToConfigs + '/Configs/hosts.json', 'hosts.json')
 
+  // SSL
+  await uploadAndLog(ssh, './Configs/supercoach_site.crt', pathToConfigs + '/Configs/supercoach_site.crt', 'supercoach_site.crt')
+  await uploadAndLog(ssh, './Configs/supercoach_site_chain.crt', pathToConfigs + '/Configs/supercoach_site_chain.crt', 'supercoach_site_chain.crt')
+  await uploadAndLog(ssh, './Configs/supercoach_site.ca-bundle', pathToConfigs + '/Configs/supercoach_site.ca-bundle', 'supercoach_site.ca-bundle')
+
   // Server IP
   const myHost = `./Configs/myHost-${ip}.js`;
   const content = `module.exports = { ip: "${ip}" };` // module.exports = { ip: 'http://localhost' };
