@@ -245,7 +245,7 @@ const getInitDataSplit = data => {
 
 const parseUserInfo = s => s
     .replace("%7B", "{")
-    .replace("%22", '"')
+    .replace("%22", '')
     .replace("%3A", "=")
     .replace("%2C", ",")
     .replace("%7D", "}")
