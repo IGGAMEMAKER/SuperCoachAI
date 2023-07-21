@@ -5,6 +5,7 @@ import {
 } from "./constants/actionConstants";
 import {patchWithIDs, pusher} from "./utils";
 import {post} from "./PingBrowser";
+import {loadProfile} from "./actions";
 // import {ping, post, remove, update} from "./PingBrowser";
 // import {getIndexByID, getNextID} from "./utils";
 
@@ -73,8 +74,6 @@ const getTelegramId = () => {
   }
 }
 
-var telegramId = getTelegramId()
-
 
 class Storage extends EventEmitter {
   addChangeListener(c) {
@@ -92,7 +91,8 @@ class Storage extends EventEmitter {
 
 const store = new Storage();
 
-
+var telegramId = getTelegramId()
+loadProfile(telegramId)
 
 Dispatcher.register((p) => {
   const saveProjectChanges = () => {
