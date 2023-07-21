@@ -236,39 +236,7 @@ const getHabitErrorStats = (habits) => {
   return errorStats
 }
 
-const getInitDataSplit = data => {
-  if (!data)
-    return ['no data']
 
-  return data.split("&")
-}
-
-const parseUserInfo = s => {
-  var opFigure = "%7B", opSym = "{"
-  var quoteFigure = "%22", quoteSym = "*"
-  var equalFigure = "%3A", equalSym = "="
-  var commaFigure = "%2C", commaSym = ","
-  var clFigure = "%7D", clSym = "}"
-
-  // console.log(s)
-  // console.log({s})
-  var spl = s.split(quoteFigure)
-  console.log(spl, 'spl')
-  var ind = spl.findIndex(el => el.includes("id"))
-  console.log(ind, 'ind')
-  var userId = spl[ind + 1]
-  console.log({userId})
-  var tr = userId.substring(3, userId.length - 3)
-  console.log(tr)
-  return tr
-  var s1 = s.replaceAll(opFigure, opSym)
-  var s2 = s1.replaceAll(quoteFigure, quoteSym)
-  var s3 = s2.replaceAll(equalFigure, equalSym)
-  var s4 = s3.replaceAll(commaFigure, commaSym)
-  var s5 = s4.replaceAll(clFigure, clSym)
-
-  return s5;
-}
 
 class MainPage extends Component {
   state = {
@@ -346,23 +314,23 @@ class MainPage extends Component {
     if (hasIntersectingHabits)
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
-    var webApp = window?.Telegram?.WebApp;
-    var initData = getInitDataSplit(webApp?.initData)
-    var userData = initData[1]
-    var parsed;
-
-    try {
-      console.log({userData})
-      parsed = parseUserInfo(userData)
-      console.log(parsed)
-    } catch (err) {
-      console.error('cannot parse user data', {err})
-    }
+    // var webApp = window?.Telegram?.WebApp;
+    // var initData = getInitDataSplit(webApp?.initData)
+    // var userData = initData[1]
+    // var userId;
+    //
+    // try {
+    //   console.log({userData})
+    //   userId = parseUserInfo(userData)
+    //   console.log(userId)
+    // } catch (err) {
+    //   console.error('cannot parse user data', {err})
+    // }
 
     return <div>
       <h1>Your daily routine</h1>
       {/*<div>{initData.join("\n")}</div>*/}
-      <div>{parsed}</div>
+      <div>{userId}</div>
       {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
         <div className="left">
