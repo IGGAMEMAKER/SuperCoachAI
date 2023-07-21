@@ -244,13 +244,13 @@ const getInitDataSplit = data => {
 }
 
 const parseUserInfo = s => {
-  s = s.replaceAll("%7B", "{")
-  s = s.replaceAll("%22", '"')
-  s = s.replaceAll("%3A", "=")
-  s = s.replaceAll("%2C", ",")
-  s = s.replaceAll("%7D", "}")
+  var s1 = s.replaceAll("%7B", "{")
+  var s2 = s1.replaceAll("%22", '"')
+  var s3 = s2.replaceAll("%3A", "=")
+  var s4 = s3.replaceAll("%2C", ",")
+  var s5 = s4.replaceAll("%7D", "}")
 
-  return s;
+  return s5;
 }
 
 class MainPage extends Component {
