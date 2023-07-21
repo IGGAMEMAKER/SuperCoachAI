@@ -258,8 +258,9 @@ const parseUserInfo = s => {
   console.log(ind, 'ind')
   var userId = spl[ind + 1]
   console.log({userId})
-  console.log(userId.substr(2))
-  return userId.substr(2)
+  var tr = userId.substr(3, userId.length - 3)
+  console.log(tr)
+  return tr
   var s1 = s.replaceAll(opFigure, opSym)
   var s2 = s1.replaceAll(quoteFigure, quoteSym)
   var s3 = s2.replaceAll(equalFigure, equalSym)
