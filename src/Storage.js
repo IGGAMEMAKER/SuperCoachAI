@@ -1,27 +1,21 @@
 import {EventEmitter} from 'events';
 import Dispatcher from './Dispatcher';
 import {
-  HABITS_ADD
+  HABITS_ADD, PROFILE_LOAD
 } from "./constants/actionConstants";
 import {patchWithIDs, pusher} from "./utils";
+import {post} from "./PingBrowser";
 // import {ping, post, remove, update} from "./PingBrowser";
 // import {getIndexByID, getNextID} from "./utils";
 
 
 const CE = 'CHANGE_EVENT';
 
-var seq = (progress) => progress.map((p, i) => ({
-  date: new Date(Date.now() - i * 24 * 3600 * 1000),
-  progress: p
-}))
+
 
 var habits = [
-  {name: 'Cold shower', progress: seq([true, false, true, false]), from: '8:45', to: '9:25'},
-  {name: 'Breathing',   progress: seq([true, true, true, true]),   from: '9:35', to: '9:45'},
-  // {name: 'Cold shower', progress: seq([true, false, true, false]), fromHour: 8, fromMinutes: 45, toHour: 9, toMinutes: 25},
-  // {name: 'Breathing',   progress: seq([true, true, true, true]), fromHour: 9, fromMinutes: 35, toHour: 9, toMinutes: 45},
-  // {name: 'Workout',     progress: seq([true, false, true, false]), fromHour: 10, fromMinutes: 0, toHour: 11, toMinutes: 35},
-  // {name: 'Super long habit description for markup test, omg why',     progress: seq([true, false, true, false]), fromHour: 12, fromMinutes: 5, toHour: 15, toMinutes: 25}
+  // {name: 'Cold shower', progress: seq([true, false, true, false]), from: '8:45', to: '9:25', schedule: [0, 1, 2, 3, 4, 5, 6]},
+  // {name: 'Breathing',   progress: seq([true, true, true, true]),   from: '9:35', to: '9:45', schedule: [0, 1, 2, 3, 4]},
 ]
 
 patchWithIDs(habits)
@@ -60,19 +54,27 @@ const parseUserInfo = s => {
   return s5;
 }
 
-// var userId = ''
-var webApp = window?.Telegram?.WebApp;
-var initData = getInitDataSplit(webApp?.initData)
-var userData = initData[1]
-var userId;
+const getTelegramId = () => {
+  var webApp = window?.Telegram?.WebApp;
+  var initData = getInitDataSplit(webApp?.initData)
+  var userData = initData[1]
 
-try {
-  console.log({userData})
-  userId = parseUserInfo(userData)
-  console.log(userId)
-} catch (err) {
-  console.error('cannot parse user data', {err})
+  try {
+    console.log({userData})
+    var id = parseUserInfo(userData)
+
+    console.log(id)
+
+    return id
+  } catch (err) {
+    console.error('cannot parse user data', {err})
+
+    return 'myTGId'
+  }
 }
+
+var telegramId = getTelegramId()
+
 
 class Storage extends EventEmitter {
   addChangeListener(c) {
@@ -98,10 +100,20 @@ Dispatcher.register((p) => {
     // update('/api/projects/' + projectId, {project})
     //   .finally(() => {
         store.emitChange()
-      // })
+    // })
   }
 
   switch (p.actionType) {
+    case PROFILE_LOAD:
+      post('/profile', {telegramId})
+        .then(r => {
+          console.log('load profile', r, telegramId)
+        })
+        .catch(err => {
+          console.error('caught on /profile', err)
+        })
+      break;
+
     case HABITS_ADD:
       console.log(HABITS_ADD, {p})
       pusher(habits, {name: p.text, progress: [], from: p.from, to: p.to })
@@ -114,5 +126,7 @@ Dispatcher.register((p) => {
       break;
   }
 });
+
+
 
 export default store;

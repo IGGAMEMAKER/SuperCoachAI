@@ -314,24 +314,8 @@ class MainPage extends Component {
     if (hasIntersectingHabits)
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
-    // var webApp = window?.Telegram?.WebApp;
-    // var initData = getInitDataSplit(webApp?.initData)
-    // var userData = initData[1]
-    // var userId;
-    //
-    // try {
-    //   console.log({userData})
-    //   userId = parseUserInfo(userData)
-    //   console.log(userId)
-    // } catch (err) {
-    //   console.error('cannot parse user data', {err})
-    // }
-
     return <div>
       <h1>Your daily routine</h1>
-      {/*<div>{initData.join("\n")}</div>*/}
-      {/*<div>{userId}</div>*/}
-      {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
         <div className="left">
           HABITS
