@@ -12,7 +12,7 @@ const getUser = async (req, res) => {
   var telegramId = req.body.telegramId
   console.log({telegramId})
 
-  var u = await UserModel.findOne({telegramId})
+  var u = await UserModel.find({telegramId})
   var mockUser = {telegramId, habits: []}
 
   console.log({u})
