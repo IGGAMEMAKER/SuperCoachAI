@@ -92,7 +92,6 @@ class Storage extends EventEmitter {
 const store = new Storage();
 
 var telegramId = getTelegramId()
-loadProfile(telegramId)
 
 Dispatcher.register((p) => {
   const saveProjectChanges = () => {
@@ -127,6 +126,7 @@ Dispatcher.register((p) => {
   }
 });
 
+loadProfile(telegramId)
 
 
 export default store;
