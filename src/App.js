@@ -339,7 +339,7 @@ class MainPage extends Component {
 
     return <div>
       <h1>Your daily routine</h1>
-      <div>{initData.join("\n")}</div>
+      {/*<div>{initData.join("\n")}</div>*/}
       <div>{parseUserInfo(userData)}</div>
       {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
