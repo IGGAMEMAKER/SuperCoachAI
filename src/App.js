@@ -244,19 +244,19 @@ const getInitDataSplit = data => {
 }
 
 const parseUserInfo = s => {
-  var opFigure = '%7B'
-  // return s.split("%3A")
-  return s.split("%22")
-  var s1 = s.replaceAll(opFigure, '{')
-  console.log('replaced', {s1})
-  var s2 = s1.replaceAll("%22", '"')
-  console.log('replaced', {s2})
-  var s3 = s2.replaceAll("%3A", "=")
-  console.log('replaced', {s3})
-  var s4 = s3.replaceAll("%2C", ",")
-  console.log('replaced', {s4})
-  var s5 = s4.replaceAll("%7D", "}")
-  console.log('replaced', {s5})
+  var opFigure = '%7B', opSym = '{'
+  var quoteFigure = "%22", quoteSym = '"'
+  var equalFigure = "%3A", equalSym = "="
+  var commaFigure = "%2C", commaSym = ","
+  var clFigure = "%7D", clSym = "}"
+
+  console.log(s, {s})
+  // return s.split(quoteFigure)
+  var s1 = s.replaceAll(opFigure, opSym)
+  var s2 = s1.replaceAll(quoteFigure, quoteSym)
+  var s3 = s2.replaceAll(equalFigure, equalSym)
+  var s4 = s3.replaceAll(commaFigure, commaSym)
+  var s5 = s4.replaceAll(clFigure, clSym)
 
   return s5;
 }
