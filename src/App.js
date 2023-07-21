@@ -20,19 +20,50 @@ const getLiteralDayOfWeek = (val) => {
   }
 }
 
-function HabitAdder({}) {
-  var [expanded, expandHabit] = useState(false)
+function HabitEditor({habit, onCloseEditor}) {
+  if (!habit)
+    return ''
+
+  const onToChange = () => {}
+  const onFromChange = () => {}
+
+  return <div className="popup">
+    <h2 className={"title"}>Edit habit {habit.name}</h2>
+    <b>{habit.id}</b>
+    <br />
+    <div>
+      <label>From</label>
+      <input className="new-habit-input" type="time" value={habit.from} required onChange={onToChange} />
+    </div>
+    <div>
+      <label>To</label>
+      <input className="new-habit-input" type="time" value={habit.to} required onChange={onFromChange} />
+    </div>
+    <br />
+    <br />
+    <button onClick={onCloseEditor}>Close</button>
+  </div>
+}
+
+function HabitAdder({isOpen, onCloseAddingPopup}) {
+  // var [expanded, expandHabit] = useState(false)
   var [text, setText] = useState("")
   var [time, setTime] = useState("11:00")
   var [timeTo, setTimeTo] = useState("12:00")
+
+  if (!isOpen)
+    return ''
 
   var hasText = text.length
   var hasFromTime = time.length
   var canSave = hasText && hasFromTime && timeTo.length
 
-  if (!expanded) {
-    return <button onClick={() => expandHabit(true)}>+ new habit</button>
-  }
+  // if (!expanded) {
+  //   return <button className="new-habit-button" onClick={() => {
+  //     expandHabit(true)
+  //     onShowAddingPopup()
+  //   }}>+ new habit</button>
+  // }
 
   var onFromChange = ev => {
     var v = ev.target.value;
@@ -62,9 +93,14 @@ function HabitAdder({}) {
     </div>
   }
 
+  var onAdd = () => {
+    onCloseAddingPopup()
+    actions.addHabit(text, time, timeTo)
+  }
+
   var onTextChange = ev => setText(ev.target.value)
   // {/*min="09:00" max="18:00"*/}
-  return <div>
+  return <div className="popup">
     <input className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
     {fromForm}
     {toForm}
@@ -76,7 +112,10 @@ function HabitAdder({}) {
     {/*  defaultState={true}*/}
     {/*/>*/}
 
-    <button className={"new-habit-button"} onClick={() => {actions.addHabit(text, time, timeTo)}} disabled={!canSave}>Add habit</button>
+    <button className={"new-habit-button"} onClick={onAdd} disabled={!canSave}>Add habit</button>
+    <br />
+    <br />
+    <button className={""} onClick={onCloseAddingPopup}>Cancel</button>
   </div>
 }
 
@@ -236,11 +275,13 @@ const getHabitErrorStats = (habits) => {
   return errorStats
 }
 
-
+// const MODE_DAY_PLAN
 
 class MainPage extends Component {
   state = {
-    habits: []
+    habits: [],
+    isAddingHabitPopupOpened: false,
+    editingHabitID: -1
   }
 
   saveHabits() {
@@ -248,6 +289,15 @@ class MainPage extends Component {
       habits: storage.getHabits()
     })
   }
+
+  setEditingHabit = id => {
+    this.setState({editingHabitID: id})
+  }
+  unsetEditingHabit = () => {
+    this.setEditingHabit(-1)
+  }
+
+  toggleAddingPopup = value => this.setState({isAddingHabitPopupOpened: value})
 
   componentWillMount() {
     storage.addChangeListener(() => {
@@ -303,6 +353,7 @@ class MainPage extends Component {
             {/*{twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}*/}
             <span className={erroredFrom}>{h.from}</span> -- <span className={erroredTo}>{h.to}</span>
           </div>
+          <div className="habit-editing-icon" onClick={() => {this.setEditingHabit(h.id)}}>E</div>
         </div>)
 
         days.forEach(d => {
@@ -315,7 +366,8 @@ class MainPage extends Component {
     if (hasIntersectingHabits)
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
-    return <div>
+    var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
+    return <div className={"plan-day-container"}>
       <h1>Your daily routine</h1>
       <div className="habits-table">
         <div className="left">
@@ -332,10 +384,12 @@ class MainPage extends Component {
         {habitsMapped}
         <div className="left">
           <br />
-          <HabitAdder />
+          <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">+ new habit</button>
         </div>
         {days.map(d => <div></div>)}
       </div>
+      <HabitEditor habit={editingHabit} onCloseEditor={() => {this.unsetEditingHabit()}}/>
+      <HabitAdder onCloseAddingPopup={() => this.toggleAddingPopup(false)} isOpen={this.state.isAddingHabitPopupOpened} />
     </div>
   }
 }

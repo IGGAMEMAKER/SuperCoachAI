@@ -2,6 +2,30 @@ const {app} = require('./expressGenerator')(3333);
 
 const {UserModel} = require('./Models')
 
+const getCookies = req => {
+  return {
+    telegramId: req.cookies["telegramId"]
+  }
+}
+// const generateCookies = async (res, telegramId) => {
+//   var token = createSessionToken(email)
+//   setCookies(res, token)
+//
+//   await UserModel.updateOne({
+//     email,
+//     sessionToken: {$exists: false}
+//   }, {
+//     sessionToken: token,
+//     sessionCreatedAt: new Date()
+//   })
+// }
+const flushCookies = (res) => {
+  setCookies(res, '', '')
+}
+const setCookies = (res, telegramId) => {
+  res.cookie('telegramId', telegramId)
+}
+
 const renderSPA = (req, res) => {
   var appPath = __dirname.replace('server', 'build') + '/index.html'
   res.sendFile(appPath);
@@ -38,20 +62,20 @@ const getUser = async (req, res) => {
 
 const authenticate = async (req, res, next) => {
   // get telegramId here
-  var telegramId = '' // req.cookies(???) req.body?
+  var {telegramId} = getCookies(req) // '' // req.cookies(???) req.body?
 
-  var u = await UserModel.find({telegramId})
-
-  if (!u) {
-    u = new UserModel({telegramId, habits: []})
-
-    await u.save()
-  } else {
-
-  }
-
-  req.telegramId = telegramId
-  next()
+  UserModel.find({telegramId})
+    .then(u => {
+      if (!u) {
+        next(1)
+      } else {
+        req.telegramId = telegramId
+        next()
+      }
+    })
+    .catch(err => {
+      next(err)
+    })
 }
 
 const saveHabits = async (req, res) => {

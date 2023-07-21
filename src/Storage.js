@@ -4,7 +4,7 @@ import {
   HABITS_ADD, PROFILE_LOAD
 } from "./constants/actionConstants";
 import {patchWithIDs, pusher} from "./utils";
-import {post} from "./PingBrowser";
+import {post, update} from "./PingBrowser";
 
 
 const CE = 'CHANGE_EVENT';
@@ -97,11 +97,11 @@ const store = new Storage();
 
 Dispatcher.register((p) => {
   const saveProjectChanges = () => {
-    // console.log('will update projectId', {projectId})
-    // update('/api/projects/' + projectId, {project})
-    //   .finally(() => {
+    console.log('will update profile')
+    update('/habits', {habits})
+      .finally(() => {
         store.emitChange()
-    // })
+    })
   }
 
   switch (p.actionType) {
@@ -110,6 +110,7 @@ Dispatcher.register((p) => {
       post('/profile', {telegramId: p.telegramId})
         .then(r => {
           console.log('load profile', r, telegramId)
+          habits = r.profile.habits
         })
         .catch(err => {
           console.error('caught on /profile', err)
@@ -121,7 +122,13 @@ Dispatcher.register((p) => {
 
     case HABITS_ADD:
       console.log(HABITS_ADD, {p})
-      pusher(habits, {name: p.text, progress: [], from: p.from, to: p.to })
+      pusher(habits, {
+        name: p.text,
+        progress: [],
+        schedule: [0, 1, 2, 3, 4, 5, 6],
+        from: p.from,
+        to: p.to
+      })
 
       saveProjectChanges()
       break

@@ -11,14 +11,51 @@
   color: lightgray;
 }
 
-.habit-container {}
+.habit-container {
+  position: relative;
+}
 .habit-container.intersects {
   background-color: pink;
+}
+.habit-editing-icon {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  bottom: 5px;
+  width: 35px;
+  height: 35px;
 }
 
 .habit-date-error {
   color: red;
   font-weight: bold;
+}
+
+.base-container {
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+.plan-day-container {
+  position: relative;
+  /*height: 100%;*/
+  /*width: 100%;*/
+}
+.popup {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /*background-color: gray;*/
+  background-color: #000000b5;
+  color: white;
+
+  position: fixed;
+  z-index: 1000;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
 }
 
 
