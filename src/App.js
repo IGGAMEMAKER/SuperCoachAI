@@ -337,10 +337,12 @@ class MainPage extends Component {
     var webApp = window?.Telegram?.WebApp;
     var initData = getInitDataSplit(webApp?.initData)
     var userData = initData[1]
+    var parsed;
 
     try {
       console.log({userData})
-      console.log(parseUserInfo(userData))
+      parsed = parseUserInfo(userData)
+      console.log(parsed)
     } catch (err) {
       console.error('cannot parse user data', {err})
     }
@@ -348,7 +350,7 @@ class MainPage extends Component {
     return <div>
       <h1>Your daily routine</h1>
       {/*<div>{initData.join("\n")}</div>*/}
-      <div>{parseUserInfo(userData)}</div>
+      <div>{parsed}</div>
       {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
         <div className="left">

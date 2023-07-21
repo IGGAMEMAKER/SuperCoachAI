@@ -153,10 +153,10 @@ const uploadConfigs = async (ssh, ip, check = {}) => {
   await uploadAndLog(ssh, './Configs/hosts.json', pathToConfigs + '/Configs/hosts.json', 'hosts.json')
 
   // SSL
-  await uploadAndLog(ssh, './Configs/supercoach_site.crt', pathToConfigs + '/Configs/supercoach_site.crt', 'supercoach_site.crt')
-  await uploadAndLog(ssh, './Configs/supercoach.site.key', pathToConfigs + '/Configs/supercoach.site.key', 'supercoach.site.key')
-  await uploadAndLog(ssh, './Configs/supercoach_site_chain.crt', pathToConfigs + '/Configs/supercoach_site_chain.crt', 'supercoach_site_chain.crt')
-  await uploadAndLog(ssh, './Configs/supercoach_site.ca-bundle', pathToConfigs + '/Configs/supercoach_site.ca-bundle', 'supercoach_site.ca-bundle')
+  // await uploadAndLog(ssh, './Configs/supercoach_site.crt', pathToConfigs + '/Configs/supercoach_site.crt', 'supercoach_site.crt')
+  // await uploadAndLog(ssh, './Configs/supercoach.site.key', pathToConfigs + '/Configs/supercoach.site.key', 'supercoach.site.key')
+  // await uploadAndLog(ssh, './Configs/supercoach_site_chain.crt', pathToConfigs + '/Configs/supercoach_site_chain.crt', 'supercoach_site_chain.crt')
+  // await uploadAndLog(ssh, './Configs/supercoach_site.ca-bundle', pathToConfigs + '/Configs/supercoach_site.ca-bundle', 'supercoach_site.ca-bundle')
 
   // Server IP
   const myHost = `./Configs/myHost-${ip}.js`;
