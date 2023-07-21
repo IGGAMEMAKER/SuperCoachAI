@@ -308,8 +308,11 @@ class MainPage extends Component {
     var intersectingHabitsWarning;
     if (hasIntersectingHabits)
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
+
+    var webApp = window?.Telegram?.WebApp;
     return <div>
       <h1>Your daily routine</h1>
+      <div>{webApp?.initData}</div>
       <div className="habits-table">
         <div className="left">
           HABITS
