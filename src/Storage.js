@@ -5,9 +5,6 @@ import {
 } from "./constants/actionConstants";
 import {patchWithIDs, pusher} from "./utils";
 import {post} from "./PingBrowser";
-import {loadProfile} from "./actions";
-// import {ping, post, remove, update} from "./PingBrowser";
-// import {getIndexByID, getNextID} from "./utils";
 
 
 const CE = 'CHANGE_EVENT';
@@ -109,12 +106,16 @@ Dispatcher.register((p) => {
 
   switch (p.actionType) {
     case PROFILE_LOAD:
-      post('/profile', {telegramId})
+      console.log(PROFILE_LOAD, p)
+      post('/profile', {telegramId: p.telegramId})
         .then(r => {
           console.log('load profile', r, telegramId)
         })
         .catch(err => {
           console.error('caught on /profile', err)
+        })
+        .finally(() => {
+          store.emitChange()
         })
       break;
 

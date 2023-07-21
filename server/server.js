@@ -8,11 +8,14 @@ const renderSPA = (req, res) => {
 }
 
 const getUser = async (req, res) => {
+  console.log('getUser', req.body)
   var telegramId = req.body.telegramId
+  console.log({telegramId})
 
-  var u = await UserModel.find({telegramId})
+  var u = await UserModel.findOne({telegramId})
   var mockUser = {telegramId, habits: []}
 
+  console.log({u})
   // save cookies
   if (!u) {
     u = new UserModel(mockUser)
