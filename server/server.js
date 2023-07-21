@@ -23,6 +23,7 @@ const getUser = async (req, res) => {
 
         u.save()
           .then(r => {
+            console.log('user saved', r)
             res.json({profile: mockUser})
           })
           .catch(err => {
