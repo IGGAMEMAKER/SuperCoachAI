@@ -236,6 +236,21 @@ const getHabitErrorStats = (habits) => {
   return errorStats
 }
 
+const getInitDataSplit = data => {
+  if (!data)
+    return ['no data']
+
+  return data.split("&")
+}
+
+const parseUserInfo = s =>
+  s
+    .replace("%7B", "{")
+    .replace("%22", '"')
+    .replace("%3A", "=")
+    .replace("%2C", ",")
+    .replace("%7D", "}")
+
 class MainPage extends Component {
   state = {
     habits: []
@@ -257,19 +272,7 @@ class MainPage extends Component {
   }
 
 
-  getUserDataSplit = data => {
-    if (!data)
-      return ['no data']
 
-    return data.split("&")/*.map(s =>
-      s
-        .replace("%7B", "{")
-        .replace("%22", '"')
-        .replace("%3A", "=")
-        .replace("%2C", ",")
-        .replace("%7D", "}")
-    )*/
-  }
 
   render() {
     const dow = (name, number) => {
@@ -325,11 +328,24 @@ class MainPage extends Component {
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
     var webApp = window?.Telegram?.WebApp;
-    var userData = this.getUserDataSplit(webApp?.initData)
+    var initData = getInitDataSplit(webApp?.initData)
+    var userData = initData[1]
+
+    try {
+      console.log({
+        userData
+      })
+      console.log({
+        parsed: parseUserInfo(userData)
+      })
+    } catch (err) {
+      console.error('cannot parse user data', {err})
+    }
 
     return <div>
       <h1>Your daily routine</h1>
-      <div>{userData.join("\n")}</div>
+      <div>{initData.join("\n")}</div>
+      {/*<div>{userData}</div>*/}
       {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
         <div className="left">
