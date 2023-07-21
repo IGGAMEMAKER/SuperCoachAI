@@ -243,8 +243,7 @@ const getInitDataSplit = data => {
   return data.split("&")
 }
 
-const parseUserInfo = s =>
-  s
+const parseUserInfo = s => s
     .replace("%7B", "{")
     .replace("%22", '"')
     .replace("%3A", "=")
@@ -332,12 +331,8 @@ class MainPage extends Component {
     var userData = initData[1]
 
     try {
-      console.log({
-        userData
-      })
-      console.log({
-        parsed: parseUserInfo(userData)
-      })
+      console.log({userData})
+      console.log(parseUserInfo(userData))
     } catch (err) {
       console.error('cannot parse user data', {err})
     }
