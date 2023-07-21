@@ -256,18 +256,19 @@ class MainPage extends Component {
     this.saveHabits()
   }
 
+
   getUserDataSplit = data => {
     if (!data)
       return ['no data']
 
-    return data.split("&").map(split =>
-      split
+    return data.split("&")/*.map(s =>
+      s
         .replace("%7B", "{")
         .replace("%22", '"')
         .replace("%3A", "=")
         .replace("%2C", ",")
         .replace("%7D", "}")
-    )
+    )*/
   }
 
   render() {
@@ -324,9 +325,11 @@ class MainPage extends Component {
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
     var webApp = window?.Telegram?.WebApp;
+    var userData = this.getUserDataSplit(webApp?.initData)
+
     return <div>
       <h1>Your daily routine</h1>
-      <div>{this.getUserDataSplit(webApp?.initData).join("\n")}</div>
+      <div>{userData.join("\n")}</div>
       {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
         <div className="left">
