@@ -245,10 +245,15 @@ const getInitDataSplit = data => {
 
 const parseUserInfo = s => {
   var s1 = s.replaceAll("%7B", "{")
+  console.log('replaced', {s1})
   var s2 = s1.replaceAll("%22", '"')
+  console.log('replaced', {s2})
   var s3 = s2.replaceAll("%3A", "=")
+  console.log('replaced', {s3})
   var s4 = s3.replaceAll("%2C", ",")
+  console.log('replaced', {s4})
   var s5 = s4.replaceAll("%7D", "}")
+  console.log('replaced', {s5})
 
   return s5;
 }
