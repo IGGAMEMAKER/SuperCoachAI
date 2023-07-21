@@ -252,7 +252,12 @@ const parseUserInfo = s => {
 
   console.log(s)
   console.log({s})
-  // return s.split(quoteFigure)
+  var spl = s.split(quoteFigure)
+  var ind = spl.findIndex(el => el.includes("id"))
+  var userId = spl[ind + 1]
+  console.log({userId})
+  console.log(userId.substr(2))
+  return userId.substr(2)
   var s1 = s.replaceAll(opFigure, opSym)
   var s2 = s1.replaceAll(quoteFigure, quoteSym)
   var s3 = s2.replaceAll(equalFigure, equalSym)
