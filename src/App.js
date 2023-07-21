@@ -260,7 +260,14 @@ class MainPage extends Component {
     if (!data)
       return ['no data']
 
-    return data.split("&")
+    return data.split("&").map(split =>
+      split
+        .replace("%7B", "{")
+        .replace("%22", '"')
+        .replace("%3A", "=")
+        .replace("%2C", ",")
+        .replace("%7D", "}")
+    )
   }
 
   render() {
