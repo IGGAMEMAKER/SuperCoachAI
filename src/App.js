@@ -250,7 +250,8 @@ const parseUserInfo = s => {
   var commaFigure = "%2C", commaSym = ","
   var clFigure = "%7D", clSym = "}"
 
-  console.log(s, {s})
+  console.log(s)
+  console.log({s})
   // return s.split(quoteFigure)
   var s1 = s.replaceAll(opFigure, opSym)
   var s2 = s1.replaceAll(quoteFigure, quoteSym)
