@@ -12,19 +12,27 @@ const getUser = async (req, res) => {
   var telegramId = req.body.telegramId
   console.log({telegramId})
 
-  var u = await UserModel.find({telegramId})
-  var mockUser = {telegramId, habits: []}
+  UserModel.find({telegramId})
+    .then(u => {
+      var mockUser = {telegramId, habits: []}
 
-  console.log({u})
-  // save cookies
-  if (!u) {
-    u = new UserModel(mockUser)
+      console.log({u})
+      // save cookies
+      if (!u) {
+        u = new UserModel(mockUser)
 
-    await u.save()
-    res.json({profile: mockUser})
-  } else {
-    res.json({profile: u}) // progress??
-  }
+        u.save()
+          .then(r => {
+            res.json({profile: mockUser})
+          })
+          .catch(err => {
+            console.error({err})
+            res.json({profile: mockUser, error: 1})
+          })
+      } else {
+        res.json({profile: u}) // progress??
+      }
+    })
 }
 
 const authenticate = async (req, res, next) => {
