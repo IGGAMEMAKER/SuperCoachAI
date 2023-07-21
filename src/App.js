@@ -256,6 +256,13 @@ class MainPage extends Component {
     this.saveHabits()
   }
 
+  getUserDataSplit = data => {
+    if (!data)
+      return ['no data']
+
+    return data.split("&")
+  }
+
   render() {
     const dow = (name, number) => {
       var isToday = number === new Date().getDate()
@@ -312,7 +319,7 @@ class MainPage extends Component {
     var webApp = window?.Telegram?.WebApp;
     return <div>
       <h1>Your daily routine</h1>
-      <div>{webApp?.initData}</div>
+      <div>{this.getUserDataSplit(webApp?.initData).join("\n")}</div>
       {/*<div>{webApp?.initDataUnsafe}</div>*/}
       <div className="habits-table">
         <div className="left">
