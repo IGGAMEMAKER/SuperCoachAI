@@ -244,8 +244,8 @@ const getInitDataSplit = data => {
 }
 
 const parseUserInfo = s => {
-  var opFigure = '%7B', opSym = '{'
-  var quoteFigure = "%22", quoteSym = '"'
+  var opFigure = "%7B", opSym = "{"
+  var quoteFigure = "%22", quoteSym = "*"
   var equalFigure = "%3A", equalSym = "="
   var commaFigure = "%2C", commaSym = ","
   var clFigure = "%7D", clSym = "}"
