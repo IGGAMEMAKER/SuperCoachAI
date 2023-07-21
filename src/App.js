@@ -244,7 +244,9 @@ const getInitDataSplit = data => {
 }
 
 const parseUserInfo = s => {
-  var s1 = s.replaceAll("%7B", "{")
+  var opFigure = '%7B'
+  return s.split("%3A")
+  var s1 = s.replaceAll(opFigure, '{')
   console.log('replaced', {s1})
   var s2 = s1.replaceAll("%22", '"')
   console.log('replaced', {s2})
