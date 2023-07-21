@@ -74,6 +74,8 @@ const getTelegramId = () => {
   }
 }
 
+var telegramId = getTelegramId()
+
 
 class Storage extends EventEmitter {
   addChangeListener(c) {
@@ -84,6 +86,10 @@ class Storage extends EventEmitter {
     this.emit(CE);
   }
 
+  getTelegramId() {
+    return telegramId
+  }
+
   getHabits() {
     return habits
   }
@@ -91,7 +97,6 @@ class Storage extends EventEmitter {
 
 const store = new Storage();
 
-var telegramId = getTelegramId()
 
 Dispatcher.register((p) => {
   const saveProjectChanges = () => {
@@ -126,7 +131,6 @@ Dispatcher.register((p) => {
   }
 });
 
-loadProfile(telegramId)
 
 
 export default store;

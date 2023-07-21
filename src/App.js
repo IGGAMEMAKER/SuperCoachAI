@@ -3,7 +3,7 @@ import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
-import actions from "./actions";
+import actions, {loadProfile} from "./actions";
 import {FieldAdder} from "./UI/FieldAdder";
 import {patchWithIDs} from "./utils";
 
@@ -256,6 +256,7 @@ class MainPage extends Component {
     })
 
     this.saveHabits()
+    actions.loadProfile(storage.getTelegramId())
   }
 
 
