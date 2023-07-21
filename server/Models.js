@@ -16,7 +16,8 @@ const UserModel = mongoose.model("users", UserSchema)
 
 async function main() {
   console.log("main");
-  await mongoose.connect('mongodb://localhost:27017/supercoach');
+  // await mongoose.connect('mongodb://localhost:27017/supercoach');
+  await mongoose.connect('mongodb://127.0.0.1:27017/supercoach');
 
   console.log("connected to DB");
 }
