@@ -250,10 +250,12 @@ const parseUserInfo = s => {
   var commaFigure = "%2C", commaSym = ","
   var clFigure = "%7D", clSym = "}"
 
-  console.log(s)
-  console.log({s})
+  // console.log(s)
+  // console.log({s})
   var spl = s.split(quoteFigure)
+  console.log(spl, 'spl')
   var ind = spl.findIndex(el => el.includes("id"))
+  console.log(ind, 'ind')
   var userId = spl[ind + 1]
   console.log({userId})
   console.log(userId.substr(2))
