@@ -474,6 +474,7 @@ class MainPage extends Component {
       </div>
       <HabitEditor habit={editingHabit} onCloseEditor={() => {this.unsetEditingHabit()}}/>
       <HabitAdder onCloseAddingPopup={() => this.toggleAddingPopup(false)} isOpen={this.state.isAddingHabitPopupOpened} />
+      {JSON.stringify(this.state.habitProgress)}
     </div>
   }
 }
