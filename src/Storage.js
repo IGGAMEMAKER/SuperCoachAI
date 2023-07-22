@@ -1,9 +1,9 @@
 import {EventEmitter} from 'events';
 import Dispatcher from './Dispatcher';
 import {
-  HABITS_ADD, PROFILE_LOAD
+  HABITS_ADD, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
 } from "./constants/actionConstants";
-import {patchWithIDs, pusher} from "./utils";
+import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
 import {post, update} from "./PingBrowser";
 
 
@@ -118,6 +118,17 @@ Dispatcher.register((p) => {
         .finally(() => {
           store.emitChange()
         })
+      break;
+
+    case HABITS_SCHEDULE_TOGGLE:
+      var ind = getIndexByID(habits, p.id)
+      // habits[ind].schedule[]
+      saveProjectChanges()
+      break;
+
+    case HABITS_REMOVE:
+      removeById(habits, p.id)
+      saveProjectChanges()
       break;
 
     case HABITS_ADD:

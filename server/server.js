@@ -65,7 +65,9 @@ const getUser = async (req, res) => {
 
 const authenticate = async (req, res, next) => {
   // get telegramId here
-  var {telegramId} = getCookies(req) // '' // req.cookies(???) req.body?
+  var c = getCookies(req)
+  console.log('authenticate', c)
+  var {telegramId} = c // '' // req.cookies(???) req.body?
 
   UserModel.find({telegramId})
     .then(u => {
@@ -91,6 +93,7 @@ const saveHabits = async (req, res) => {
   )
 
   console.log({r})
+  // if (r.modifiedCount) // then habits saved
 
   res.json({r})
 }

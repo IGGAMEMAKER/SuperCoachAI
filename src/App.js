@@ -27,21 +27,49 @@ function HabitEditor({habit, onCloseEditor}) {
   const onToChange = () => {}
   const onFromChange = () => {}
 
+  var days = [0, 1, 2, 3, 4, 5, 6]
+
   return <div className="popup">
     <h2 className={"title"}>Edit habit {habit.name}</h2>
-    <b>{habit.id}</b>
+    {/*<b>{habit.id}</b>*/}
+    {/*<br />*/}
     <br />
     <div>
-      <label>From</label>
+      <div className="popup-label">From</div>
       <input className="new-habit-input" type="time" value={habit.from} required onChange={onToChange} />
     </div>
     <div>
-      <label>To</label>
+      <div className="popup-label">To</div>
       <input className="new-habit-input" type="time" value={habit.to} required onChange={onFromChange} />
     </div>
     <br />
+    <div className="popup-label">Schedule</div>
+    <table>
+      <tr>
+        {days.map(d => <td>{getLiteralDayOfWeek(d)}</td>)}
+      </tr>
+      <tr>
+        {days.map(d => {
+          var checked = habit.schedule.find(s => s === d)
+
+          return <td>
+            <input
+              className="habit-checkbox" type="checkbox"
+              checked={checked}
+              onChange={() => actions.toggleHabitSchedule(habit.id, d)}
+            />
+          </td>
+        })}
+        {JSON.stringify(habit.schedule)}
+        {JSON.stringify(days)}
+      </tr>
+    </table>
+    <br />
     <br />
     <button onClick={onCloseEditor}>Close</button>
+    <br />
+    <br />
+    <button onClick={() => {onCloseEditor(); actions.removeHabit(habit.id)}}>Remove habit</button>
   </div>
 }
 

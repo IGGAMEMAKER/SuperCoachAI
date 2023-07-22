@@ -1,7 +1,7 @@
 const rrr = require("superagent")
 const request = rrr.agent()
 
-const FRONTEND = ''
+const FRONTEND = 'https://supercoach.site'
 
 const ping = (url, picker) => {
   var t0 = new Date();
