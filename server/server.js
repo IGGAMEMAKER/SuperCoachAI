@@ -117,7 +117,7 @@ app.post('/profile', getUser)
 //   })
 // })
 
-app.post('/habits', authenticate, saveHabits)
+app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
   // add/remove progress here
 })
