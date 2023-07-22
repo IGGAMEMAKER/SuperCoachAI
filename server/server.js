@@ -144,6 +144,8 @@ app.post('/habits/progress', authenticate, (req, res) => {
       else
         u.progress.push({habitId, date})
 
+      console.log('progress', u.progress)
+
       UserModel.updateOne({telegramId: req.telegramId}, {progress: u.progress})
         .then(r => {
           res.json({ok: 1, habitProgress: u.progress})
