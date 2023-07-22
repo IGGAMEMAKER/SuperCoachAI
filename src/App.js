@@ -52,7 +52,10 @@ function HabitEditor({habit, onCloseEditor}) {
       </tr>
       <tr>
         {days.map(d => {
-          var checked = habit.schedule.find(vvv => vvv === d)
+          var checked = habit.schedule.find(vvv => {
+            console.log({vvv, d})
+            return vvv === d
+          })
 
           return <td>
             {d}
