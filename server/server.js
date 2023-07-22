@@ -126,9 +126,39 @@ app.post('/profile', getUser)
 //   })
 // })
 
+const isHabitDoneOnDayX = (progress, habitId, date) => progress.habitId === habitId && getUniqueDay(date) === getUniqueDay(progress.date)
+const getUniqueDay = date => {
+  return new Date(date).getDay()
+}
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
   // add/remove progress here
+  UserModel.find({telegramId: req.telegramId})
+    .then(u => {
+      var date = req.body.date
+      var habitId = req.body.habitId
+      var uniqueDay = getUniqueDay(date)
+
+      if (u.progress.find(p => isHabitDoneOnDayX(p, habitId, date) ))
+        u.progress = u.progress.filter(p => !isHabitDoneOnDayX(p, habitId, date))
+      else
+        u.progress.push({habitId, date})
+
+      UserModel.updateOne({telegramId: req.telegramId}, {progress: u.progress})
+        .then(r => {
+          res.json({ok: 1, habitProgress: u.progress})
+        })
+        .catch(err => {
+          console.error('caught when updating progress', {err})
+          res.json({fail: 1, cannotSaveProgress: 1, err})
+        })
+    })
+    .catch(err => {
+      res.json({fail: 1, noUser: 1})
+    })
+    .finally(() => {
+      // res.json({ok: 1})
+    })
 })
 
 // ---------------- API ------------------------

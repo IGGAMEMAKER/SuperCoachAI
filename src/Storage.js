@@ -1,7 +1,7 @@
 import {EventEmitter} from 'events';
 import Dispatcher from './Dispatcher';
 import {
-  HABITS_ADD, HABITS_DATE_EDIT, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
+  HABITS_ADD, HABITS_DATE_EDIT, HABITS_PROGRESS_TOGGLE, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
 } from "./constants/actionConstants";
 import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
 import {post, update} from "./PingBrowser";
@@ -15,6 +15,7 @@ var habits = [
   // {name: 'Cold shower', progress: seq([true, false, true, false]), from: '8:45', to: '9:25', schedule: [0, 1, 2, 3, 4, 5, 6]},
   // {name: 'Breathing',   progress: seq([true, true, true, true]),   from: '9:35', to: '9:45', schedule: [0, 1, 2, 3, 4]},
 ]
+var habitProgress = []
 
 patchWithIDs(habits)
 
@@ -90,6 +91,10 @@ class Storage extends EventEmitter {
   getHabits() {
     return habits
   }
+
+  getHabitProgress() {
+    return habitProgress
+  }
 }
 
 const store = new Storage();
@@ -111,6 +116,7 @@ Dispatcher.register((p) => {
         .then(r => {
           console.log('load profile', r, telegramId)
           habits = r.profile.habits
+          habitProgress = r.profile.progress
         })
         .catch(err => {
           console.error('caught on /profile', err)
@@ -143,7 +149,7 @@ Dispatcher.register((p) => {
       console.log(HABITS_ADD, {p})
       pusher(habits, {
         name: p.text,
-        progress: [],
+        // progress: [],
         schedule: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1}, // 1 - yes, 0 - no
         from: p.from,
         to: p.to
@@ -151,6 +157,18 @@ Dispatcher.register((p) => {
 
       saveProfileChanges()
       break
+
+    case HABITS_PROGRESS_TOGGLE:
+      post('/habits/progress', {date: p.date, habitId: p.habitId})
+        .then(r => {
+          console.log('save progress', r)
+          habitProgress = r.habitProgress;
+          store.emitChange()
+        })
+        .catch(err => {
+          console.error('caught while progress save', err, p)
+        })
+      break;
 
     default:
       console.warn(`UNEXPECTED TYPE. Got unexpected type ${p.type}`);

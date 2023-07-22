@@ -3,7 +3,7 @@ import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
-import actions, {loadProfile} from "./actions";
+import actions, {loadProfile, toggleHabitProgress} from "./actions";
 import {FieldAdder} from "./UI/FieldAdder";
 import {patchWithIDs} from "./utils";
 
@@ -27,6 +27,11 @@ function HabitEditor({habit, onCloseEditor}) {
   if (!habit)
     return ''
 
+  const close = () => {
+    setTimeFrom("")
+    setTimeTo("")
+    onCloseEditor()
+  }
 
   const onToChange = (ev) => {
     var time = ev.target.value;
@@ -43,17 +48,15 @@ function HabitEditor({habit, onCloseEditor}) {
 
   var days = [0, 1, 2, 3, 4, 5, 6]
 
-  return <div className="popup">
+  return <div className="popup" key={"habit" + habit.id}>
     <h2 className={"title"}>Edit habit {habit.name}</h2>
-    {/*<b>{habit.id}</b>*/}
-    {/*<br />*/}
     <br/>
     <div>
-      <div className="popup-label">From</div>
+      <div className="popup-label">From {habit.from}</div>
       <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange}/>
     </div>
     <div>
-      <div className="popup-label">To</div>
+      <div className="popup-label">To {habit.to}</div>
       <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange}/>
     </div>
     <br/>
@@ -93,7 +96,7 @@ function HabitEditor({habit, onCloseEditor}) {
     </center>
     <br/>
     <br/>
-    <button onClick={onCloseEditor}>Close</button>
+    <button onClick={close}>Close</button>
     <br/>
     <br/>
     <br/>
@@ -102,7 +105,7 @@ function HabitEditor({habit, onCloseEditor}) {
     <br/>
     <br/>
     <button onClick={() => {
-      onCloseEditor();
+      close();
       actions.removeHabit(habit.id)
     }}>Remove habit
     </button>
@@ -344,13 +347,15 @@ const getHabitErrorStats = (habits) => {
 class MainPage extends Component {
   state = {
     habits: [],
+    habitProgress: [],
     isAddingHabitPopupOpened: false,
     editingHabitID: -1
   }
 
   saveHabits() {
     this.setState({
-      habits: storage.getHabits()
+      habits: storage.getHabits(),
+      habitProgress: storage.getHabitProgress()
     })
   }
 
@@ -424,11 +429,18 @@ class MainPage extends Component {
           var d = date.getDay()
           var exists = h.schedule[d.toString()];
           console.log(d.toString(), h.schedule)
+
+          var checked = this.state.habitProgress.find()
+
+          const onToggleProgress = ev => {
+            actions.toggleHabitProgress(h.id, date)
+          }
           // {JSON.stringify(h.schedule)}
           var content;
             // content = <input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/>
           if (exists)
-            content = <input className="habit-checkbox" type="checkbox"/>
+            content = <input className="habit-checkbox" type="checkbox" checked={checked} onChange={onToggleProgress} />
+
           habitsMapped.push(<div>{content}</div>)
         })
     })

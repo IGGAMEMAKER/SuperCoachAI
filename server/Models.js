@@ -5,7 +5,7 @@ var UserSchema = new Schema({
   telegramId: String,
 
   habits: Array,
-  progress: Array,
+  progress: Array, // [{habitId, date}]
   // habits?? entire profile?
   // save habit progress too?
 })

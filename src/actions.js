@@ -27,6 +27,13 @@ export function editHabitTime(id, time, whichTime) {
   // }, 2000)
 }
 
+export function toggleHabitProgress(id, date, ) {
+  Dispatcher.dispatch({
+    actionType: HABITS_SCHEDULE_TOGGLE,
+    id, date
+  })
+}
+
 export function removeHabit(id) {
   Dispatcher.dispatch({
     actionType: HABITS_REMOVE,
@@ -51,5 +58,6 @@ export default {
   removeHabit,
   editHabitTime,
   toggleHabitSchedule,
+  toggleHabitProgress,
 }
 
