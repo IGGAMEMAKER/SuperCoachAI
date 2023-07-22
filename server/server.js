@@ -48,13 +48,16 @@ const getUser = async (req, res) => {
         u.save()
           .then(r => {
             console.log('user saved', r)
+            setCookies(res, telegramId)
             res.json({profile: mockUser})
           })
           .catch(err => {
             console.error({err})
+            flushCookies(res)
             res.json({profile: mockUser, error: 1})
           })
       } else {
+        setCookies(res, telegramId)
         res.json({profile: u}) // progress??
       }
     })
