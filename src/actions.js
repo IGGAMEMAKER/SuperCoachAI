@@ -1,6 +1,6 @@
 import Dispatcher from './Dispatcher';
 import {
-  HABITS_ADD, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
+  HABITS_ADD, HABITS_DATE_EDIT, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
 } from './constants/actionConstants';
 
 export function loadProfile(telegramId) {
@@ -14,6 +14,14 @@ export function addHabit(text, from, to) {
   Dispatcher.dispatch({
     actionType: HABITS_ADD,
     text, from, to
+  })
+}
+
+export function editHabitTime(id, time, whichTime) {
+  // whichTime: 'to', 'from'
+  Dispatcher.dispatch({
+    actionType: HABITS_DATE_EDIT,
+    id, time, whichTime
   })
 }
 
@@ -35,9 +43,11 @@ export function toggleHabitSchedule(id, dayOfWeek) {
 
 
 export default {
+  loadProfile,
+
   addHabit,
   removeHabit,
-  loadProfile,
+  editHabitTime,
   toggleHabitSchedule,
 }
 

@@ -1,7 +1,7 @@
 import {EventEmitter} from 'events';
 import Dispatcher from './Dispatcher';
 import {
-  HABITS_ADD, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
+  HABITS_ADD, HABITS_DATE_EDIT, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
 } from "./constants/actionConstants";
 import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
 import {post, update} from "./PingBrowser";
@@ -96,7 +96,7 @@ const store = new Storage();
 
 
 Dispatcher.register((p) => {
-  const saveProjectChanges = () => {
+  const saveProfileChanges = () => {
     console.log('will update profile')
     update('/habits', {habits})
       .finally(() => {
@@ -123,12 +123,20 @@ Dispatcher.register((p) => {
     case HABITS_SCHEDULE_TOGGLE:
       var ind = getIndexByID(habits, p.id)
       habits[ind].schedule[p.dayOfWeek] = !habits[ind].schedule[p.dayOfWeek]
-      saveProjectChanges()
+
+      saveProfileChanges()
+      break;
+    case HABITS_DATE_EDIT:
+      var ind = getIndexByID(habits, p.id)
+      habits[ind][p.whichTime] = p.time
+
+      saveProfileChanges()
       break;
 
     case HABITS_REMOVE:
       removeById(habits, p.id)
-      saveProjectChanges()
+
+      saveProfileChanges()
       break;
 
     case HABITS_ADD:
@@ -141,7 +149,7 @@ Dispatcher.register((p) => {
         to: p.to
       })
 
-      saveProjectChanges()
+      saveProfileChanges()
       break
 
     default:

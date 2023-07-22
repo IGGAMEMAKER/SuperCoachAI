@@ -24,9 +24,15 @@ function HabitEditor({habit, onCloseEditor}) {
   if (!habit)
     return ''
 
-  const onToChange = () => {
+  const onToChange = (ev) => {
+    var time = ev.target.value;
+
+    actions.editHabitTime(habit.id, time, 'to')
   }
-  const onFromChange = () => {
+  const onFromChange = (ev) => {
+    var time = ev.target.value;
+
+    actions.editHabitTime(habit.id, time, 'from')
   }
 
   var days = [0, 1, 2, 3, 4, 5, 6]
@@ -100,14 +106,14 @@ function HabitEditor({habit, onCloseEditor}) {
 function HabitAdder({isOpen, onCloseAddingPopup}) {
   // var [expanded, expandHabit] = useState(false)
   var [text, setText] = useState("")
-  var [time, setTime] = useState("11:00")
+  var [timeFrom, setTimeFrom] = useState("11:00")
   var [timeTo, setTimeTo] = useState("12:00")
 
   if (!isOpen)
     return ''
 
   var hasText = text.length
-  var hasFromTime = time.length
+  var hasFromTime = timeFrom.length
   var canSave = hasText && hasFromTime && timeTo.length
 
   // if (!expanded) {
@@ -120,7 +126,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var onFromChange = ev => {
     var v = ev.target.value;
     console.log(v, typeof (v))
-    setTime(v)
+    setTimeFrom(v)
   }
 
   var onToChange = ev => {
@@ -134,7 +140,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   if (hasText) {
     fromForm = <div>
       <label>From</label>
-      <input className="new-habit-input" type="time" value={time} required onChange={onFromChange} />
+      <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange} />
     </div>
   }
 
@@ -147,7 +153,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
   var onAdd = () => {
     onCloseAddingPopup()
-    actions.addHabit(text, time, timeTo)
+    actions.addHabit(text, timeFrom, timeTo)
   }
 
   var onTextChange = ev => setText(ev.target.value)
@@ -414,8 +420,8 @@ class MainPage extends Component {
           console.log(d.toString(), h.schedule)
           // {JSON.stringify(h.schedule)}
           var content;
-          if (exists)
             // content = <input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/>
+          if (exists)
             content = <input className="habit-checkbox" type="checkbox"/>
           habitsMapped.push(<div>{content}</div>)
         })
