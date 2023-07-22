@@ -24,8 +24,10 @@ function HabitEditor({habit, onCloseEditor}) {
   if (!habit)
     return ''
 
-  const onToChange = () => {}
-  const onFromChange = () => {}
+  const onToChange = () => {
+  }
+  const onFromChange = () => {
+  }
 
   var days = [0, 1, 2, 3, 4, 5, 6]
 
@@ -33,16 +35,16 @@ function HabitEditor({habit, onCloseEditor}) {
     <h2 className={"title"}>Edit habit {habit.name}</h2>
     {/*<b>{habit.id}</b>*/}
     {/*<br />*/}
-    <br />
+    <br/>
     <div>
       <div className="popup-label">From</div>
-      <input className="new-habit-input" type="time" value={habit.from} required onChange={onToChange} />
+      <input className="new-habit-input" type="time" value={habit.from} required onChange={onToChange}/>
     </div>
     <div>
       <div className="popup-label">To</div>
-      <input className="new-habit-input" type="time" value={habit.to} required onChange={onFromChange} />
+      <input className="new-habit-input" type="time" value={habit.to} required onChange={onFromChange}/>
     </div>
-    <br />
+    <br/>
     <div className="popup-label">Schedule</div>
     <table>
       <tr>
@@ -61,16 +63,24 @@ function HabitEditor({habit, onCloseEditor}) {
             />
           </td>
         })}
-        {JSON.stringify(habit.schedule)}
-        {JSON.stringify(days)}
+      </tr>
+      <tr>
+        <td>{JSON.stringify(habit.schedule)}</td>
+      </tr>
+      <tr>
+        <td>{JSON.stringify(days)}</td>
       </tr>
     </table>
-    <br />
-    <br />
+    <br/>
+    <br/>
     <button onClick={onCloseEditor}>Close</button>
-    <br />
-    <br />
-    <button onClick={() => {onCloseEditor(); actions.removeHabit(habit.id)}}>Remove habit</button>
+    <br/>
+    <br/>
+    <button onClick={() => {
+      onCloseEditor();
+      actions.removeHabit(habit.id)
+    }}>Remove habit
+    </button>
   </div>
 }
 
