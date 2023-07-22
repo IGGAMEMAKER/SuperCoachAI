@@ -413,7 +413,11 @@ class MainPage extends Component {
           var exists = h.schedule[d.toString()];
           console.log(d.toString(), h.schedule)
           // {JSON.stringify(h.schedule)}
-          habitsMapped.push(<div><input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/></div>)
+          var content;
+          if (exists)
+            // content = <input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/>
+            content = <input className="habit-checkbox" type="checkbox"/>
+          habitsMapped.push(<div>{content}</div>)
         })
     })
 
