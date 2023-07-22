@@ -410,7 +410,7 @@ class MainPage extends Component {
 
         days.forEach(d => {
           var exists = h.schedule[d];
-          habitsMapped.push(<div><input style={{display: exists ? 'block': 'hidden'}} className="habit-checkbox" type="checkbox"/></div>)
+          habitsMapped.push(<div>{exists}<input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/></div>)
         })
     })
 
