@@ -19,12 +19,12 @@ export function addHabit(text, from, to) {
 
 export function editHabitTime(id, time, whichTime) {
   // whichTime: 'to', 'from'
-  setTimeout(() => {
+  // setTimeout(() => {
     Dispatcher.dispatch({
       actionType: HABITS_DATE_EDIT,
       id, time, whichTime
     })
-  }, 2000)
+  // }, 2000)
 }
 
 export function removeHabit(id) {

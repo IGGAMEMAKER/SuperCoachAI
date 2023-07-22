@@ -21,20 +21,23 @@ const getLiteralDayOfWeek = (val) => {
 }
 
 function HabitEditor({habit, onCloseEditor}) {
-  // var [timeFrom, setTimeFrom] = useState(habit.from)
-  // var [timeTo, setTimeTo] = useState(habit.to)
+  var [timeFrom, setTimeFrom] = useState(habit.from)
+  var [timeTo, setTimeTo] = useState(habit.to)
 
   if (!habit)
     return ''
 
+
   const onToChange = (ev) => {
     var time = ev.target.value;
 
+    setTimeTo(time)
     actions.editHabitTime(habit.id, time, 'to')
   }
   const onFromChange = (ev) => {
     var time = ev.target.value;
 
+    setTimeFrom(time)
     actions.editHabitTime(habit.id, time, 'from')
   }
 
@@ -47,11 +50,11 @@ function HabitEditor({habit, onCloseEditor}) {
     <br/>
     <div>
       <div className="popup-label">From</div>
-      <input className="new-habit-input" type="time" value={habit.from} required onChange={onFromChange}/>
+      <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange}/>
     </div>
     <div>
       <div className="popup-label">To</div>
-      <input className="new-habit-input" type="time" value={habit.to} required onChange={onToChange}/>
+      <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange}/>
     </div>
     <br/>
     <div className="popup-label">Schedule</div>
