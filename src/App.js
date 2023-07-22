@@ -46,6 +46,7 @@ function HabitEditor({habit, onCloseEditor}) {
     </div>
     <br/>
     <div className="popup-label">Schedule</div>
+    <center>
     <table>
       <tr>
         {days.map(d => <td>{getLiteralDayOfWeek(d)}</td>)}
@@ -61,7 +62,7 @@ function HabitEditor({habit, onCloseEditor}) {
           console.log('checked ', checked, d)
 
           return <td>
-            {d}
+            {/*{d}*/}
             <input
               className="habit-checkbox" type="checkbox"
               checked={checked}
@@ -77,6 +78,7 @@ function HabitEditor({habit, onCloseEditor}) {
       {/*  <td>{JSON.stringify(days)}</td>*/}
       {/*</tr>*/}
     </table>
+    </center>
     <br/>
     <br/>
     <button onClick={onCloseEditor}>Close</button>
@@ -407,7 +409,8 @@ class MainPage extends Component {
         </div>)
 
         days.forEach(d => {
-          habitsMapped.push(<div><input className="habit-checkbox" type="checkbox"/></div>)
+          var exists = h.schedule[d];
+          habitsMapped.push(<div><input style={{display: exists ? 'block': 'hidden'}} className="habit-checkbox" type="checkbox"/></div>)
         })
     })
 
