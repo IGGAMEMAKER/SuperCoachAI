@@ -430,7 +430,7 @@ class MainPage extends Component {
           var exists = h.schedule[d.toString()];
           console.log(d.toString(), h.schedule)
 
-          var checked = this.state.habitProgress.find()
+          var checked = false; // this.state.habitProgress.find()
 
           const onToggleProgress = ev => {
             actions.toggleHabitProgress(h.id, date)
