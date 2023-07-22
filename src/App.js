@@ -52,11 +52,12 @@ function HabitEditor({habit, onCloseEditor}) {
       </tr>
       <tr>
         {days.map(d => {
-          var checked = !!habit.schedule.filter(vvv => {
-            var res = vvv === d
-            console.log({vvv, d}, vvv, d, res)
-            return res
-          }).length
+          // var checked = !!habit.schedule.filter(vvv => {
+          //   var res = vvv === d
+          //   console.log({vvv, d}, vvv, d, res)
+          //   return res
+          // }).length
+          var checked = habit.schedule[d]
           console.log('checked ', checked, d)
 
           return <td>

@@ -122,7 +122,7 @@ Dispatcher.register((p) => {
 
     case HABITS_SCHEDULE_TOGGLE:
       var ind = getIndexByID(habits, p.id)
-      // habits[ind].schedule[]
+      habits[ind].schedule[p.dayOfWeek] = !habits[ind].schedule[p.dayOfWeek]
       saveProjectChanges()
       break;
 
@@ -136,7 +136,7 @@ Dispatcher.register((p) => {
       pusher(habits, {
         name: p.text,
         progress: [],
-        schedule: [0, 1, 2, 3, 4, 5, 6],
+        schedule: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1}, // 1 - yes, 0 - no
         from: p.from,
         to: p.to
       })
