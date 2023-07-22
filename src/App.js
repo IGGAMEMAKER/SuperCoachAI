@@ -408,10 +408,12 @@ class MainPage extends Component {
           <div className="habit-editing-icon" onClick={() => {this.setEditingHabit(h.id)}}>E</div>
         </div>)
 
-        days.forEach(d => {
+        days.forEach(date => {
+          var d = date.getDay()
           var exists = h.schedule[d.toString()];
           console.log(d.toString(), h.schedule)
-          habitsMapped.push(<div>{JSON.stringify(h.schedule)}{exists}<input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/></div>)
+          // {JSON.stringify(h.schedule)}
+          habitsMapped.push(<div><input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/></div>)
         })
     })
 
