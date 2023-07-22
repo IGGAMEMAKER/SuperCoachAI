@@ -439,7 +439,7 @@ class MainPage extends Component {
           var content;
             // content = <input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/>
           if (exists)
-            content = <input className="habit-checkbox" type="checkbox" checked={checked} onChange={onToggleProgress} />
+            content = <input className="habit-checkbox" type="checkbox" onChange={onToggleProgress} />
 
           habitsMapped.push(<div>{content}</div>)
         })
