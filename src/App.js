@@ -57,6 +57,7 @@ function HabitEditor({habit, onCloseEditor}) {
             console.log({vvv, d}, vvv, d, res)
             return res
           })
+          console.log('checked ', checked, d)
 
           return <td>
             {d}
