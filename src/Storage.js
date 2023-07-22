@@ -159,6 +159,7 @@ Dispatcher.register((p) => {
       break
 
     case HABITS_PROGRESS_TOGGLE:
+      console.log(HABITS_PROGRESS_TOGGLE)
       post('/habits/progress', {date: p.date, habitId: p.habitId})
         .then(r => {
           console.log('save progress', r)

@@ -132,13 +132,13 @@ const getUniqueDay = date => {
 }
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
+  console.log('/habits/progress')
+      var date = req.body.date
+      var habitId = req.body.habitId
+  console.log(date, habitId)
   // add/remove progress here
   UserModel.find({telegramId: req.telegramId})
     .then(u => {
-      var date = req.body.date
-      var habitId = req.body.habitId
-      var uniqueDay = getUniqueDay(date)
-
       if (u.progress.find(p => isHabitDoneOnDayX(p, habitId, date) ))
         u.progress = u.progress.filter(p => !isHabitDoneOnDayX(p, habitId, date))
       else

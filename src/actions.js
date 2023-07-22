@@ -27,7 +27,7 @@ export function editHabitTime(id, time, whichTime) {
   // }, 2000)
 }
 
-export function toggleHabitProgress(id, date, ) {
+export function toggleHabitProgress(id, date) {
   Dispatcher.dispatch({
     actionType: HABITS_SCHEDULE_TOGGLE,
     id, date
