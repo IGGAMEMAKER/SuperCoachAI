@@ -53,8 +53,9 @@ function HabitEditor({habit, onCloseEditor}) {
       <tr>
         {days.map(d => {
           var checked = habit.schedule.find(vvv => {
-            console.log({vvv, d})
-            return vvv === d
+            var res = vvv === d
+            console.log({vvv, d}, vvv, d, res)
+            return res
           })
 
           return <td>
