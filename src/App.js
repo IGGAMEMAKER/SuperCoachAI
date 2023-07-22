@@ -44,11 +44,11 @@ function HabitEditor({habit, onCloseEditor}) {
     <br/>
     <div>
       <div className="popup-label">From</div>
-      <input className="new-habit-input" type="time" value={habit.from} required onChange={onToChange}/>
+      <input className="new-habit-input" type="time" value={habit.from} required onChange={onFromChange}/>
     </div>
     <div>
       <div className="popup-label">To</div>
-      <input className="new-habit-input" type="time" value={habit.to} required onChange={onFromChange}/>
+      <input className="new-habit-input" type="time" value={habit.to} required onChange={onToChange}/>
     </div>
     <br/>
     <div className="popup-label">Schedule</div>
