@@ -79,9 +79,12 @@ const authenticate = async (req, res, next) => {
 }
 
 const saveHabits = async (req, res) => {
+  var habits = req.body.habits
+  console.log({habits}, req.telegramId)
+
   var r = await UserModel.updateOne(
     {telegramId: req.telegramId},
-    {habits: req.body.habits}
+    {habits}
   )
 
   console.log({r})
