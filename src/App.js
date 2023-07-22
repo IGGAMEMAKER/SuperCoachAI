@@ -70,16 +70,21 @@ function HabitEditor({habit, onCloseEditor}) {
           </td>
         })}
       </tr>
-      <tr>
-        <td>{JSON.stringify(habit.schedule)}</td>
-      </tr>
-      <tr>
-        <td>{JSON.stringify(days)}</td>
-      </tr>
+      {/*<tr>*/}
+      {/*  <td>{JSON.stringify(habit.schedule)}</td>*/}
+      {/*</tr>*/}
+      {/*<tr>*/}
+      {/*  <td>{JSON.stringify(days)}</td>*/}
+      {/*</tr>*/}
     </table>
     <br/>
     <br/>
     <button onClick={onCloseEditor}>Close</button>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     <br/>
     <br/>
     <button onClick={() => {
