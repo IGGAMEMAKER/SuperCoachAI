@@ -21,6 +21,9 @@ const getLiteralDayOfWeek = (val) => {
 }
 
 function HabitEditor({habit, onCloseEditor}) {
+  // var [timeFrom, setTimeFrom] = useState(habit.from)
+  // var [timeTo, setTimeTo] = useState(habit.to)
+
   if (!habit)
     return ''
 
