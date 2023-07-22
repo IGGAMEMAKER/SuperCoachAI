@@ -50,9 +50,10 @@ function HabitEditor({habit, onCloseEditor}) {
       </tr>
       <tr>
         {days.map(d => {
-          var checked = habit.schedule.find(s => s === d)
+          var checked = habit.schedule.find(vvv => vvv === d)
 
           return <td>
+            {d}
             <input
               className="habit-checkbox" type="checkbox"
               checked={checked}
