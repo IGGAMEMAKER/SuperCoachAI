@@ -160,7 +160,7 @@ Dispatcher.register((p) => {
 
     case HABITS_PROGRESS_TOGGLE:
       console.log(HABITS_PROGRESS_TOGGLE)
-      post('/habits/progress', {date: p.date, habitId: p.habitId})
+      post('/habits/progress', {date: p.date, habitId: p.id})
         .then(r => {
           console.log('save progress', r)
           habitProgress = r.habitProgress;
