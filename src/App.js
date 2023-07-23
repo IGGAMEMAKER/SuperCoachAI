@@ -96,7 +96,7 @@ function HabitEditor({habit, onCloseEditor}) {
     </center>
     <br/>
     <br/>
-    <button onClick={close}>Close</button>
+    <button className="close" onClick={close}>Close</button>
     <br/>
     <br/>
     <br/>
@@ -175,8 +175,10 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     <br />
     {/*<br />*/}
     <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
-    {fromForm}
-    {toForm}
+    <div className={"from-to-form"}>
+      {fromForm}
+      {toForm}
+    </div>
     {/*<FieldAdder*/}
     {/*  placeholder="add new habit"*/}
     {/*  onAdd={val => actions.addHabit(val)}*/}
@@ -185,10 +187,11 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     {/*  defaultState={true}*/}
     {/*/>*/}
 
-    <button className={"new-habit-button"} onClick={onAdd} disabled={!canSave}>Add habit</button>
+    <button className={`new-habit-button new-habit-button-confirm ${canSave ? '' : 'disabled'}`} onClick={onAdd} disabled={!canSave}>Add habit</button>
     <br />
     <br />
-    <button className={""} onClick={onCloseAddingPopup}>Cancel</button>
+    <br />
+    <button className="close" onClick={onCloseAddingPopup}>Close</button>
   </div>
 }
 
@@ -332,7 +335,7 @@ class MainPage extends Component {
             {/*{twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}*/}
             <span className={erroredFrom}>{h.from}</span> -- <span className={erroredTo}>{h.to}</span>
           </div>
-          <div className="habit-editing-icon" onClick={() => {this.setEditingHabit(h.id)}}>E</div>
+          <div className="habit-editing-icon" onClick={() => {this.setEditingHabit(h.id)}}>✏️</div>
         </div>)
 
         days.forEach(date => {

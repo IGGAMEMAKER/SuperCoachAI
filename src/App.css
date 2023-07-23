@@ -75,6 +75,25 @@
   background-color: white;
 }
 
+.close {
+  width: 200px;
+  height: 40px;
+}
+.from-to-form {
+  min-height: 150px;
+}
+.new-habit-button-confirm.disabled {
+  color: gray;
+  border-color: gray;
+}
+.new-habit-button-confirm {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  height: 60px;
+  font-size: large;
+}
+
 .new-habit-input {
   width: 100%;
   margin-bottom: 18px;
