@@ -164,10 +164,13 @@ Dispatcher.register((p) => {
         .then(r => {
           console.log('save progress', r)
           habitProgress = r.habitProgress;
-          store.emitChange()
+          // store.emitChange()
         })
         .catch(err => {
           console.error('caught while progress save', err, p)
+        })
+        .finally(() => {
+          store.emitChange()
         })
       break;
 

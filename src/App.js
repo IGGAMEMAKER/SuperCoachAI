@@ -430,14 +430,13 @@ class MainPage extends Component {
           var exists = h.schedule[d.toString()];
           console.log(d.toString(), h.schedule)
 
-          var checked = this.state.habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
+          var checked = !!this.state.habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
 
           const onToggleProgress = ev => {
             actions.toggleHabitProgress(h.id, date)
           }
-          // {JSON.stringify(h.schedule)}
+
           var content;
-            // content = <input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/>
           if (exists)
             content = <input className="habit-checkbox" type="checkbox" checked={checked} onChange={onToggleProgress} />
 
