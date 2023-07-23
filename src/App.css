@@ -78,6 +78,9 @@
 .new-habit-input {
   width: 100%;
   margin-bottom: 18px;
+
+  height: 28px;
+  font-size: medium;
 }
 
 .left {
@@ -92,7 +95,8 @@
 
 .current-day {
   border-style: solid;
-  border-radius: 100%;
+  /*border-radius: 100%;*/
+  border-radius: 1000px;
   border-width: thin;
   border-color: white;
   background-color: green;

@@ -171,7 +171,10 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var onTextChange = ev => setText(ev.target.value)
   // {/*min="09:00" max="18:00"*/}
   return <div className="popup">
-    <input className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
+    <h1>New habit</h1>
+    <br />
+    {/*<br />*/}
+    <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
     {fromForm}
     {toForm}
     {/*<FieldAdder*/}
@@ -295,8 +298,8 @@ class MainPage extends Component {
       return <div>
         {name}
         <br/>
-        <span className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</span>
-        <br/>
+        <div className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</div>
+        {/*<br/>*/}
       </div>
     }
 
