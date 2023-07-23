@@ -132,27 +132,29 @@ const getUniqueDay = date => {
 }
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
-  console.log('/habits/progress')
+  // console.log('/habits/progress')
       var date = req.body.date
       var habitId = req.body.habitId
   console.log(date, habitId)
+  var telegramId = req.telegramId
 
-  // add/remove progress here
-  UserModel.find({telegramId: req.telegramId})
+  UserModel.find({telegramId})
     .then(u => {
-      if (u.progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
+      var progress = u.progress || [];
+
+      if (progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
         console.log("remove habit")
-        u.progress = u.progress.filter(p => !isHabitDoneOnDayX(p, habitId, date))
+        progress = progress.filter(p => !isHabitDoneOnDayX(p, habitId, date))
       } else {
         console.log("add habit")
-        u.progress.push({habitId, date})
+        progress.push({habitId, date})
       }
 
-      console.log('progress', u.progress)
+      console.log('progress', progress)
 
-      UserModel.updateOne({telegramId: req.telegramId}, {progress: u.progress})
+      UserModel.updateOne({telegramId}, {progress})
         .then(r => {
-          res.json({ok: 1, habitProgress: u.progress})
+          res.json({ok: 1, habitProgress: progress})
         })
         .catch(err => {
           console.error('caught when updating progress', {err})
