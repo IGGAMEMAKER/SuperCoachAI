@@ -136,13 +136,18 @@ app.post('/habits/progress', authenticate, (req, res) => {
       var date = req.body.date
       var habitId = req.body.habitId
   console.log(date, habitId)
+
   // add/remove progress here
   UserModel.find({telegramId: req.telegramId})
     .then(u => {
-      if (u.progress.find(p => isHabitDoneOnDayX(p, habitId, date) ))
+      if (u.progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
+        console.log("remove habit")
         u.progress = u.progress.filter(p => !isHabitDoneOnDayX(p, habitId, date))
-      else
+      }
+      else {
+        console.log("add habit")
         u.progress.push({habitId, date})
+      }
 
       console.log('progress', u.progress)
 
