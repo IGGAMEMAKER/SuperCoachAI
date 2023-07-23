@@ -148,7 +148,7 @@ app.post('/habits/progress', authenticate, (req, res) => {
   console.log(date, habitId)
   var telegramId = req.telegramId
 
-  UserModel.find({telegramId})
+  UserModel.findOne({telegramId})
     .then(u => {
       var progress = u.progress || [];
       console.log(u, progress)
