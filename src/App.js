@@ -163,6 +163,9 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var onAdd = () => {
     onCloseAddingPopup()
     actions.addHabit(text, timeFrom, timeTo)
+    setText("")
+    setTimeTo("00:00")
+    setTimeFrom(timeTo)
   }
 
   var onTextChange = ev => setText(ev.target.value)
@@ -247,102 +250,6 @@ const getErrorStats2 = habits => {
 
   return errorStats
 }
-const getHabitErrorStats = (habits) => {
-  var errorStats = {}
-  const saveErr = (h, from, to) => {
-    if (from)
-      errorStats[h.id + '.from'] = 1
-
-    if (to)
-      errorStats[h.id + '.to'] = 1
-  }
-
-  const saveInt = (h1, h2, from1, to1, from2, to2) => {
-    saveErr(h1, from1, to1)
-    saveErr(h2, from2, to2)
-  }
-
-  for (var i = 0; i < habits.length; i++) {
-    var h1 = habits[i];
-    var from1 = getHour(h1.from)
-    var to1 = getHour(h1.to)
-
-    var badH1 = from1 >= to1
-
-    if (badH1) {
-      saveErr(h1, true, true)
-    }
-
-    for (var j = i + 1; j < habits.length; j++) {
-      var arr = [];
-
-      var h2 = habits[j]
-      var from2 = getHour(h2.from)
-      var to2 = getHour(h2.to)
-      var badH2 = from2 >= to1
-
-      if (badH2) {
-        saveErr(h2, true, true)
-      }
-
-
-      arr.push({val: from1, id: h1.id, from1, from: true, isMin: from1 < to1})
-      arr.push({val: from2, id: h2.id, from2, from: true, isMin: from2 < to2})
-      arr.push({val: to1,   id: h1.id, to1  , to: true,   isMin: to1 })
-      arr.push({val: to2,   id: h2.id, to2  , to: true})
-
-      var sorted = arr.sort((s1, s2) => {
-        var diff = s1.val - s2.val
-
-        if (diff !== 0) return diff
-
-        return s1.id - s2.id
-      })
-
-      var s0 = sorted[0]
-      var s1 = sorted[1]
-      var s2 = sorted[2]
-      var s3 = sorted[3]
-
-      var openedId = s0.id;
-      for (var ii = 1; ii < sorted.length; ii++) {
-        var s = sorted[ii]
-        if (s.id === openedId) {
-
-        }
-      }
-
-      // if (s0.id === s1.id) {
-      //   // one habit opens and closes
-      //   // TODO if all habits start and end at the same time, then program thinks it's ok
-      //   if (s0.val === s1.val && s1.val === s2.val && s2.val === s3.val) {
-      //     saveInt(h1, h2, true, true, true, true)
-      //   }
-      // } else {
-      //   // habits intersect and we need to know, how
-      //
-      //   // any1 belongs to (f2, t2)
-      //   // any2 belongs to (f1, t1)
-      //
-      //   if (s1.id !== s2.id) {
-      //
-      //   } else {
-      //
-      //   }
-      //   if (s0.id === s3.id) {
-      //     saveInt(h1, h2, true, true, true, true)
-      //   } else if (sorted)
-      //
-      //   // (f1, t1) (f2, t2) t1 > f2                    --- intersect
-      //   // (f1, t1) === (f2, t2)                        --- equal
-      //   // (f1, t1) in (f2, t2) or (f2, t2) in (f1, t1) --- contain
-      // }
-    }
-  }
-  return errorStats
-}
-
-// const MODE_DAY_PLAN
 
 class MainPage extends Component {
   state = {
@@ -473,7 +380,7 @@ class MainPage extends Component {
       </div>
       <HabitEditor habit={editingHabit} onCloseEditor={() => {this.unsetEditingHabit()}}/>
       <HabitAdder onCloseAddingPopup={() => this.toggleAddingPopup(false)} isOpen={this.state.isAddingHabitPopupOpened} />
-      {JSON.stringify(this.state.habitProgress)}
+      {/*{JSON.stringify(this.state.habitProgress)}*/}
     </div>
   }
 }
