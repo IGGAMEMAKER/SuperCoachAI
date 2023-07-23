@@ -126,10 +126,20 @@ app.post('/profile', getUser)
 //   })
 // })
 
-const isHabitDoneOnDayX = (progress, habitId, date) => progress.habitId === habitId && getUniqueDay(date) === getUniqueDay(progress.date)
+const isHabitDoneOnDayX = (progress, habitId, date) => {
+  var sameHabit = progress.habitId === habitId
+  var d1 = getUniqueDay(date)
+  var d2 = getUniqueDay(progress.date)
+  var sameDay = d1 === d2
+
+  console.log('isHabitDoneOnDayX', sameHabit, sameDay, d1, d2)
+  return sameHabit && sameDay
+}
+
 const getUniqueDay = date => {
   return new Date(date).getDay()
 }
+
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
   // console.log('/habits/progress')
@@ -140,6 +150,7 @@ app.post('/habits/progress', authenticate, (req, res) => {
 
   UserModel.find({telegramId})
     .then(u => {
+      console.log(u)
       var progress = u.progress || [];
 
       if (progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
@@ -154,6 +165,7 @@ app.post('/habits/progress', authenticate, (req, res) => {
 
       UserModel.updateOne({telegramId}, {progress})
         .then(r => {
+          console.log('saved progress??', progress, r)
           res.json({ok: 1, habitProgress: progress})
         })
         .catch(err => {
