@@ -143,8 +143,7 @@ app.post('/habits/progress', authenticate, (req, res) => {
       if (u.progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
         console.log("remove habit")
         u.progress = u.progress.filter(p => !isHabitDoneOnDayX(p, habitId, date))
-      }
-      else {
+      } else {
         console.log("add habit")
         u.progress.push({habitId, date})
       }
@@ -161,9 +160,11 @@ app.post('/habits/progress', authenticate, (req, res) => {
         })
     })
     .catch(err => {
+      console.error('caught cause failed to get user??', err)
       res.json({fail: 1, noUser: 1})
     })
     .finally(() => {
+      console.log('finally progress')
       // res.json({ok: 1})
     })
 })
