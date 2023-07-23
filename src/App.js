@@ -5,7 +5,7 @@ import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
 import actions, {loadProfile, toggleHabitProgress} from "./actions";
 import {FieldAdder} from "./UI/FieldAdder";
-import {patchWithIDs} from "./utils";
+import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 
 
 const getLiteralDayOfWeek = (val) => {
@@ -430,7 +430,7 @@ class MainPage extends Component {
           var exists = h.schedule[d.toString()];
           console.log(d.toString(), h.schedule)
 
-          var checked = false; // this.state.habitProgress.find()
+          var checked = this.state.habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
 
           const onToggleProgress = ev => {
             actions.toggleHabitProgress(h.id, date)
@@ -439,7 +439,7 @@ class MainPage extends Component {
           var content;
             // content = <input style={{display: exists ? 'block': 'none'}} className="habit-checkbox" type="checkbox"/>
           if (exists)
-            content = <input className="habit-checkbox" type="checkbox" onChange={onToggleProgress} />
+            content = <input className="habit-checkbox" type="checkbox" checked={checked} onChange={onToggleProgress} />
 
           habitsMapped.push(<div>{content}</div>)
         })
@@ -470,7 +470,7 @@ class MainPage extends Component {
           <br />
           <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">+ new habit</button>
         </div>
-        {days.map(d => <div></div>)}
+        {/*{days.map(d => <div></div>)}*/}
       </div>
       <HabitEditor habit={editingHabit} onCloseEditor={() => {this.unsetEditingHabit()}}/>
       <HabitAdder onCloseAddingPopup={() => this.toggleAddingPopup(false)} isOpen={this.state.isAddingHabitPopupOpened} />

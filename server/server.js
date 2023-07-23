@@ -1,3 +1,5 @@
+import {isHabitDoneOnDayX} from "../src/utils";
+
 const {app} = require('./expressGenerator')(3333);
 
 const {UserModel} = require('./Models')
@@ -126,32 +128,19 @@ app.post('/profile', getUser)
 //   })
 // })
 
-const isHabitDoneOnDayX = (progress, habitId, date) => {
-  var sameHabit = progress.habitId === habitId
-  var d1 = getUniqueDay(date)
-  var d2 = getUniqueDay(progress.date)
-  var sameDay = d1 === d2
 
-  console.log('isHabitDoneOnDayX', sameHabit, sameDay, d1, d2)
-  return sameHabit && sameDay
-}
-
-const getUniqueDay = date => {
-  return new Date(date).getDay()
-}
 
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
   // console.log('/habits/progress')
-      var date = req.body.date
-      var habitId = req.body.habitId
+  var {date, habitId} = req.body
   console.log(date, habitId)
   var telegramId = req.telegramId
 
   UserModel.findOne({telegramId})
     .then(u => {
       var progress = u.progress || [];
-      console.log(u, progress)
+      console.log(progress)
 
       if (progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
         console.log("remove habit")
@@ -165,7 +154,7 @@ app.post('/habits/progress', authenticate, (req, res) => {
 
       UserModel.updateOne({telegramId}, {progress})
         .then(r => {
-          console.log('saved progress??', progress, r)
+          console.log('saved progress??')
           res.json({ok: 1, habitProgress: progress})
         })
         .catch(err => {
