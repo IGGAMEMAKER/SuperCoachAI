@@ -1,4 +1,4 @@
-const {isHabitDoneOnDayX} = require("../src/utils");
+const {isHabitDoneOnDayX} = require("../utils");
 const {app} = require('./expressGenerator')(3333);
 
 const {UserModel} = require('./Models')
