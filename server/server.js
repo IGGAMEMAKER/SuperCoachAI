@@ -150,8 +150,8 @@ app.post('/habits/progress', authenticate, (req, res) => {
 
   UserModel.find({telegramId})
     .then(u => {
-      console.log(u)
       var progress = u.progress || [];
+      console.log(u, progress)
 
       if (progress.find(p => isHabitDoneOnDayX(p, habitId, date) )) {
         console.log("remove habit")
@@ -176,10 +176,6 @@ app.post('/habits/progress', authenticate, (req, res) => {
     .catch(err => {
       console.error('caught cause failed to get user??', err)
       res.json({fail: 1, noUser: 1})
-    })
-    .finally(() => {
-      console.log('finally progress')
-      // res.json({ok: 1})
     })
 })
 
