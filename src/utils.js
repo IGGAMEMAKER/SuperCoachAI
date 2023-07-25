@@ -50,7 +50,9 @@ export const removeById = (list, id) => {
 
 // ---------------------
 export const getUniqueDay = date => {
-  return new Date(date).getDay()
+  var d = new Date(date);
+
+  return d.getUTCFullYear() * 1000000 + d.getUTCMonth() * 1000 + d.getUTCDate()
 }
 
 export const isHabitDoneOnDayX = (progress, habitId, date) => {
