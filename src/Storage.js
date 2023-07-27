@@ -1,10 +1,11 @@
 import {EventEmitter} from 'events';
 import Dispatcher from './Dispatcher';
 import {
+  ADMIN_USERS,
   HABITS_ADD, HABITS_DATE_EDIT, HABITS_PROGRESS_TOGGLE, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
 } from "./constants/actionConstants";
 import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
-import {post, update} from "./PingBrowser";
+import {ping, post, update} from "./PingBrowser";
 
 
 const CE = 'CHANGE_EVENT';
@@ -16,6 +17,7 @@ var habits = [
   // {name: 'Breathing',   progress: seq([true, true, true, true]),   from: '9:35', to: '9:45', schedule: [0, 1, 2, 3, 4]},
 ]
 var habitProgress = []
+var users = []
 
 patchWithIDs(habits)
 
@@ -95,6 +97,10 @@ class Storage extends EventEmitter {
   getHabitProgress() {
     return habitProgress
   }
+
+  getUsers() {
+    return users
+  }
 }
 
 const store = new Storage();
@@ -110,6 +116,20 @@ Dispatcher.register((p) => {
   }
 
   switch (p.actionType) {
+    case ADMIN_USERS:
+      post('/admin/users')
+        .then(r => {
+          console.log('users', r)
+          users = r.users;
+        })
+        .catch(err => {
+          console.error('err', err)
+        })
+        .finally(() => {
+          store.emitChange()
+        })
+      break;
+
     case PROFILE_LOAD:
       console.log(PROFILE_LOAD, p)
       post('/profile', {telegramId: p.telegramId})

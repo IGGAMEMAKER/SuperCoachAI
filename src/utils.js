@@ -49,12 +49,12 @@ export const removeById = (list, id) => {
 }
 
 // ---------------------
+// TODO duplicate in utils.js
 export const getUniqueDay = date => {
   var d = new Date(date);
 
   return d.getUTCFullYear() * 1000000 + d.getUTCMonth() * 1000 + d.getUTCDate()
 }
-
 export const isHabitDoneOnDayX = (progress, habitId, date) => {
   var sameHabit = progress.habitId === habitId
   var d1 = getUniqueDay(date)

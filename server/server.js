@@ -1,7 +1,7 @@
 const {isHabitDoneOnDayX} = require("../utils");
 const {app} = require('./expressGenerator')(3333);
 
-const {UserModel} = require('./Models')
+const {UserModel, MessageModel} = require('./Models')
 
 const getCookies = req => {
   return {
@@ -25,6 +25,11 @@ const flushCookies = (res) => {
 }
 const setCookies = (res, telegramId) => {
   res.cookie('telegramId', telegramId)
+}
+
+const renderAdminPanel = (req, res) => {
+  var appPath = __dirname.replace('server', 'build') + '/admin.html'
+  res.sendFile(appPath);
 }
 
 const renderSPA = (req, res) => {
@@ -106,6 +111,7 @@ var seq = (progress) => progress.map((p, i) => ({
 
 // ROUTES
 app.get('/', renderSPA)
+app.get('/admin', renderSPA)
 app.post('/profile', getUser)
 
 // app.get('/profile', (req, res) => {
@@ -127,7 +133,18 @@ app.post('/profile', getUser)
 //   })
 // })
 
-
+app.post('/admin/users', (req, res) => {
+  UserModel.find()
+    .then(users => {
+      res.json({users})
+    })
+    .catch(err => {
+      res.json({
+        users: [],
+        err
+      })
+    })
+})
 
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {

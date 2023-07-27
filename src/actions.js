@@ -1,5 +1,6 @@
 import Dispatcher from './Dispatcher';
 import {
+  ADMIN_USERS,
   HABITS_ADD, HABITS_DATE_EDIT, HABITS_PROGRESS_TOGGLE, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
 } from './constants/actionConstants';
 
@@ -48,10 +49,17 @@ export function toggleHabitSchedule(id, dayOfWeek) {
   })
 }
 
-
+// ------------------------
+export function loadUsersInAdminPanel() {
+  Dispatcher.dispatch({
+    actionType: ADMIN_USERS
+  })
+}
 
 
 export default {
+  loadUsersInAdminPanel,
+  //
   loadProfile,
 
   addHabit,

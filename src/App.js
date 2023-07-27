@@ -3,7 +3,7 @@ import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
-import actions, {loadProfile, toggleHabitProgress} from "./actions";
+import actions, {loadProfile, loadUsersInAdminPanel, toggleHabitProgress} from "./actions";
 import {FieldAdder} from "./UI/FieldAdder";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 
@@ -257,6 +257,36 @@ const getErrorStats2 = habits => {
   return errorStats
 }
 
+
+class AdminPage extends Component {
+  state = {
+    users: []
+  }
+
+  saveUsers() {
+    this.setState({
+      users: storage.getUsers()
+    })
+  }
+
+  componentWillMount() {
+    storage.addChangeListener(() => {
+      console.log('store listener')
+      this.saveUsers()
+    })
+
+    this.saveUsers()
+    actions.loadUsersInAdminPanel(storage.getTelegramId())
+  }
+
+  render() {
+    return <div>
+      {JSON.stringify(this.state.users)}
+    </div>
+  }
+}
+
+
 class MainPage extends Component {
   state = {
     habits: [],
@@ -398,6 +428,7 @@ function App() {
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
+          <Route path='/admin'                     element={<AdminPage/>}/>
         </Routes>
       </header>
     </div>

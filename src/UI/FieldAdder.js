@@ -14,7 +14,6 @@ export function FieldAdder({onAdd, placeholder, defaultButtonClass = "", default
     <input autoFocus value={value} placeholder={placeholder} onChange={ev => onChange(ev.target.value)}/>
     <button className={defaultButtonClass} onClick={() => {
       onAdd(value)
-      // actions.addBenefitToMonetizationPlan(index, value)
       onChange("")
       setNeedsToAdd(false)
     }}>Add
