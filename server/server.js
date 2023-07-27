@@ -133,7 +133,7 @@ app.post('/profile', getUser)
 //   })
 // })
 
-app.post('/admin/users', (req, res) => {
+app.all('/admin/users', (req, res) => {
   UserModel.find()
     .then(users => {
       res.json({users})
