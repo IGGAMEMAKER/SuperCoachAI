@@ -125,13 +125,11 @@ const getAllUsers = (req, res) => {
 const getMessagesOfUser = async (req, res) => {
   var {telegramId} = req.params
   res.json({
-    messages: await UserModel.find({telegramId}) //['hi, zyabl']
+    messages: await MessageModel.find({sender: telegramId}) //['hi, zyabl']
   })
 }
 
-const saveMessage = async (req, res) => {
-  var {chatId, text, sender} = req.body;
-
+const saveMessage = async (text, sender, chatId) => {
   var message = new MessageModel({
     text,
     sender,
@@ -140,42 +138,20 @@ const saveMessage = async (req, res) => {
   })
   var s = await message.save()
 
+  return s
+}
+const saveMessagesRoute = async (req, res) => {
+  var {chatId, text, sender} = req.body;
+
+  var s = await saveMessage(text, sender, chatId)
+
   console.log(s, 'save message')
   res.json({
     ok: 1
   })
 }
 
-// ROUTES
-app.get('/', renderSPA)
-app.get('/admin', renderSPA)
-app.post('/profile', getUser)
-
-// app.get('/profile', (req, res) => {
-//   res.json({
-//     habits: [
-//       {
-//         name: 'Cold shower',
-//         progress: seq([true, false, true, false]),
-//         from: '8:45', to: '9:25',
-//         schedule: [0, 1, 2, 3, 4, 5, 6]
-//       },
-//       {
-//         name: 'Breathing',
-//         progress: seq([true, true, true, true]),
-//         from: '9:35', to: '9:45',
-//         schedule: [0, 1, 2, 3, 4]
-//       },
-//     ]
-//   })
-// })
-
-app.all('/admin/users', getAllUsers)
-app.post('/messages', saveMessage)
-app.get('/messages/:telegramId', getMessagesOfUser)
-
-app.put('/habits', authenticate, saveHabits)
-app.post('/habits/progress', authenticate, (req, res) => {
+const saveHabitProgress = (req, res) => {
   // console.log('/habits/progress')
   var {date, habitId} = req.body
   console.log(date, habitId)
@@ -210,7 +186,39 @@ app.post('/habits/progress', authenticate, (req, res) => {
       console.error('caught cause failed to get user??', err)
       res.json({fail: 1, noUser: 1})
     })
-})
+}
+
+
+// ROUTES
+app.get('/', renderSPA)
+app.get('/admin', renderSPA)
+app.post('/profile', getUser)
+
+// app.get('/profile', (req, res) => {
+//   res.json({
+//     habits: [
+//       {
+//         name: 'Cold shower',
+//         progress: seq([true, false, true, false]),
+//         from: '8:45', to: '9:25',
+//         schedule: [0, 1, 2, 3, 4, 5, 6]
+//       },
+//       {
+//         name: 'Breathing',
+//         progress: seq([true, true, true, true]),
+//         from: '9:35', to: '9:45',
+//         schedule: [0, 1, 2, 3, 4]
+//       },
+//     ]
+//   })
+// })
+
+app.all('/admin/users', getAllUsers)
+app.post('/messages', saveMessagesRoute)
+app.get('/messages/:telegramId', getMessagesOfUser)
+
+app.put('/habits', authenticate, saveHabits)
+app.post('/habits/progress', authenticate, saveHabitProgress)
 
 // ---------------- API ------------------------
 
