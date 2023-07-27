@@ -6,6 +6,7 @@ import storage from "./Storage";
 import actions, {loadProfile, loadUsersInAdminPanel, toggleHabitProgress} from "./actions";
 import {FieldAdder} from "./UI/FieldAdder";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
+import {ping} from "./PingBrowser";
 
 
 const getLiteralDayOfWeek = (val) => {
@@ -257,6 +258,49 @@ const getErrorStats2 = habits => {
   return errorStats
 }
 
+class UserView extends Component {
+  state = {
+    expanded: false,
+    messages: [],
+  }
+
+  loadMessages = () => {
+    var telegramId = this.props.user.telegramId
+    ping('/messages/' + telegramId)
+      .then(r => {
+        console.log('got messages', r);
+        this.setState({
+          messages: r.messages,
+          expanded: true
+        })
+      })
+      .catch(err => {
+        console.error('cannot load messages for user')
+        console.error(err)
+        console.error(telegramId)
+      })
+  }
+
+  render() {
+    var user = this.props.user
+
+    var needsResponse = !user.hasAnswer
+    var unanswered = <div>
+      Needs your response <button onClick={() => {
+      this.loadMessages()
+    }}>Show</button>
+    </div>
+
+    return <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
+      <b>{user.telegramId}</b> [{user.habits.length}] habits
+      <br/>{user.habits.map(h => h.name).join(', ')}
+      <br/>
+      <br/>
+      {needsResponse ? unanswered : 'Answered'}
+      {this.state.expanded ? JSON.stringify(this.state.messages) : 'no messages?'}
+    </div>
+  }
+}
 
 class AdminPage extends Component {
   state = {
@@ -280,8 +324,12 @@ class AdminPage extends Component {
   }
 
   render() {
+    var users = this.state.users;
+
     return <div>
-      {JSON.stringify(this.state.users)}
+      {users.map(u => <UserView user={u} />)}
+      {users.map(u => JSON.stringify(u))}
+      {/*{JSON.stringify(this.state.users)}*/}
     </div>
   }
 }

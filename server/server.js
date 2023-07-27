@@ -145,6 +145,11 @@ app.all('/admin/users', (req, res) => {
       })
     })
 })
+app.get('/messages/:telegramId', (req, res) => {
+  res.json({
+    messages: ['hi, zyabl']
+  })
+})
 
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {
