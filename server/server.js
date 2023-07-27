@@ -1,3 +1,4 @@
+const {launch} = require("./saveTelegramMessages");
 const {isHabitDoneOnDayX} = require("../utils");
 const {app} = require('./expressGenerator')(3333);
 
@@ -239,3 +240,5 @@ const standardErrorHandler = (err, req, res, next) => {
 
 app.use(customErrorHandler)
 app.use(standardErrorHandler)
+
+launch()

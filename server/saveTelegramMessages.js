@@ -45,11 +45,11 @@ const sendTGMessage = () => {
   console.log('will send message')
 }
 
-const activate = () => {
+const launch = () => {
   console.log('bot activation')
 }
 
 module.exports = {
   sendTGMessage,
-  activate
+  launch
 }
