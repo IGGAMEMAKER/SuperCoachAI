@@ -24,9 +24,10 @@ bot.on(message('text'), async (ctx) => {
   await ctx.telegram.sendMessage(chatId, text);
 
   console.log(ctx, {ctx}, {chat})
-  var sender = message.from;
-  console.log({sender})
-  // await saveMessage(text, , chatId, )
+  var sender = chatId;
+  console.log({sender}, message)
+  var r = await saveMessage(text, sender, chatId, new Date())
+  console.log(r)
 });
 
 bot.launch();
