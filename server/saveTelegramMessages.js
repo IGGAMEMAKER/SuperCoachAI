@@ -1,3 +1,4 @@
+const {saveMessage} = require("./saveMessagesInDB");
 const {MessageModel} = require("./Models");
 const {TG_BOT_API_KEY} = require("../CD/Configs");
 const { Telegraf } = require('telegraf')
@@ -15,14 +16,17 @@ bot.command('quit', async (ctx) => {
 
 bot.on(message('text'), async (ctx) => {
   // Explicit usage
-  var chat = ctx.message.chat
+  var message = ctx.message;
+  var chat = message.chat
   var chatId = chat.id;
-  await ctx.telegram.sendMessage(chat.id, `Hello ${ctx.state.role}`);
+
+  var text = message.text
+  await ctx.telegram.sendMessage(chatId, text);
 
   console.log(ctx, {ctx}, {chat})
-  var message = new MessageModel({
-
-  })
+  var sender = message.from;
+  console.log({sender})
+  // await saveMessage(text, , chatId, )
 });
 
 bot.launch();

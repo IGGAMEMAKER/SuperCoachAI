@@ -1,3 +1,4 @@
+const {saveMessage} = require("./saveMessagesInDB");
 const {launch} = require("./saveTelegramMessages");
 const {isHabitDoneOnDayX} = require("../utils");
 const {app} = require('./expressGenerator')(3333);
@@ -130,17 +131,7 @@ const getMessagesOfUser = async (req, res) => {
   })
 }
 
-const saveMessage = async (text, sender, chatId) => {
-  var message = new MessageModel({
-    text,
-    sender,
-    chatId,
-    date: Date.now()
-  })
-  var s = await message.save()
 
-  return s
-}
 const saveMessagesRoute = async (req, res) => {
   var {chatId, text, sender} = req.body;
 
