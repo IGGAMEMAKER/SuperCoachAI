@@ -11,8 +11,8 @@ var UserSchema = new Schema({
 })
 
 var MessageSchema = new Schema({
-  text: String,
   sender: String, // telegramId
+  text: String,
   date: Date,
   chatId: String
 })

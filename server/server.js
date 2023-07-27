@@ -109,6 +109,43 @@ var seq = (progress) => progress.map((p, i) => ({
   progress: p
 }))
 
+const getAllUsers = (req, res) => {
+  UserModel.find()
+    .then(users => {
+      res.json({users})
+    })
+    .catch(err => {
+      res.json({
+        users: [],
+        err
+      })
+    })
+}
+
+const getMessagesOfUser = async (req, res) => {
+  var {telegramId} = req.params
+  res.json({
+    messages: await UserModel.find({telegramId}) //['hi, zyabl']
+  })
+}
+
+const saveMessage = async (req, res) => {
+  var {chatId, text, sender} = req.body;
+
+  var message = new MessageModel({
+    text,
+    sender,
+    chatId,
+    date: Date.now()
+  })
+  var s = await message.save()
+
+  console.log(s, 'save message')
+  res.json({
+    ok: 1
+  })
+}
+
 // ROUTES
 app.get('/', renderSPA)
 app.get('/admin', renderSPA)
@@ -133,23 +170,9 @@ app.post('/profile', getUser)
 //   })
 // })
 
-app.all('/admin/users', (req, res) => {
-  UserModel.find()
-    .then(users => {
-      res.json({users})
-    })
-    .catch(err => {
-      res.json({
-        users: [],
-        err
-      })
-    })
-})
-app.get('/messages/:telegramId', (req, res) => {
-  res.json({
-    messages: ['hi, zyabl']
-  })
-})
+app.all('/admin/users', getAllUsers)
+app.post('/messages', saveMessage)
+app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.put('/habits', authenticate, saveHabits)
 app.post('/habits/progress', authenticate, (req, res) => {

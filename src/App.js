@@ -6,7 +6,7 @@ import storage from "./Storage";
 import actions, {loadProfile, loadUsersInAdminPanel, toggleHabitProgress} from "./actions";
 import {FieldAdder} from "./UI/FieldAdder";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
-import {ping} from "./PingBrowser";
+import {ping, post} from "./PingBrowser";
 
 
 const getLiteralDayOfWeek = (val) => {
@@ -281,6 +281,17 @@ class UserView extends Component {
       })
   }
 
+  saveMessage = () => {
+    var message = {chatId: '', text: 'hi, girl!', sender: storage.getTelegramId()}
+    post('/messages', message)
+      .then(r => {
+        console.log('saveMessage', r)
+      })
+      .catch(err => {
+        console.error('saving message failed', err)
+      })
+  }
+
   render() {
     var user = this.props.user
 
@@ -291,13 +302,19 @@ class UserView extends Component {
     }}>Show</button>
     </div>
 
+    var messageForm = <div>
+      {JSON.stringify(this.state.messages)}
+      <br />
+      <button onClick={() => this.saveMessage()}>Save</button>
+    </div>
+
     return <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
       <b>{user.telegramId}</b> [{user.habits.length}] habits
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br/>
       <br/>
       {needsResponse ? unanswered : 'Answered'}
-      {this.state.expanded ? JSON.stringify(this.state.messages) : 'no messages?'}
+      {this.state.expanded ? messageForm : 'no messages?'}
     </div>
   }
 }
