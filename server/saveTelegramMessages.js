@@ -27,10 +27,10 @@ bot.on(message('text'), async (ctx) => {
   var sender = chatId;
 
   console.log({sender}, message)
-  var r = await saveMessage(text, sender, chatId, new Date())
-  changeAnswerStatus(chatId, false)
+  var s = await saveMessage(text, sender, chatId, new Date())
+  var r = await changeAnswerStatus(chatId, false)
 
-  console.log(r)
+  console.log(r, s)
 });
 
 bot.launch();
