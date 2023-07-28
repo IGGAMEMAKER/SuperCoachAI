@@ -9,6 +9,9 @@ import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
 import {FieldPicker} from "./UI/FieldPicker";
 
+const TIME_FROM_MORNING = "9:00"
+const TIME_FROM_AFTERNOON = "12:00"
+const TIME_FROM_EVENING = "16-00"
 
 const getLiteralDayOfWeek = (val) => {
   switch (val) {
@@ -144,9 +147,9 @@ function HabitTimePicker({onSave, defaultFrom="11:00", defaultTo="12:00"}) {
   }
 
   return <div>
-    {timeButton('Morning', '9-00', '12-00')}
-    {timeButton('Afternoon', '13-00', '16-00')}
-    {timeButton('Evening', '17-00', '20-00')}
+    {timeButton('Morning', TIME_FROM_MORNING, '12:00')}
+    {timeButton('Afternoon', TIME_FROM_AFTERNOON, '16:00')}
+    {timeButton('Evening', TIME_FROM_EVENING, '20:00')}
   </div>
 }
 
@@ -516,9 +519,9 @@ class MainPage extends Component {
 
         const getTimePeriod = () => {
           switch (h.from) {
-            case "9-00": return "Morning";
-            case "12-00": return "Afternoon"
-            case "16-00": return "Evening"
+            case TIME_FROM_MORNING: return "Morning";
+            case TIME_FROM_AFTERNOON: return "Afternoon"
+            case TIME_FROM_EVENING: return "Evening"
             default: return "???"
           }
         }
