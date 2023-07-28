@@ -361,7 +361,7 @@ class AdminPage extends Component {
 
     this.loadUsers()
 
-    setInterval(this.loadUsers, 5 * 1000)
+    setInterval(this.loadUsers, 30 * 1000)
   }
 
   loadUsers = () => {
