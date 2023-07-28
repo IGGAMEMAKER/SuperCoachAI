@@ -6,7 +6,7 @@ var UserSchema = new Schema({
 
   habits: Array,
   progress: Array, // [{habitId, date}]
-  hasAnswer: Boolean,
+  hasAnswer: {type: Boolean, default: true},
   // habits?? entire profile?
   // save habit progress too?
 })

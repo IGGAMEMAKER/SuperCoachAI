@@ -1,5 +1,5 @@
+const {changeAnswerStatus} = require("./saveMessagesInDB");
 const {saveMessage} = require("./saveMessagesInDB");
-const {MessageModel} = require("./Models");
 const {TG_BOT_API_KEY} = require("../CD/Configs");
 const { Telegraf } = require('telegraf')
 const { message } = require('telegraf/filters')
@@ -28,6 +28,7 @@ bot.on(message('text'), async (ctx) => {
 
   console.log({sender}, message)
   var r = await saveMessage(text, sender, chatId, new Date())
+  changeAnswerStatus(chatId, false)
 
   console.log(r)
 });
