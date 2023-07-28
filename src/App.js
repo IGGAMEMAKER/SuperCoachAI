@@ -373,10 +373,9 @@ class AdminPage extends Component {
 
     return <div>
       {users.map(u => <UserView user={u} onAnswer={() => {this.loadUsers()}} />)}
-      <br/>
-      <br/>
-      {users.map(u => JSON.stringify(u))}
-      {/*{JSON.stringify(this.state.users)}*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*{users.map(u => JSON.stringify(u))}*/}
     </div>
   }
 }
