@@ -112,6 +112,14 @@ var seq = (progress) => progress.map((p, i) => ({
 }))
 
 const getAllUsers = (req, res) => {
+  // UserModel.aggregate([{
+  //     $lookup: {
+  //       from: "worksnapsTimeEntries", // collection name in db
+  //       localField: "_id",
+  //       foreignField: "student",
+  //       as: "worksnapsTimeEntries"
+  //     }
+  //   }])
   UserModel.find()
     .then(users => {
       res.json({users})
@@ -135,9 +143,22 @@ const getMessagesOfUser = async (req, res) => {
 const saveMessagesRoute = async (req, res) => {
   var {chatId, text, sender} = req.body;
 
-  var s = await saveMessage(text, sender, chatId)
+  var s = await saveMessage(text, sender, chatId, new Date())
 
   console.log(s, 'save message')
+  res.json({
+    ok: 1
+  })
+}
+
+const answerToUserRoute = async (req, res) => {
+  var {text, chatId} = req.body;
+  var sender = '-1'
+
+  await saveMessage(text, sender, chatId, new Date())
+  await UserModel.updateOne({telegramId: chatId}, {hasAnswer: true})
+
+
   res.json({
     ok: 1
   })
@@ -207,6 +228,7 @@ app.post('/profile', getUser)
 
 app.all('/admin/users', getAllUsers)
 app.post('/messages', saveMessagesRoute)
+app.post('/answer', answerToUserRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.put('/habits', authenticate, saveHabits)

@@ -21,12 +21,14 @@ bot.on(message('text'), async (ctx) => {
   var chatId = chat.id;
 
   var text = message.text
-  await ctx.telegram.sendMessage(chatId, text);
+  // await ctx.telegram.sendMessage(chatId, text);
 
   console.log(ctx, {ctx}, {chat})
   var sender = chatId;
+
   console.log({sender}, message)
   var r = await saveMessage(text, sender, chatId, new Date())
+
   console.log(r)
 });
 
@@ -46,8 +48,9 @@ testSend().then().catch().finally()
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
 
-const sendTGMessage = () => {
+const sendTGMessage = async (chatId, text) => {
   console.log('will send message')
+  await bot.telegram.sendMessage(chatId, text)
 }
 
 const launch = () => {

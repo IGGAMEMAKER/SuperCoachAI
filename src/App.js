@@ -281,11 +281,12 @@ class UserView extends Component {
       })
   }
 
-  saveMessage = () => {
-    var message = {chatId: '', text: 'hi, girl!', sender: storage.getTelegramId()}
-    post('/messages', message)
+  answerAsAdmin = (chatId, text) => {
+    var message = {chatId, text}
+    post('/answer', message)
       .then(r => {
         console.log('saveMessage', r)
+        this.loadMessages()
       })
       .catch(err => {
         console.error('saving message failed', err)
@@ -296,7 +297,7 @@ class UserView extends Component {
     var user = this.props.user
 
     var needsResponse = !user.hasAnswer
-    var unanswered = <div>
+    var unanswered = <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
       Needs your response <button onClick={() => {
       this.loadMessages()
     }}>Show</button>
@@ -305,10 +306,10 @@ class UserView extends Component {
     var messageForm = <div>
       {JSON.stringify(this.state.messages)}
       <br />
-      <button onClick={() => this.saveMessage()}>Save</button>
+      <button onClick={() => this.answerAsAdmin(user.telegramId, 'Хай, зябл')}>Save</button>
     </div>
 
-    return <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
+    return <div>
       <b>{user.telegramId}</b> [{user.habits.length}] habits
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br/>
