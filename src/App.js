@@ -56,8 +56,9 @@ function HabitEditor({habit, onCloseEditor}) {
     <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={(fr, to) => {
       // setTimeFrom(fr)
       // setTimeTo(to)
-      actions.editHabitTime(habit.id, fr, 'from')
-      actions.editHabitTime(habit.id, to, 'to')
+      actions.editHabitTime(habit.id, fr, to)
+      // actions.editHabitTime(habit.id, fr, 'from')
+      // actions.editHabitTime(habit.id, to, 'to')
     }} />
     {/*<div>*/}
     {/*  <div className="popup-label">From {habit.from}</div>*/}
