@@ -146,10 +146,22 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     setTimeTo(v)
   }
 
-  const timeButton = (time, fr, to) => <button style={{backgroundColor: timeFrom === fr ? 'green' : 'buttonface'}} onClick={() => {
-    setTimeFrom(fr)
-    setTimeTo(to)
-  }}>{time}</button>
+  const timeButton = (time, fr, to) => {
+    var s = {}
+    var isChosen = timeFrom === fr;
+    if (isChosen) {
+      s.backgroundColor = 'green';
+      s.color = 'white'
+      s.fontWeight = '800'
+    } else {
+      s.backgroundColor = 'buttonface'
+    }
+
+    return <button style={s} onClick={() => {
+      setTimeFrom(fr)
+      setTimeTo(to)
+    }}>{time}</button>
+  }
 
   var fromForm;
   var toForm;
