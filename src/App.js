@@ -318,8 +318,6 @@ class UserView extends Component {
         this.answerAsAdmin(user.telegramId, 'Хай, зябл')
         this.props.onAnswer()
       }}>Answer</button>
-      <br />
-      <hr />
     </div>
 
     return <div>
@@ -329,6 +327,8 @@ class UserView extends Component {
       <br/>
       {needsResponse ? unanswered : answered}
       {this.state.expanded ? messageForm : ''}
+      <br />
+      <hr />
     </div>
   }
 }
