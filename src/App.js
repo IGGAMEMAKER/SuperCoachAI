@@ -525,7 +525,8 @@ class MainPage extends Component {
             default: return "???"
           }
         }
-        habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container ${intersects ? 'intersects' : ''}`}>
+        // habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container ${intersects ? 'intersects' : ''}`}>
+        habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container`}>
           {h.name}
           <br />
           <div className="habit-date">
