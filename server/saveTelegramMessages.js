@@ -35,7 +35,7 @@ bot.on(message('text'), async (ctx) => {
   var me = '136526204'
   var kostya = '137720008'
 
-  var adminChatId = kostya
+  var adminChatId = me
   await sendTGMessage(adminChatId, 'You got new message from users! Reply: supercoach.site/admin')
 
   // console.log(r, s)
