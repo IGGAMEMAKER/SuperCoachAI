@@ -31,7 +31,11 @@ bot.on(message('text'), async (ctx) => {
   var s = await saveMessage(text, sender, chatId, new Date())
   var r = await changeAnswerStatus(chatId, false)
 
-  console.log(r, s)
+  // notify admin
+  var adminChatId = '136526204'
+  await sendTGMessage(adminChatId, 'You got new message from users! Reply here: https://supercoach.site/admin')
+
+  // console.log(r, s)
 });
 
 bot.launch();

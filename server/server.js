@@ -114,14 +114,6 @@ var seq = (progress) => progress.map((p, i) => ({
 }))
 
 const getAllUsers = (req, res) => {
-  // UserModel.aggregate([{
-  //     $lookup: {
-  //       from: "worksnapsTimeEntries", // collection name in db
-  //       localField: "_id",
-  //       foreignField: "student",
-  //       as: "worksnapsTimeEntries"
-  //     }
-  //   }])
   UserModel.find()
     .then(users => {
       res.json({users})
