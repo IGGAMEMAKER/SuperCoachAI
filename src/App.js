@@ -360,6 +360,8 @@ class AdminPage extends Component {
     })
 
     this.loadUsers()
+
+    setInterval(this.loadUsers, 5 * 1000)
   }
 
   loadUsers = () => {
@@ -371,6 +373,8 @@ class AdminPage extends Component {
 
     return <div>
       {users.map(u => <UserView user={u} onAnswer={() => {this.loadUsers()}} />)}
+      <br/>
+      <br/>
       {users.map(u => JSON.stringify(u))}
       {/*{JSON.stringify(this.state.users)}*/}
     </div>
