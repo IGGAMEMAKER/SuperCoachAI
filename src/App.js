@@ -312,12 +312,14 @@ class UserView extends Component {
         var style = {textAlign: isSenderAdmin ? 'right' : 'left'}
         return <div style={style}>{m.text}</div>
       })}
-      {JSON.stringify(this.state.messages)}
+      {/*{JSON.stringify(this.state.messages)}*/}
       <br />
       <button onClick={() => {
         this.answerAsAdmin(user.telegramId, 'Хай, зябл')
         this.props.onAnswer()
       }}>Answer</button>
+      <br />
+      <hr />
     </div>
 
     return <div>
