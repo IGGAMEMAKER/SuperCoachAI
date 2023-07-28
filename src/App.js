@@ -7,6 +7,7 @@ import actions, {loadProfile, loadUsersInAdminPanel, toggleHabitProgress} from "
 import {FieldAdder} from "./UI/FieldAdder";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
+import {FieldPicker} from "./UI/FieldPicker";
 
 
 const getLiteralDayOfWeek = (val) => {
@@ -258,6 +259,14 @@ const getErrorStats2 = habits => {
   return errorStats
 }
 
+function AdminSender({onSend}) {
+  var [text, setText] = useState("")
+
+  return <div>
+    <input value={text} onChange={ev => setText(ev.target.value)} />
+    {text.length ? <button onClick={() => {onSend(text)}}>Answer</button> : ''}
+  </div>
+}
 class UserView extends Component {
   state = {
     expanded: false,
@@ -314,10 +323,11 @@ class UserView extends Component {
       })}
       {/*{JSON.stringify(this.state.messages)}*/}
       <br />
-      <button onClick={() => {
-        this.answerAsAdmin(user.telegramId, 'Хай, зябл')
+      <AdminSender onSend={(text) => {
+        this.answerAsAdmin(user.telegramId, text)
         this.props.onAnswer()
-      }}>Answer</button>
+      }} />
+      {/*<button onClick={}>Answer</button>*/}
     </div>
 
     return <div>
