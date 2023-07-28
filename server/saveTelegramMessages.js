@@ -32,8 +32,11 @@ bot.on(message('text'), async (ctx) => {
   var r = await changeAnswerStatus(chatId, false)
 
   // notify admin
-  var adminChatId = '136526204'
-  await sendTGMessage(adminChatId, 'You got new message from users! Reply here: https://supercoach.site/admin')
+  var me = '136526204'
+  var kostya = '137720008'
+
+  var adminChatId = me
+  await sendTGMessage(adminChatId, 'You got new message from users! Reply: supercoach.site/admin')
 
   // console.log(r, s)
 });
