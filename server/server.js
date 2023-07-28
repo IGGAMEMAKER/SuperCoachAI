@@ -137,7 +137,7 @@ const getAllUsers = (req, res) => {
 const getMessagesOfUser = async (req, res) => {
   var {telegramId} = req.params
   res.json({
-    messages: await MessageModel.find({sender: telegramId}) //['hi, zyabl']
+    messages: await MessageModel.find({chatId: telegramId}) //['hi, zyabl']
   })
 }
 
@@ -157,8 +157,7 @@ const answerToUserRoute = async (req, res) => {
   var {text, chatId} = req.body;
   var sender = '-1'
 
-  var www = await saveMessage(text, sender, chatId, new Date())
-  // console.log({www})
+  await saveMessage(text, sender, chatId, new Date())
   await changeAnswerStatus(chatId, true)
   await sendTGMessage(chatId, text)
 

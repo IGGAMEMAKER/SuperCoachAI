@@ -7,11 +7,14 @@ const saveMessage = async (text, sender, chatId, date=new Date()) => {
     chatId,
     date
   })
-  console.log('save message', text, typeof text, sender, typeof sender, chatId, typeof chatId, date)
+
+  // console.log('save message', text, typeof text, sender, typeof sender, chatId, typeof chatId, date)
+  console.log('save message', typeof text, text, typeof sender, sender, typeof chatId, chatId)
   var s = await message.save()
   console.log(s)
   return s
 }
+
 const changeAnswerStatus = (chatId, status) => UserModel.updateOne({telegramId: chatId + ""}, {hasAnswer: status})
 module.exports = {
   saveMessage,
