@@ -114,6 +114,34 @@ function HabitEditor({habit, onCloseEditor}) {
   </div>
 }
 
+function HabitTimePicker({onSave}) {
+  var [timeFrom, setTimeFrom] = useState("11:00")
+  var [timeTo, setTimeTo] = useState("12:00")
+
+  const timeButton = (time, fr, to) => {
+    var st = {}
+    var isChosen = timeFrom === fr;
+    if (isChosen) {
+      st.backgroundColor = 'green';
+      st.color = 'white'
+      st.fontWeight = '800'
+    } else {
+      st.backgroundColor = 'buttonface'
+    }
+
+    return <button style={st} onClick={() => {
+      setTimeFrom(fr)
+      setTimeTo(to)
+      onSave(fr, to)
+    }}>{time}</button>
+  }
+
+  return <div>
+    {timeButton('Morning', '9-00', '12-00')}
+    {timeButton('Afternoon', '13-00', '16-00')}
+    {timeButton('Evening', '17-00', '20-00')}
+  </div>
+}
 function HabitAdder({isOpen, onCloseAddingPopup}) {
   // var [expanded, expandHabit] = useState(false)
   var [text, setText] = useState("")
@@ -147,17 +175,17 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   }
 
   const timeButton = (time, fr, to) => {
-    var s = {}
+    var st = {}
     var isChosen = timeFrom === fr;
     if (isChosen) {
-      s.backgroundColor = 'green';
-      s.color = 'white'
-      s.fontWeight = '800'
+      st.backgroundColor = 'green';
+      st.color = 'white'
+      st.fontWeight = '800'
     } else {
-      s.backgroundColor = 'buttonface'
+      st.backgroundColor = 'buttonface'
     }
 
-    return <button style={s} onClick={() => {
+    return <button style={st} onClick={() => {
       setTimeFrom(fr)
       setTimeTo(to)
     }}>{time}</button>
@@ -166,11 +194,15 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var fromForm;
   var toForm;
   if (hasText) {
-    fromForm = <div>
-      {timeButton('Morning', '9-00', '12-00')}
-      {timeButton('Afternoon', '13-00', '16-00')}
-      {timeButton('Evening', '17-00', '20-00')}
-    </div>
+    fromForm = <HabitTimePicker onSave={(fr, to) => {
+      setTimeFrom(fr)
+      setTimeTo(to)
+    }} />
+    {/*<div>*/}
+    {/*  {timeButton('Morning', '9-00', '12-00')}*/}
+    {/*  {timeButton('Afternoon', '13-00', '16-00')}*/}
+    {/*  {timeButton('Evening', '17-00', '20-00')}*/}
+    // </div>
     // fromForm = <div>
     //   <label>From</label>
     //   <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange} />
