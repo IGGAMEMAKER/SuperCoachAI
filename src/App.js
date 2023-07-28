@@ -264,7 +264,7 @@ function AdminSender({onSend}) {
 
   return <div>
     <input value={text} onChange={ev => setText(ev.target.value)} />
-    {text.length ? <button onClick={() => {onSend(text)}}>Answer</button> : ''}
+    {text.length ? <button onClick={() => {onSend(text); setText("")}}>Answer</button> : ''}
   </div>
 }
 class UserView extends Component {
@@ -327,11 +327,10 @@ class UserView extends Component {
         this.answerAsAdmin(user.telegramId, text)
         this.props.onAnswer()
       }} />
-      {/*<button onClick={}>Answer</button>*/}
     </div>
 
     return <div>
-      <b>{user.telegramId}</b> [{user.habits.length}] habits
+      <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br/>
       <br/>
