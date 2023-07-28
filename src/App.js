@@ -53,14 +53,18 @@ function HabitEditor({habit, onCloseEditor}) {
   return <div className="popup" key={"habit" + habit.id}>
     <h2 className={"title"}>Edit habit {habit.name}</h2>
     <br/>
-    <div>
-      <div className="popup-label">From {habit.from}</div>
-      <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange}/>
-    </div>
-    <div>
-      <div className="popup-label">To {habit.to}</div>
-      <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange}/>
-    </div>
+    <HabitTimePicker onSave={(fr, to) => {
+      setTimeFrom(fr)
+      setTimeTo(to)
+    }} />
+    {/*<div>*/}
+    {/*  <div className="popup-label">From {habit.from}</div>*/}
+    {/*  <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange}/>*/}
+    {/*</div>*/}
+    {/*<div>*/}
+    {/*  <div className="popup-label">To {habit.to}</div>*/}
+    {/*  <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange}/>*/}
+    {/*</div>*/}
     <br/>
     <div className="popup-label">Schedule</div>
     <center>
@@ -142,6 +146,7 @@ function HabitTimePicker({onSave}) {
     {timeButton('Evening', '17-00', '20-00')}
   </div>
 }
+
 function HabitAdder({isOpen, onCloseAddingPopup}) {
   // var [expanded, expandHabit] = useState(false)
   var [text, setText] = useState("")
