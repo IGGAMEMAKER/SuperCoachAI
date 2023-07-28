@@ -154,7 +154,9 @@ Dispatcher.register((p) => {
       break;
     case HABITS_DATE_EDIT:
       var ind = getIndexByID(habits, p.id)
-      habits[ind][p.whichTime] = p.time
+      // habits[ind][p.whichTime] = p.time
+      habits[ind].from = p.from
+      habits[ind].to = p.to
 
       saveProfileChanges()
       break;

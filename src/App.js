@@ -54,8 +54,10 @@ function HabitEditor({habit, onCloseEditor}) {
     <h2 className={"title"}>Edit habit {habit.name}</h2>
     <br/>
     <HabitTimePicker onSave={(fr, to) => {
-      setTimeFrom(fr)
-      setTimeTo(to)
+      // setTimeFrom(fr)
+      // setTimeTo(to)
+      actions.editHabitTime(habit.id, fr, 'from')
+      actions.editHabitTime(habit.id, to, 'to')
     }} />
     {/*<div>*/}
     {/*  <div className="popup-label">From {habit.from}</div>*/}
