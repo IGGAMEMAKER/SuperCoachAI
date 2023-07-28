@@ -296,19 +296,28 @@ class UserView extends Component {
   render() {
     var user = this.props.user
 
+    var showHistory = (n ='Show chat') => <button onClick={() => {this.loadMessages()}}>{n}</button>
     var needsResponse = !user.hasAnswer
     var unanswered = <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
-        Needs your response <button onClick={() => {this.loadMessages()}}>Show</button>
+        Needs your response {showHistory()}
     </div>
 
     var answered = <div>
-      ANSWERED <button onClick={() => {this.loadMessages()}}>Show</button>
+      ANSWERED {showHistory()}
     </div>
 
     var messageForm = <div>
+      {this.state.messages.map(m => {
+        var isSenderAdmin = m.sender.length < 3
+        var style = {textAlign: isSenderAdmin ? 'right' : 'left'}
+        return <div style={style}>{m.text}</div>
+      })}
       {JSON.stringify(this.state.messages)}
       <br />
-      <button onClick={() => this.answerAsAdmin(user.telegramId, 'Хай, зябл')}>Save</button>
+      <button onClick={() => {
+        this.answerAsAdmin(user.telegramId, 'Хай, зябл')
+        this.props.onAnswer()
+      }}>Answer</button>
     </div>
 
     return <div>
@@ -339,7 +348,10 @@ class AdminPage extends Component {
       this.saveUsers()
     })
 
-    this.saveUsers()
+    this.loadUsers()
+  }
+
+  loadUsers = () => {
     actions.loadUsersInAdminPanel(storage.getTelegramId())
   }
 
@@ -347,7 +359,7 @@ class AdminPage extends Component {
     var users = this.state.users;
 
     return <div>
-      {users.map(u => <UserView user={u} />)}
+      {users.map(u => <UserView user={u} onAnswer={() => {this.loadUsers()}} />)}
       {users.map(u => JSON.stringify(u))}
       {/*{JSON.stringify(this.state.users)}*/}
     </div>
