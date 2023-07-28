@@ -1,3 +1,4 @@
+const {sendTGMessage} = require("./saveTelegramMessages");
 const {saveMessage} = require("./saveMessagesInDB");
 const {launch} = require("./saveTelegramMessages");
 const {isHabitDoneOnDayX} = require("../utils");
@@ -157,7 +158,7 @@ const answerToUserRoute = async (req, res) => {
 
   await saveMessage(text, sender, chatId, new Date())
   await UserModel.updateOne({telegramId: chatId}, {hasAnswer: true})
-
+  await sendTGMessage(chatId, text)
 
   res.json({
     ok: 1
