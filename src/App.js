@@ -53,7 +53,7 @@ function HabitEditor({habit, onCloseEditor}) {
   return <div className="popup" key={"habit" + habit.id}>
     <h2 className={"title"}>Edit habit {habit.name}</h2>
     <br/>
-    <HabitTimePicker onSave={(fr, to) => {
+    <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={(fr, to) => {
       // setTimeFrom(fr)
       // setTimeTo(to)
       actions.editHabitTime(habit.id, fr, 'from')
@@ -120,9 +120,9 @@ function HabitEditor({habit, onCloseEditor}) {
   </div>
 }
 
-function HabitTimePicker({onSave}) {
-  var [timeFrom, setTimeFrom] = useState("11:00")
-  var [timeTo, setTimeTo] = useState("12:00")
+function HabitTimePicker({onSave, defaultFrom="11:00", defaultTo="12:00"}) {
+  var [timeFrom, setTimeFrom] = useState(defaultFrom)
+  var [timeTo, setTimeTo] = useState(defaultTo)
 
   const timeButton = (time, fr, to) => {
     var st = {}
