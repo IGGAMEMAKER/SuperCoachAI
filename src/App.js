@@ -514,12 +514,21 @@ class MainPage extends Component {
         var erroredFrom = eFrom ? 'habit-date-error' : ''
         var erroredTo   = eTo ? 'habit-date-error' : ''
 
+        const getTimePeriod = () => {
+          switch (h.from) {
+            case "9-00": return "Morning";
+            case "12-00": return "Afternoon"
+            case "16-00": return "Evening"
+            default: return "???"
+          }
+        }
         habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container ${intersects ? 'intersects' : ''}`}>
           {h.name}
           <br />
           <div className="habit-date">
             {/*{twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}*/}
-            <span className={erroredFrom}>{h.from}</span> -- <span className={erroredTo}>{h.to}</span>
+            {/*<span className={erroredFrom}>{h.from}</span> -- <span className={erroredTo}>{h.to}</span>*/}
+            <span>{getTimePeriod()}</span>
           </div>
           {/*<div className="habit-editing-icon" onClick={() => {this.setEditingHabit(h.id)}}>✏️</div>*/}
         </div>)
