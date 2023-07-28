@@ -556,7 +556,7 @@ class MainPage extends Component {
         })
     })
 
-    var hasIntersectingHabits = !!Object.keys(errorStats).length;
+    var hasIntersectingHabits = false; // !!Object.keys(errorStats).length;
     var intersectingHabitsWarning;
     if (hasIntersectingHabits)
       intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
