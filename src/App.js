@@ -146,21 +146,31 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     setTimeTo(v)
   }
 
+  const timeButton = (time, fr, to) => <button onClick={() => {
+    setTimeFrom(fr)
+    setTimeTo(to)
+  }}>{time}</button>
+
   var fromForm;
   var toForm;
   if (hasText) {
     fromForm = <div>
-      <label>From</label>
-      <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange} />
+      {timeButton('Morning', '9-00', '12-00')}
+      {timeButton('Afternoon', '13-00', '16-00')}
+      {timeButton('Evening', '17-00', '20-00')}
     </div>
+    // fromForm = <div>
+    //   <label>From</label>
+    //   <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange} />
+    // </div>
   }
 
-  if (hasText && hasFromTime) {
-    toForm = <div>
-      <label>To</label>
-      <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange} />
-    </div>
-  }
+  // if (hasText && hasFromTime) {
+  //   toForm = <div>
+  //     <label>To</label>
+  //     <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange} />
+  //   </div>
+  // }
 
   var onAdd = () => {
     onCloseAddingPopup()
@@ -179,7 +189,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
     <div className={"from-to-form"}>
       {fromForm}
-      {toForm}
+      {/*{toForm}*/}
     </div>
     {/*<FieldAdder*/}
     {/*  placeholder="add new habit"*/}
