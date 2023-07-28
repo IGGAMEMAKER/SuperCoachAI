@@ -158,7 +158,7 @@ const answerToUserRoute = async (req, res) => {
   var sender = '-1'
 
   var www = await saveMessage(text, sender, chatId, new Date())
-  console.log({www})
+  // console.log({www})
   await changeAnswerStatus(chatId, true)
   await sendTGMessage(chatId, text)
 

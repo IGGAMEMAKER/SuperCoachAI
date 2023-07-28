@@ -23,10 +23,11 @@ bot.on(message('text'), async (ctx) => {
   var text = message.text
   // await ctx.telegram.sendMessage(chatId, text);
 
-  console.log(ctx, {ctx}, {chat})
+  console.log('got text', text)
+  // console.log(ctx, {ctx}, {chat})
   var sender = chatId;
 
-  console.log({sender}, message)
+  // console.log({sender}, message)
   var s = await saveMessage(text, sender, chatId, new Date())
   var r = await changeAnswerStatus(chatId, false)
 
