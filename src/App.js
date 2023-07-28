@@ -298,9 +298,11 @@ class UserView extends Component {
 
     var needsResponse = !user.hasAnswer
     var unanswered = <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
-      Needs your response <button onClick={() => {
-      this.loadMessages()
-    }}>Show</button>
+        Needs your response <button onClick={() => {this.loadMessages()}}>Show</button>
+    </div>
+
+    var answered = <div>
+      ANSWERED <button onClick={() => {this.loadMessages()}}>Show</button>
     </div>
 
     var messageForm = <div>
@@ -314,8 +316,8 @@ class UserView extends Component {
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br/>
       <br/>
-      {needsResponse ? unanswered : 'Answered'}
-      {this.state.expanded ? messageForm : 'no messages?'}
+      {needsResponse ? unanswered : answered}
+      {this.state.expanded ? messageForm : ''}
     </div>
   }
 }
