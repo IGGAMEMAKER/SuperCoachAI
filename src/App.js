@@ -558,8 +558,8 @@ class MainPage extends Component {
 
     var hasIntersectingHabits = false; // !!Object.keys(errorStats).length;
     var intersectingHabitsWarning;
-    if (hasIntersectingHabits)
-      intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
+    // if (hasIntersectingHabits)
+    //   intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
     return <div className={"plan-day-container"}>
@@ -568,7 +568,6 @@ class MainPage extends Component {
         <div className="left">
           HABITS
           <br />
-          {intersectingHabitsWarning}
         </div>
         {days.map(d => {
           var dayOfWeek = d.getDay()
