@@ -57,7 +57,8 @@ bot.on(message('text'), async (ctx) => {
       ' 1. Input the name of the habit\n' +
       ' 2. Select time of the day when you will perform it\n' +
       ' 3. Select which days of the week will you perform it\n' +
-      'After you\'re done, you can already start tracking your execution and then I will send you some tasks.'
+      'After you\'re done, you can already start tracking your execution and then I will send you some tasks.\n\n' +
+      'Also, if you want AI assistance, ask questions in this chat'
     await respondAsAdmin(chatId, launchAppMessage)
   }
 
