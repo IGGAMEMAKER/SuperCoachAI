@@ -61,6 +61,6 @@ export const isHabitDoneOnDayX = (progress, habitId, date) => {
   var d2 = getUniqueDay(progress.date)
   var sameDay = d1 === d2
 
-  console.log('isHabitDoneOnDayX', sameHabit, sameDay, d1, d2)
+  // console.log('isHabitDoneOnDayX', sameHabit, sameDay, d1, d2)
   return sameHabit && sameDay
 }
