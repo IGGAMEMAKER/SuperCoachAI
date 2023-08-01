@@ -33,6 +33,7 @@ bot.on(message('text'), async (ctx) => {
   await saveMessage(text, sender, chatId, new Date())
 
   var isCommandMessage = false;
+  const userQuery = {telegramId: chatId}
 
   // if there are some command/trigger messages, respond to them!
   if (text === '/start') {
@@ -42,17 +43,18 @@ bot.on(message('text'), async (ctx) => {
       'The app allows you to track habits and the AI Coach will help you along the way. \n\n' +
       'Let\'s begin. What\'s your name?'
     await respondAsAdmin(chatId, initialText)
+    await UserModel.updateOne(userQuery, {name: '', goal: ''})
   } else if (!user.name) {
     // will write his name
     isCommandMessage = true;
-    await UserModel.updateOne({telegramId: chatId}, {name: text})
+    await UserModel.updateOne(userQuery, {name: text})
 
     const nameConfirmationText = 'What do you want to achieve with this tool?'
     await respondAsAdmin(chatId, nameConfirmationText)
   } else if (!user.goal) {
     isCommandMessage = true;
 
-    await UserModel.updateOne({telegramId: chatId}, {goal: text})
+    await UserModel.updateOne(userQuery, {goal: text})
     const launchAppMessage = 'Got it! Now Launch app and add new habits.\n' +
       ' 1. Input the name of the habit\n' +
       ' 2. Select time of the day when you will perform it\n' +
