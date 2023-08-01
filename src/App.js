@@ -396,12 +396,11 @@ class UserView extends Component {
       }} />
     </div>
 
-    var habits= []
+    var habits = []
 
     return <div>
       <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks
       <br/>{user.habits.map(h => h.name).join(', ')}
-      {JSON.stringify(this.state.response)}
 
       <div className="habits-table">
         <div className="left">
@@ -409,11 +408,8 @@ class UserView extends Component {
           <br />
         </div>
         {renderTableOfDays()}
-        {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
-        <div className="left">
-          <br />
-          <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">+ new habit</button>
-        </div>
+        {/*{getMappedHabits(user.habits, this.state.habitProgress, this.setEditingHabit)}*/}
+        {getMappedHabits(user.habits, user.progress)}
       </div>
 
       <br/>
