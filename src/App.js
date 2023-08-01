@@ -336,6 +336,8 @@ class UserView extends Component {
   state = {
     expanded: false,
     messages: [],
+
+    response: {}
   }
 
   loadMessages = () => {
@@ -394,9 +396,26 @@ class UserView extends Component {
       }} />
     </div>
 
+    var habits= []
+
     return <div>
       <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks
       <br/>{user.habits.map(h => h.name).join(', ')}
+      {JSON.stringify(this.state.response)}
+
+      <div className="habits-table">
+        <div className="left">
+          HABITS
+          <br />
+        </div>
+        {renderTableOfDays()}
+        {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
+        <div className="left">
+          <br />
+          <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">+ new habit</button>
+        </div>
+      </div>
+
       <br/>
       <br/>
       {needsResponse ? unanswered : answered}
@@ -445,6 +464,87 @@ class AdminPage extends Component {
   }
 }
 
+const getRecentDays = () => {
+  var days = []
+
+  for (var i = -4; i <= 0; i++) {
+    days.push(new Date(Date.now() + i * 24 * 3600 * 1000))
+  }
+
+  return days;
+}
+
+const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
+  var habitsMapped = []
+  var days = getRecentDays()
+
+  habits
+    .sort((h1, h2) => getHour(h1.from) - getHour(h2.from))
+    .forEach(h => {
+      var isOnUserScreen = !!setEditingHabit
+      const getTimePeriod = () => {
+        switch (h.from) {
+          case TIME_FROM_MORNING: return "Morning";
+          case TIME_FROM_AFTERNOON: return "Afternoon"
+          case TIME_FROM_EVENING: return "Evening"
+
+          default: return "???"
+        }
+      }
+
+      const onEditHabit = () => {
+        if (isOnUserScreen)
+          setEditingHabit(h.id)
+      }
+      // habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container`}>
+      habitsMapped.push(<div onClick={onEditHabit} className={`left habit-container`}>
+        {h.name}
+        <br />
+        <div className="habit-date"><span>{getTimePeriod()}</span></div>
+      </div>)
+
+      days.forEach(date => {
+        var d = date.getDay()
+        var exists = h.schedule[d.toString()];
+        console.log(d.toString(), h.schedule)
+
+        var checked = !!habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
+
+        const onToggleProgress = ev => {
+          if (isOnUserScreen)
+            actions.toggleHabitProgress(h.id, date)
+        }
+
+        var content;
+        if (exists)
+          content = <input className="habit-checkbox" type="checkbox" checked={checked} onChange={onToggleProgress} />
+
+        habitsMapped.push(<div>{content}</div>)
+      })
+    })
+
+  return habitsMapped
+}
+
+const dow = (name, number) => {
+  var isToday = number === new Date().getDate()
+
+  return <div>
+    {name}
+    <br/>
+    <div className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</div>
+  </div>
+}
+const renderTableOfDays = () => {
+  var days = getRecentDays()
+
+  return days.map(d => {
+    var dayOfWeek = d.getDay()
+    var day = d.getDate()
+
+    return <div>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</div>
+  })
+}
 
 class MainPage extends Component {
   state = {
@@ -480,86 +580,8 @@ class MainPage extends Component {
     actions.loadProfile(storage.getTelegramId())
   }
 
-
-
-
   render() {
-    const dow = (name, number) => {
-      var isToday = number === new Date().getDate()
-
-      return <div>
-        {name}
-        <br/>
-        <div className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</div>
-        {/*<br/>*/}
-      </div>
-    }
-
     var {habits} = this.state
-
-    var days = []
-    for (var i = -4; i <= 0; i++) {
-      days.push(new Date(Date.now() + i * 24 * 3600 * 1000))
-    }
-
-    const twoDigit = num => num < 10 ? '0'+num : num
-
-    var habitsMapped = []
-    var errorStats = getErrorStats2(habits)
-
-    habits
-      .sort((h1, h2) => getHour(h1.from) - getHour(h2.from))
-      .forEach(h => {
-        var eFrom = errorStats[h.id + '.from']
-        var eTo   = errorStats[h.id + '.to']
-
-        var intersects = eFrom || eTo
-        var erroredFrom = eFrom ? 'habit-date-error' : ''
-        var erroredTo   = eTo ? 'habit-date-error' : ''
-
-        const getTimePeriod = () => {
-          switch (h.from) {
-            case TIME_FROM_MORNING: return "Morning";
-            case TIME_FROM_AFTERNOON: return "Afternoon"
-            case TIME_FROM_EVENING: return "Evening"
-            default: return "???"
-          }
-        }
-        // habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container ${intersects ? 'intersects' : ''}`}>
-        habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container`}>
-          {h.name}
-          <br />
-          <div className="habit-date">
-            {/*{twoDigit(h.fromHour)}-{twoDigit(h.fromMinutes)} : {twoDigit(h.toHour)}-{twoDigit(h.toMinutes)}*/}
-            {/*<span className={erroredFrom}>{h.from}</span> -- <span className={erroredTo}>{h.to}</span>*/}
-            <span>{getTimePeriod()}</span>
-          </div>
-          {/*<div className="habit-editing-icon" onClick={() => {this.setEditingHabit(h.id)}}>✏️</div>*/}
-        </div>)
-
-        days.forEach(date => {
-          var d = date.getDay()
-          var exists = h.schedule[d.toString()];
-          console.log(d.toString(), h.schedule)
-
-          var checked = !!this.state.habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
-
-          const onToggleProgress = ev => {
-            actions.toggleHabitProgress(h.id, date)
-          }
-
-          var content;
-          if (exists)
-            content = <input className="habit-checkbox" type="checkbox" checked={checked} onChange={onToggleProgress} />
-
-          habitsMapped.push(<div>{content}</div>)
-        })
-    })
-
-    var hasIntersectingHabits = false; // !!Object.keys(errorStats).length;
-    var intersectingHabitsWarning;
-    // if (hasIntersectingHabits)
-    //   intersectingHabitsWarning = <span className="intersecting-habits-warning">Your habits intersect by time!! Fix that!</span>
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
     return <div className={"plan-day-container"}>
@@ -569,22 +591,15 @@ class MainPage extends Component {
           HABITS
           <br />
         </div>
-        {days.map(d => {
-          var dayOfWeek = d.getDay()
-          var day = d.getDate()
-
-          return <div>{dow(getLiteralDayOfWeek(dayOfWeek), day)}</div>
-        })}
-        {habitsMapped}
+        {renderTableOfDays()}
+        {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
         <div className="left">
           <br />
           <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">+ new habit</button>
         </div>
-        {/*{days.map(d => <div></div>)}*/}
       </div>
       <HabitEditor habit={editingHabit} onCloseEditor={() => {this.unsetEditingHabit()}}/>
       <HabitAdder onCloseAddingPopup={() => this.toggleAddingPopup(false)} isOpen={this.state.isAddingHabitPopupOpened} />
-      {/*{JSON.stringify(this.state.habitProgress)}*/}
     </div>
   }
 }
