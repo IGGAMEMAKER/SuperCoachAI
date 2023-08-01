@@ -335,6 +335,7 @@ class UserView extends Component {
 
   loadMessages = () => {
     var telegramId = this.props.user.telegramId
+
     ping('/messages/' + telegramId)
       .then(r => {
         console.log('got messages', r);
@@ -367,7 +368,8 @@ class UserView extends Component {
     var showHistory = (n = 'Show chat') => <button onClick={() => {this.loadMessages()}}>{n}</button>
 
     var needsResponse = !user.hasAnswer
-    var unanswered = <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
+
+    var unanswered = <div style={{backgroundColor: 'red'}}>
       Needs your response {showHistory()}
     </div>
 
@@ -421,7 +423,7 @@ class UserView extends Component {
     var user = this.props.user
 
     return <div>
-      <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={() => {}}>Show progress</button>
+      <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br/>
       <br/>
@@ -464,9 +466,6 @@ class AdminPage extends Component {
 
     return <div>
       {users.map(u => <UserView user={u} onAnswer={() => {this.loadUsers()}} />)}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*{users.map(u => JSON.stringify(u))}*/}
     </div>
   }
 }
