@@ -7,6 +7,10 @@ var UserSchema = new Schema({
   habits: Array,
   progress: Array, // [{habitId, date}]
   hasAnswer: {type: Boolean, default: true},
+  name: String,
+  username: String, // telegram @username
+  goal: String,
+
   // habits?? entire profile?
   // save habit progress too?
 })

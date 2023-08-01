@@ -1,3 +1,4 @@
+const {UserModel} = require("./Models");
 const {changeAnswerStatus} = require("./saveMessagesInDB");
 const {saveMessage} = require("./saveMessagesInDB");
 const {TG_BOT_API_KEY} = require("../CD/Configs");
@@ -28,29 +29,47 @@ bot.on(message('text'), async (ctx) => {
   var sender = chatId;
 
   // console.log({sender}, message)
-  var s = await saveMessage(text, sender, chatId, new Date())
-  var r = await changeAnswerStatus(chatId, false)
+  var user = await UserModel.findOne({telegramId: chatId})
+  await saveMessage(text, sender, chatId, new Date())
 
-  // notify admin
-  var me = '136526204'
-  var kostya = '137720008'
-
-  var adminChatId = kostya
   var isCommandMessage = false;
-
 
   // if there are some command/trigger messages, respond to them!
   if (text === '/start') {
     isCommandMessage = true;
     const initialText = 'Hi!\n' +
       '\n' +
-      'The app allows you to track habits and the AI Coach will help you along the way. \n' +
+      'The app allows you to track habits and the AI Coach will help you along the way. \n\n' +
       'Let\'s begin. What\'s your name?'
-    await sendTGMessage(chatId, initialText)
+    await respondAsAdmin(chatId, initialText)
+  } else if (!user.name) {
+    // will write his name
+    isCommandMessage = true;
+    await UserModel.updateOne({telegramId: chatId}, {name: text})
+
+    const nameConfirmationText = 'What do you want to achieve with this tool?'
+    await respondAsAdmin(chatId, nameConfirmationText)
+  } else if (!user.goal) {
+    isCommandMessage = true;
+
+    await UserModel.updateOne({telegramId: chatId}, {goal: text})
+    const launchAppMessage = 'Got it! Now Launch app and add new habits.\n' +
+      ' 1. Input the name of the habit\n' +
+      ' 2. Select time of the day when you will perform it\n' +
+      ' 3. Select which days of the week will you perform it\n' +
+      'After you\'re done, you can already start tracking your execution and then I will send you some tasks.'
+    await respondAsAdmin(chatId, launchAppMessage)
   }
 
-  if (!isCommandMessage)
-    await sendTGMessage(adminChatId, 'You got new message from users! Reply: supercoach.site/admin')
+
+  if (!isCommandMessage) {
+    // notify admin
+    var me = '136526204'
+    var kostya = '137720008'
+
+    await changeAnswerStatus(chatId, false)
+    await sendTGMessage(kostya, 'You got new message from users! Reply: supercoach.site/admin')
+  }
 });
 
 bot.launch();
@@ -74,11 +93,20 @@ const sendTGMessage = async (chatId, text) => {
   await bot.telegram.sendMessage(chatId, text)
 }
 
+const respondAsAdmin = async (chatId, text) => {
+  var sender = '-1'
+
+  await saveMessage(text, sender, chatId, new Date())
+  await changeAnswerStatus(chatId, true)
+  await sendTGMessage(chatId, text)
+}
+
 const launch = () => {
   console.log('bot activation')
 }
 
 module.exports = {
   sendTGMessage,
+  respondAsAdmin,
   launch
 }

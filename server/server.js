@@ -1,3 +1,4 @@
+const {respondAsAdmin} = require("./saveTelegramMessages");
 const {changeAnswerStatus} = require("./saveMessagesInDB");
 const {sendTGMessage} = require("./saveTelegramMessages");
 const {saveMessage} = require("./saveMessagesInDB");
@@ -147,15 +148,9 @@ const saveMessagesRoute = async (req, res) => {
 
 const answerToUserRoute = async (req, res) => {
   var {text, chatId} = req.body;
-  var sender = '-1'
+  await respondAsAdmin(chatId, text)
 
-  await saveMessage(text, sender, chatId, new Date())
-  await changeAnswerStatus(chatId, true)
-  await sendTGMessage(chatId, text)
-
-  res.json({
-    ok: 1
-  })
+  res.json({ok: 1})
 }
 
 const saveHabitProgress = (req, res) => {
