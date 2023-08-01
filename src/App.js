@@ -421,10 +421,23 @@ class UserView extends Component {
 
   render() {
     var user = this.props.user
+    var lastProgress;
+    if (user.progress.length) {
+      var last = user.progress[user.progress.length - 1]
+      console.log({last})
+
+      if (!last) {
+        console.error('UNDEFINED LAST', {user})
+      } else {
+        lastProgress = <p>Last action: {last.date}</p>
+      }
+    }
 
     return <div>
       <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
       <br/>{user.habits.map(h => h.name).join(', ')}
+      <br />
+      {lastProgress}
       <br/>
       <br/>
       {this.renderChatHistory(user)}

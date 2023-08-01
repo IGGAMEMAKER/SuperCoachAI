@@ -36,9 +36,21 @@ bot.on(message('text'), async (ctx) => {
   var kostya = '137720008'
 
   var adminChatId = kostya
-  await sendTGMessage(adminChatId, 'You got new message from users! Reply: supercoach.site/admin')
+  var isCommandMessage = false;
 
-  // console.log(r, s)
+
+  // if there are some command/trigger messages, respond to them!
+  if (text === '/start') {
+    isCommandMessage = true;
+    const initialText = 'Hi!\n' +
+      '\n' +
+      'The app allows you to track habits and the AI Coach will help you along the way. \n' +
+      'Let\'s begin. What\'s your name?'
+    await sendTGMessage(chatId, initialText)
+  }
+
+  if (!isCommandMessage)
+    await sendTGMessage(adminChatId, 'You got new message from users! Reply: supercoach.site/admin')
 });
 
 bot.launch();
