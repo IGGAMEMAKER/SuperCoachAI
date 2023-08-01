@@ -154,7 +154,6 @@ function HabitTimePicker({onSave, defaultFrom="11:00", defaultTo="12:00"}) {
 }
 
 function HabitAdder({isOpen, onCloseAddingPopup}) {
-  // var [expanded, expandHabit] = useState(false)
   var [text, setText] = useState("")
   var [timeFrom, setTimeFrom] = useState("11:00")
   var [timeTo, setTimeTo] = useState("12:00")
@@ -165,13 +164,6 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var hasText = text.length
   var hasFromTime = timeFrom.length
   var canSave = hasText && hasFromTime && timeTo.length
-
-  // if (!expanded) {
-  //   return <button className="new-habit-button" onClick={() => {
-  //     expandHabit(true)
-  //     onShowAddingPopup()
-  //   }}>+ new habit</button>
-  // }
 
   var onFromChange = ev => {
     var v = ev.target.value;
@@ -334,7 +326,8 @@ function AdminSender({onSend}) {
 }
 class UserView extends Component {
   state = {
-    expanded: false,
+    showMessages: false,
+    showProgress: false,
     messages: [],
 
     response: {}
@@ -347,7 +340,8 @@ class UserView extends Component {
         console.log('got messages', r);
         this.setState({
           messages: r.messages,
-          expanded: true
+          showMessages: true,
+          showProgress: false,
         })
       })
       .catch(err => {
@@ -369,13 +363,12 @@ class UserView extends Component {
       })
   }
 
-  render() {
-    var user = this.props.user
+  renderChatHistory = (user) => {
+    var showHistory = (n = 'Show chat') => <button onClick={() => {this.loadMessages()}}>{n}</button>
 
-    var showHistory = (n ='Show chat') => <button onClick={() => {this.loadMessages()}}>{n}</button>
     var needsResponse = !user.hasAnswer
     var unanswered = <div style={{backgroundColor: needsResponse ? 'red' : 'gray'}}>
-        Needs your response {showHistory()}
+      Needs your response {showHistory()}
     </div>
 
     var answered = <div>
@@ -388,7 +381,6 @@ class UserView extends Component {
         var style = {textAlign: isSenderAdmin ? 'right' : 'left'}
         return <div style={style}>{m.text}</div>
       })}
-      {/*{JSON.stringify(this.state.messages)}*/}
       <br />
       <AdminSender onSend={(text) => {
         this.answerAsAdmin(user.telegramId, text)
@@ -396,26 +388,45 @@ class UserView extends Component {
       }} />
     </div>
 
-    var habits = []
+    return <div>
+      {needsResponse ? unanswered : answered}
+      {this.state.showMessages ? messageForm : ''}
+    </div>
+  }
+
+  showProgress = () => {
+    this.setState({
+      showMessages: false,
+      showProgress: true
+    })
+  }
+
+  renderHabitProgress = (user) => {
+    if (!this.state.showProgress)
+      return ''
 
     return <div>
-      <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks
-      <br/>{user.habits.map(h => h.name).join(', ')}
-
       <div className="habits-table">
         <div className="left">
           HABITS
           <br />
         </div>
         {renderTableOfDays()}
-        {/*{getMappedHabits(user.habits, this.state.habitProgress, this.setEditingHabit)}*/}
         {getMappedHabits(user.habits, user.progress)}
       </div>
+    </div>
+  }
 
+  render() {
+    var user = this.props.user
+
+    return <div>
+      <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={() => {}}>Show progress</button>
+      <br/>{user.habits.map(h => h.name).join(', ')}
       <br/>
       <br/>
-      {needsResponse ? unanswered : answered}
-      {this.state.expanded ? messageForm : ''}
+      {this.renderChatHistory(user)}
+      {this.renderHabitProgress(user)}
       <br />
       <hr />
     </div>
@@ -502,7 +513,7 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
       days.forEach(date => {
         var d = date.getDay()
         var exists = h.schedule[d.toString()];
-        console.log(d.toString(), h.schedule)
+        // console.log(d.toString(), h.schedule)
 
         var checked = !!habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
 
