@@ -45,11 +45,12 @@ const renderSPA = (req, res) => {
 const getUser = async (req, res) => {
   console.log('getUser', req.body)
   var telegramId = req.body.telegramId
-  console.log({telegramId})
+  var timeZone = req.body.timeZone
+  console.log({telegramId, timeZone})
 
   UserModel.findOne({telegramId})
     .then(u => {
-      var mockUser = {telegramId, habits: []}
+      var mockUser = {telegramId, timeZone, habits: []}
 
       console.log({u})
       // save cookies
@@ -68,6 +69,8 @@ const getUser = async (req, res) => {
             res.json({profile: mockUser, error: 1})
           })
       } else {
+        if (u.timeZone !== timeZone)
+          UserModel.updateOne({telegramId}, {timeZone}).then().catch().finally()
         setCookies(res, telegramId)
         res.json({profile: u}) // progress??
       }

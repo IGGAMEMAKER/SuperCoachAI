@@ -429,12 +429,12 @@ class UserView extends Component {
       if (!last) {
         console.error('UNDEFINED LAST', {user})
       } else {
-        lastProgress = <p>Last action: {last.date}</p>
+        lastProgress = <p>Last action: {new Date(last.date).toLocaleString()}</p>
       }
     }
 
     return <div>
-      <b>{user.telegramId}</b> [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
+      <b>{user.telegramId}</b> {user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br />
       {lastProgress}

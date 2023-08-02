@@ -132,7 +132,7 @@ Dispatcher.register((p) => {
 
     case PROFILE_LOAD:
       console.log(PROFILE_LOAD, p)
-      post('/profile', {telegramId: p.telegramId})
+      post('/profile', {telegramId: p.telegramId, timeZone: p.timeZone})
         .then(r => {
           console.log('load profile', r, telegramId)
           habits = r.profile.habits

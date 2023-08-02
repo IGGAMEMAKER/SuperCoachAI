@@ -10,6 +10,7 @@ var UserSchema = new Schema({
   name: String,
   username: String, // telegram @username
   goal: String,
+  timeZone: {type: Number, default: 0}
 
   // habits?? entire profile?
   // save habit progress too?
