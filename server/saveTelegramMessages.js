@@ -1,3 +1,4 @@
+const {ADMINS_ME, ADMINS_KOSTYA} = require("../src/constants/admins");
 const {UserModel} = require("./Models");
 const {changeAnswerStatus} = require("./saveMessagesInDB");
 const {saveMessage} = require("./saveMessagesInDB");
@@ -67,16 +68,14 @@ bot.on(message('text'), async (ctx) => {
 
   if (!isCommandMessage) {
     // notify admin
-    var me = '136526204'
-    var kostya = '137720008'
 
     await changeAnswerStatus(chatId, false)
-    await sendTGMessage(kostya, 'You got new message from users! Reply: supercoach.site/admin')
+    await sendTGMessage(ADMINS_KOSTYA, 'You got new message from users! Reply: supercoach.site/admin')
   }
 });
 
 bot.launch();
-var myChatWithBotId = 136526204
+var myChatWithBotId = ADMINS_ME
 
 const testSend = async () => {
   await bot.telegram.sendMessage(myChatWithBotId, 'poop')

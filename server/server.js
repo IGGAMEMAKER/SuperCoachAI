@@ -1,3 +1,4 @@
+const {ADMINS_ME} = require("../src/constants/admins");
 const {respondAsAdmin, launch, sendTGMessage} = require("./saveTelegramMessages");
 const {saveMessage} = require("./saveMessagesInDB");
 const {isHabitDoneOnDayX} = require("../utils");
@@ -31,6 +32,7 @@ var morningIsAtTimezoneX = () => {
     case 21: return 7;
     case 22: return 8;
     case 23: return 9;
+    default: console.log('WUUUUT', utcHours); return 1000000; break;
   }
 
   var diff = 10 - utcHours
@@ -57,19 +59,22 @@ var job = new CronJob(
     UserModel.find({})
       .then(users => {
         users.forEach(u => {
+          var telegramId = u.telegramId;
           var name = u.name || u.username || u.telegramId
           var d = new Date().getDay()
 
           const exists = h => h.schedule[d.toString()];
           var habits = u.habits.filter(exists)
 
-          const isMorningTask = t => t.from === TIME_FROM_MORNING
+          const isMorningTask   = t => t.from === TIME_FROM_MORNING
           const isAfternoonTask = t => t.from === TIME_FROM_AFTERNOON
-          const isEveningTask = t => t.from === TIME_FROM_EVENING
+          const isEveningTask   = t => t.from === TIME_FROM_EVENING
 
-          var morningTasks = habits.filter(isMorningTask)
-          var afternoonTasks = habits.filter(isAfternoonTask)
-          var eveningTasks = habits.filter(isEveningTask)
+          var morningTasks    = habits.filter(isMorningTask)
+          var afternoonTasks  = habits.filter(isAfternoonTask)
+          var eveningTasks    = habits.filter(isEveningTask)
+
+          var mapTasks = h => h.name;
 
           var taskCount = morningTasks.length + afternoonTasks.length + eveningTasks.length
           var hasTasks = taskCount > 0
@@ -78,7 +83,7 @@ var job = new CronJob(
 
           Here’s your plan for today:
           
-          Morning: 
+          Morning: ${morningTasks.map(mapTasks).join(', ')}
           
           Afternoon:
           
@@ -88,8 +93,11 @@ var job = new CronJob(
           Have a nice day! 🏆`
 
           if (hasTasks) {
-            console.log('will send in TG', u.telegramId, message, taskCount)
-            // sendTGMessage(u.telegramId, message).then().catch().finally()
+            console.log('will send in TG', taskCount + ' TASKS ', telegramId, message)
+
+            if (telegramId === ADMINS_ME) {
+              sendTGMessage(telegramId, message).then().catch().finally()
+            }
           }
         })
       })
