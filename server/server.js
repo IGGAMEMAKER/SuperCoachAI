@@ -47,7 +47,7 @@ const TIME_FROM_EVENING = "16-00"
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob(
-  '5/20 * * * * *',
+  '0 * * * * *',
   function() {
     console.log('You will see this message every minute');
     // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
