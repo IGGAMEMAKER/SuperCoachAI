@@ -47,7 +47,7 @@ const TIME_FROM_EVENING = "16-00"
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob(
-  '*/15 * * * * *',
+  '5/20 * * * * *',
   function() {
     console.log('You will see this message every minute');
     // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
@@ -87,7 +87,6 @@ var job = new CronJob(
           Afternoon: ${afternoonTasks.map(mapTasks).join(', ')}
           
           Evening: ${eveningTasks.map(mapTasks).join(', ')}
-          
         \nReady to grind? 💪🏽
         \nHave a nice day! 🏆`
 
