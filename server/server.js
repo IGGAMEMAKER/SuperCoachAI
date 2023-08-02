@@ -79,15 +79,13 @@ var job = new CronJob(
           var taskCount = morningTasks.length + afternoonTasks.length + eveningTasks.length
           var hasTasks = taskCount > 0
 
-          var message = `Good morning, ${name} ☀️
+          var message = `Good morning, ${name} ☀️\nHere’s your plan for today:
 
-          Here’s your plan for today:
-          
           Morning: ${morningTasks.map(mapTasks).join(', ')}
           
-          Afternoon:
+          Afternoon: ${afternoonTasks.map(mapTasks).join(', ')}
           
-          Evening: 
+          Evening: ${eveningTasks.map(mapTasks).join(', ')}
           
           Ready to grind? 💪🏽
           Have a nice day! 🏆`
