@@ -433,8 +433,10 @@ class UserView extends Component {
       }
     }
 
+
+
     return <div>
-      <b>{user.telegramId}</b> {user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
+      <b>{user.telegramId}</b> UTC:{user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br />
       {lastProgress}
@@ -525,7 +527,6 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
       days.forEach(date => {
         var d = date.getDay()
         var exists = h.schedule[d.toString()];
-        // console.log(d.toString(), h.schedule)
 
         var checked = !!habitProgress.find(p => isHabitDoneOnDayX(p, h.id, date))
 

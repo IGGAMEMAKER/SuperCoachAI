@@ -1,9 +1,104 @@
-const {respondAsAdmin} = require("./saveTelegramMessages");
-const {changeAnswerStatus} = require("./saveMessagesInDB");
-const {sendTGMessage} = require("./saveTelegramMessages");
+const {respondAsAdmin, launch, sendTGMessage} = require("./saveTelegramMessages");
 const {saveMessage} = require("./saveMessagesInDB");
-const {launch} = require("./saveTelegramMessages");
 const {isHabitDoneOnDayX} = require("../utils");
+
+var morningIsAtTimezoneX = () => {
+  var utcHours = new Date().getUTCHours() // 7
+
+  switch (utcHours) {
+    case 0: return 10;
+    case 1: return 11;
+    case 2: return 12;
+
+    case 3: return -11;
+    case 4: return -10;
+    case 5: return -9;
+    case 6: return -8;
+    case 7: return -7;
+    case 8: return -6;
+    case 9: return -5;
+    case 10: return -4;
+    case 11: return -3;
+    case 12: return -2;
+    case 13: return -1;
+    case 14: return 0;
+    case 15: return 1;
+    case 16: return 2;
+    case 17: return 3;
+    case 18: return 4;
+    case 19: return 5;
+    case 20: return 6;
+    case 21: return 7;
+    case 22: return 8;
+    case 23: return 9;
+  }
+
+  var diff = 10 - utcHours
+  return diff
+}
+
+console.log('10AM is currently in UTC:' + morningIsAtTimezoneX())
+
+const TIME_FROM_MORNING = "9:00"
+const TIME_FROM_AFTERNOON = "12:00"
+const TIME_FROM_EVENING = "16-00"
+
+var CronJob = require('cron').CronJob;
+var job = new CronJob(
+  '0 * * * * *',
+  function() {
+    console.log('You will see this message every minute');
+    // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
+
+    var tenAMCurrentlyInTimezoneX = morningIsAtTimezoneX()
+    console.log(tenAMCurrentlyInTimezoneX)
+
+    // UserModel.find({timeZone: tenAMCurrentlyInTimezoneX})
+    UserModel.find({})
+      .then(users => {
+        users.forEach(u => {
+          var name = u.name || u.username || u.telegramId
+          var d = new Date().getDay()
+
+          const exists = h => h.schedule[d.toString()];
+          var habits = u.habits.filter(exists)
+
+          const isMorningTask = t => t.from === TIME_FROM_MORNING
+          const isAfternoonTask = t => t.from === TIME_FROM_AFTERNOON
+          const isEveningTask = t => t.from === TIME_FROM_EVENING
+
+          var morningTasks = habits.filter(isMorningTask)
+          var afternoonTasks = habits.filter(isAfternoonTask)
+          var eveningTasks = habits.filter(isEveningTask)
+
+          var taskCount = morningTasks.length + afternoonTasks.length + eveningTasks.length
+          var hasTasks = taskCount > 0
+
+          var message = `Good morning, ${name} ☀️
+
+          Here’s your plan for today:
+          
+          Morning: 
+          
+          Afternoon:
+          
+          Evening: 
+          
+          Ready to grind? 💪🏽
+          Have a nice day! 🏆`
+
+          if (hasTasks) {
+            console.log('will send in TG', u.telegramId, message, taskCount)
+            // sendTGMessage(u.telegramId, message).then().catch().finally()
+          }
+        })
+      })
+  },
+  null,
+  true,
+  // 'America/Los_Angeles'
+);
+
 const {app} = require('./expressGenerator')(3333);
 
 const {UserModel, MessageModel} = require('./Models')
@@ -13,18 +108,7 @@ const getCookies = req => {
     telegramId: req.cookies["telegramId"]
   }
 }
-// const generateCookies = async (res, telegramId) => {
-//   var token = createSessionToken(email)
-//   setCookies(res, token)
-//
-//   await UserModel.updateOne({
-//     email,
-//     sessionToken: {$exists: false}
-//   }, {
-//     sessionToken: token,
-//     sessionCreatedAt: new Date()
-//   })
-// }
+
 const flushCookies = (res) => {
   setCookies(res, '', '')
 }
@@ -198,25 +282,6 @@ const saveHabitProgress = (req, res) => {
 app.get('/', renderSPA)
 app.get('/admin', renderSPA)
 app.post('/profile', getUser)
-
-// app.get('/profile', (req, res) => {
-//   res.json({
-//     habits: [
-//       {
-//         name: 'Cold shower',
-//         progress: seq([true, false, true, false]),
-//         from: '8:45', to: '9:25',
-//         schedule: [0, 1, 2, 3, 4, 5, 6]
-//       },
-//       {
-//         name: 'Breathing',
-//         progress: seq([true, true, true, true]),
-//         from: '9:35', to: '9:45',
-//         schedule: [0, 1, 2, 3, 4]
-//       },
-//     ]
-//   })
-// })
 
 app.all('/admin/users', getAllUsers)
 app.post('/messages', saveMessagesRoute)
