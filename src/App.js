@@ -509,7 +509,7 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
           case TIME_FROM_AFTERNOON: return "Afternoon"
           case TIME_FROM_EVENING: return "Evening"
 
-          default: return "???"
+          default: return h.from
         }
       }
 
