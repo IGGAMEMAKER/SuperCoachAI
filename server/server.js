@@ -91,7 +91,7 @@ var job = new CronJob(
         \nHave a nice day! 🏆`
 
           if (hasTasks) {
-            console.log('will send in TG', taskCount + ' TASKS ', telegramId)
+            console.log('will send in TG', taskCount + '/' + u.habits.length + ' TASKS ', telegramId)
 
             if (telegramId === ADMINS_ME) {
               sendTGMessage(telegramId, message).then().catch().finally()
