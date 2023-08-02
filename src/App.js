@@ -3,11 +3,9 @@ import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
-import actions, {loadProfile, loadUsersInAdminPanel, toggleHabitProgress} from "./actions";
-import {FieldAdder} from "./UI/FieldAdder";
+import actions from "./actions";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
-import {FieldPicker} from "./UI/FieldPicker";
 
 const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
@@ -57,11 +55,7 @@ function HabitEditor({habit, onCloseEditor}) {
     <h2 className={"title"}>Edit habit {habit.name}</h2>
     <br/>
     <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={(fr, to) => {
-      // setTimeFrom(fr)
-      // setTimeTo(to)
       actions.editHabitTime(habit.id, fr, to)
-      // actions.editHabitTime(habit.id, fr, 'from')
-      // actions.editHabitTime(habit.id, to, 'to')
     }} />
     {/*<div>*/}
     {/*  <div className="popup-label">From {habit.from}</div>*/}
@@ -124,13 +118,14 @@ function HabitEditor({habit, onCloseEditor}) {
   </div>
 }
 
-function HabitTimePicker({onSave, defaultFrom="11:00", defaultTo="12:00"}) {
+function HabitTimePicker({onSave, defaultFrom = TIME_FROM_MORNING, defaultTo="12:00"}) {
   var [timeFrom, setTimeFrom] = useState(defaultFrom)
   var [timeTo, setTimeTo] = useState(defaultTo)
 
   const timeButton = (time, fr, to) => {
     var st = {}
     var isChosen = timeFrom === fr;
+
     if (isChosen) {
       st.backgroundColor = 'green';
       st.color = 'white'
@@ -147,16 +142,16 @@ function HabitTimePicker({onSave, defaultFrom="11:00", defaultTo="12:00"}) {
   }
 
   return <div>
-    {timeButton('Morning', TIME_FROM_MORNING, '12:00')}
-    {timeButton('Afternoon', TIME_FROM_AFTERNOON, '16:00')}
-    {timeButton('Evening', TIME_FROM_EVENING, '20:00')}
+    {timeButton('Morning',    TIME_FROM_MORNING,    '12:00')}
+    {timeButton('Afternoon',  TIME_FROM_AFTERNOON,  '16:00')}
+    {timeButton('Evening',    TIME_FROM_EVENING,    '20:00')}
   </div>
 }
 
 function HabitAdder({isOpen, onCloseAddingPopup}) {
   var [text, setText] = useState("")
-  var [timeFrom, setTimeFrom] = useState("11:00")
-  var [timeTo, setTimeTo] = useState("12:00")
+  var [timeFrom, setTimeFrom] = useState(TIME_FROM_MORNING)
+  var [timeTo, setTimeTo] = useState(TIME_FROM_AFTERNOON)
 
   if (!isOpen)
     return ''
@@ -165,59 +160,13 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var hasFromTime = timeFrom.length
   var canSave = hasText && hasFromTime && timeTo.length
 
-  var onFromChange = ev => {
-    var v = ev.target.value;
-    console.log(v, typeof (v))
-    setTimeFrom(v)
-  }
-
-  var onToChange = ev => {
-    var v = ev.target.value;
-    console.log(v, typeof (v))
-    setTimeTo(v)
-  }
-
-  const timeButton = (time, fr, to) => {
-    var st = {}
-    var isChosen = timeFrom === fr;
-    if (isChosen) {
-      st.backgroundColor = 'green';
-      st.color = 'white'
-      st.fontWeight = '800'
-    } else {
-      st.backgroundColor = 'buttonface'
-    }
-
-    return <button style={st} onClick={() => {
-      setTimeFrom(fr)
-      setTimeTo(to)
-    }}>{time}</button>
-  }
-
   var fromForm;
-  var toForm;
   if (hasText) {
-    fromForm = <HabitTimePicker onSave={(fr, to) => {
+    fromForm = <HabitTimePicker defaultFrom={TIME_FROM_MORNING} defaultTo={TIME_FROM_AFTERNOON} onSave={(fr, to) => {
       setTimeFrom(fr)
       setTimeTo(to)
     }} />
-    {/*<div>*/}
-    {/*  {timeButton('Morning', '9-00', '12-00')}*/}
-    {/*  {timeButton('Afternoon', '13-00', '16-00')}*/}
-    {/*  {timeButton('Evening', '17-00', '20-00')}*/}
-    // </div>
-    // fromForm = <div>
-    //   <label>From</label>
-    //   <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange} />
-    // </div>
   }
-
-  // if (hasText && hasFromTime) {
-  //   toForm = <div>
-  //     <label>To</label>
-  //     <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange} />
-  //   </div>
-  // }
 
   var onAdd = () => {
     onCloseAddingPopup()
@@ -232,11 +181,9 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   return <div className="popup">
     <h1>New habit</h1>
     <br />
-    {/*<br />*/}
     <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
     <div className={"from-to-form"}>
       {fromForm}
-      {/*{toForm}*/}
     </div>
     {/*<FieldAdder*/}
     {/*  placeholder="add new habit"*/}
@@ -258,62 +205,6 @@ var getHour = h => {
   var sp = h.split(':')
 
   return parseInt(sp[0]) * 10000 + parseInt(sp[1])
-}
-
-const getErrorStats2 = habits => {
-  console.log({habits})
-
-  var dots = []
-  habits.forEach(h => {
-    dots.push({id: h.id, from: h.from,  val: getHour(h.from)})
-    dots.push({id: h.id, to:   h.to,    val: getHour(h.to)})
-  })
-
-  dots.sort((d1, d2) => {
-    var diff = d1.val - d2.val
-    if (diff === 0) {
-      // if (d1.id === d2.id)
-      //   return
-      return d1.id - d2.id
-    }
-
-    return diff
-  })
-
-  var errorStats = {}
-  const saveErr = (h, from, to) => {
-    if (from)
-      errorStats[h.id + '.from'] = 1
-
-    if (to)
-      errorStats[h.id + '.to'] = 1
-  }
-
-  const saveInt = (h1, h2, from1, to1, from2, to2) => {
-    saveErr(h1, from1, to1)
-    saveErr(h2, from2, to2)
-  }
-
-  var openedHabits = []
-  dots.forEach(d => {
-    if (openedHabits.filter(o => o.id === d.id).length) {
-      // have already, remove it
-      openedHabits = openedHabits.filter(o => o.id !== d.id)
-    } else {
-      // first occasion
-      openedHabits.push(d)
-
-      // if (!d.from) // ends faster than starts?
-      //   saveErr(d, true, true)
-
-      // if there are other opened dots, this means, that this habit intersects with other habits
-      openedHabits.filter(o => o.id !== d.id).forEach(otherHabit => {
-        saveInt(d, otherHabit, true, true, true, true)
-      })
-    }
-  })
-
-  return errorStats
 }
 
 function AdminSender({onSend}) {
@@ -509,7 +400,7 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
           case TIME_FROM_AFTERNOON: return "Afternoon"
           case TIME_FROM_EVENING: return "Evening"
 
-          default: return h.from
+          default: return "???Choose time of day, please " + h.from
         }
       }
 
