@@ -6,6 +6,7 @@ const {isHabitDoneOnDayX} = require("../utils");
 
 var morningIsAtTimezoneX = () => {
   var utcHours = new Date().getUTCHours() // 7
+
   var hrs = {
     '0': 10,
     '1': 9,
@@ -111,11 +112,11 @@ var job = new CronJob(
           var message = `Good morning, ${name} ☀️
           \nHere’s your plan for today:
 
-          Morning: ${morningTasks.map(mapTasks).join(', ')}
+          \nMorning: ${morningTasks.map(mapTasks).join(', ')}
           
-          Afternoon: ${afternoonTasks.map(mapTasks).join(', ')}
+          \nAfternoon: ${afternoonTasks.map(mapTasks).join(', ')}
           
-          Evening: ${eveningTasks.map(mapTasks).join(', ')}
+          \nEvening: ${eveningTasks.map(mapTasks).join(', ')}
         \nReady to grind? 💪🏽
         \nHave a nice day! 🏆`
 
