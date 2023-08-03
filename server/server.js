@@ -163,7 +163,7 @@ const renderSPA = (req, res) => {
 }
 
 const getUser = async (req, res) => {
-  console.log('getUser', req.body)
+  // console.log('getUser', req.body)
   var telegramId = req.body.telegramId
   var timeZone = req.body.timeZone
   console.log({telegramId, timeZone})
@@ -172,7 +172,7 @@ const getUser = async (req, res) => {
     .then(u => {
       var mockUser = {telegramId, timeZone, habits: []}
 
-      console.log({u})
+      // console.log({u})
       // save cookies
       if (!u) {
         u = new UserModel(mockUser)
