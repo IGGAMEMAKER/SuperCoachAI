@@ -6,7 +6,35 @@ const {isHabitDoneOnDayX} = require("../utils");
 
 var morningIsAtTimezoneX = () => {
   var utcHours = new Date().getUTCHours() // 7
+  var hrs = {
+    '0': 10,
+    '1': 9,
+    '2': 8,
 
+    '3': 7,
+    '4': 6,
+    '5': 5,
+    '6': 4,
+    '7': 3,
+    '8': 2,
+    '9': 1,
+    '10': 0,
+    '11': -1,
+    '12': -2,
+    '13': -3,
+    '14': -4,
+    '15': -5,
+    '16': -6,
+    '17': -7,
+    '18': -8,
+    '19': -9,
+    '20': -10,
+    '21': -11,
+    '22': -12,
+    '23': 11,
+  }
+
+  return hrs[utcHours];
   switch (utcHours) {
     case 0: return 10;
     case 1: return 11;
@@ -48,7 +76,7 @@ const TIME_FROM_EVENING = "16-00"
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob(
-  '0 0 */3 * * *',
+  '0 0 */6 * * *',
   function() {
     console.log('You will see this message every minute');
     // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
