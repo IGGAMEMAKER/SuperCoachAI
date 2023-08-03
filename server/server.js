@@ -137,10 +137,10 @@ var job = new CronJob(
     // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
 
     var tenAMCurrentlyInTimezoneX = morningIsAtTimezoneX()
-    console.log(tenAMCurrentlyInTimezoneX)
+    console.log({tenAMCurrentlyInTimezoneX})
 
-    // UserModel.find({timeZone: tenAMCurrentlyInTimezoneX})
-    UserModel.find({})
+    UserModel.find({timeZone: tenAMCurrentlyInTimezoneX})
+    // UserModel.find({})
       .then(users => {
         users.forEach(u => {
           var telegramId = u.telegramId;
