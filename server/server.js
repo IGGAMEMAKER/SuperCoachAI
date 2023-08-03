@@ -100,7 +100,7 @@ const fixDates = () => {
           }
 
           var hour = getHour(h.from)
-          if (hour < 12) {
+          if (hour < 12 && hour !== 9) {
             console.log('too early, but not morning still', h.from, username)
             changed = true
             // u.habits[i].from = TIME_FROM_MORNING
