@@ -324,10 +324,13 @@ class UserView extends Component {
       }
     }
 
-
+    var progressButton;
+    if (user.habits.length) {
+      progressButton = <button onClick={this.showProgress}>Show progress</button>
+    }
 
     return <div>
-      <b>{user.telegramId}</b> UTC:{user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks <button onClick={this.showProgress}>Show progress</button>
+      <b>{user.telegramId}</b> UTC:{user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks {progressButton}
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br />
       {lastProgress}
