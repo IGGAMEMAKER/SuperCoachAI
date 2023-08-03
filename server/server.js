@@ -4,6 +4,10 @@ const {respondAsAdmin, launch, sendTGMessage} = require("./saveTelegramMessages"
 const {saveMessage} = require("./saveMessagesInDB");
 const {isHabitDoneOnDayX} = require("../utils");
 
+const {app} = require('./expressGenerator')(3333);
+
+const {UserModel, MessageModel} = require('./Models')
+
 var morningIsAtTimezoneX = () => {
   var utcHours = new Date().getUTCHours()
   console.log({utcHours})
@@ -155,10 +159,6 @@ var job = new CronJob(
   true,
   // 'America/Los_Angeles'
 );
-
-const {app} = require('./expressGenerator')(3333);
-
-const {UserModel, MessageModel} = require('./Models')
 
 const getCookies = req => {
   return {
