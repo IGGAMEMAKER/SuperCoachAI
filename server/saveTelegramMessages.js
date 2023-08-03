@@ -81,7 +81,7 @@ const testSend = async () => {
   await bot.telegram.sendMessage(myChatWithBotId, 'poop')
 
   var chat = await bot.telegram.getChat(myChatWithBotId)
-  console.log(chat)
+  console.log({chat})
 }
 
 testSend().then().catch().finally()

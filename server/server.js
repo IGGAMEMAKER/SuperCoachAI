@@ -5,7 +5,7 @@ const {saveMessage} = require("./saveMessagesInDB");
 const {isHabitDoneOnDayX} = require("../utils");
 
 var morningIsAtTimezoneX = () => {
-  var utcHours = new Date().getUTCHours() // 7
+  var utcHours = new Date().getUTCHours()
   console.log({utcHours})
 
   var hrs = {
