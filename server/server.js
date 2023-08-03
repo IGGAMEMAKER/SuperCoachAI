@@ -77,7 +77,7 @@ const TIME_FROM_EVENING = "16-00"
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob(
-  '0 0 */6 * * *',
+  '0 0 * * * *',
   function() {
     console.log('You will see this message every minute');
     // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
@@ -123,7 +123,8 @@ var job = new CronJob(
           if (hasTasks) {
             console.log('will send in TG', taskCount + '/' + u.habits.length + ' TASKS ', telegramId)
 
-            if (telegramId === ADMINS_ME || telegramId === ADMINS_KOSTYA) {
+            // if (telegramId === ADMINS_ME || telegramId === ADMINS_KOSTYA) {
+            if (telegramId === ADMINS_ME) {
               sendTGMessage(telegramId, message).then().catch().finally()
             }
           }
