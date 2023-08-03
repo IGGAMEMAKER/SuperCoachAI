@@ -83,7 +83,7 @@ const fixDates = () => {
       users.forEach(u => {
         u.habits.forEach((h, i) => {
           if (h.from === "16-00") {
-            console.log('time is fucked')
+            console.log('time is fucked for ', u.telegramId, h.name)
             u.habits[i].from = TIME_FROM_EVENING
           }
         })
@@ -94,6 +94,8 @@ const fixDates = () => {
       })
     })
 }
+
+fixDates()
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob(
