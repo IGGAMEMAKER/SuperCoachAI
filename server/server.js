@@ -99,17 +99,21 @@ const fixDates = () => {
             changed = true
           }
 
+          var defective = h.from !== TIME_FROM_MORNING && h.from !== TIME_FROM_AFTERNOON && h.from !== TIME_FROM_EVENING
           var hour = getHour(h.from)
-          if (hour < 12 && hour !== 9) {
-            console.log('too early, but not morning still', h.from, username)
-            changed = true
-            // u.habits[i].from = TIME_FROM_MORNING
-          }
+          if (defective) {
+            if (hour < 12) {
+              console.log('too early, but not morning still', h.from, username)
+              changed = true
+              // u.habits[i].from = TIME_FROM_MORNING
+            }
 
-          if (hour > 16 || hour === 0) {
-            console.log('too late, but not evening still', h.from, username)
-            // u.habits[i].from = TIME_FROM_EVENING
-            changed = true
+            if (hour > 16 || hour === 0) {
+              console.log('too late, but not evening still', h.from, username)
+              // u.habits[i].from = TIME_FROM_EVENING
+              changed = true
+            }
+
           }
         })
 
