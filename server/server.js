@@ -117,10 +117,12 @@ const fixDates = () => {
           }
         })
 
-        UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then(r => {
-          console.log('made fixes for user', username)
-          // console.log({u, r})
-        }).catch().finally()
+        // if (changed) {
+        //   UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then(r => {
+        //     console.log('made fixes for user', username)
+        //     // console.log({u, r})
+        //   }).catch().finally()
+        // }
       })
     })
 }
