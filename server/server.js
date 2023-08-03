@@ -6,6 +6,7 @@ const {isHabitDoneOnDayX} = require("../utils");
 
 var morningIsAtTimezoneX = () => {
   var utcHours = new Date().getUTCHours() // 7
+  console.log({utcHours})
 
   var hrs = {
     '0': 10,
