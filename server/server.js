@@ -80,6 +80,11 @@ const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
 const TIME_FROM_EVENING = "16:00"
 
+var getHour = h => {
+  var sp = h.split(':')
+
+  return parseInt(sp[0]) * 10000 + parseInt(sp[1])
+}
 const fixDates = () => {
   UserModel
     .find({})
@@ -90,10 +95,19 @@ const fixDates = () => {
             console.log('time is fucked for ', u.telegramId, h.name)
             u.habits[i].from = TIME_FROM_EVENING
           }
+
+          if (getHour(h) < 12) {
+            u.habits[i].from = TIME_FROM_MORNING
+          }
+
+          if (getHour(h) > 16) {
+            u.habits[i].from = TIME_FROM_EVENING
+          }
         })
 
         UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then(r => {
-          console.log({u, r})
+          console.log('made fixes for user', u.name || u.username || u.telegramId)
+          // console.log({u, r})
         }).catch().finally()
       })
     })
