@@ -105,12 +105,12 @@ const fixDates = () => {
             if (hour < 12) {
               console.log('too early, but not morning still', h.from, username)
               changed = true
-              // u.habits[i].from = TIME_FROM_MORNING
+              u.habits[i].from = TIME_FROM_MORNING
             }
 
             if (hour > 16 || hour === 0) {
               console.log('too late, but not evening still', h.from, username)
-              // u.habits[i].from = TIME_FROM_EVENING
+              u.habits[i].from = TIME_FROM_EVENING
               changed = true
             }
 
