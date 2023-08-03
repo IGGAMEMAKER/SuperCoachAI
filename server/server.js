@@ -90,26 +90,31 @@ const fixDates = () => {
     .find({})
     .then(users => {
       users.forEach(u => {
+        var username = u.name || u.username || u.telegramId
+        var changed = false
         u.habits.forEach((h, i) => {
           if (h.from === "16-00") {
             console.log('time is fucked for ', u.telegramId, h.name)
             u.habits[i].from = TIME_FROM_EVENING
+            changed = true
           }
 
           var hour = getHour(h.from)
           if (hour < 12) {
-            console.log('too early, but not morning still')
+            console.log('too early, but not morning still', h.from, username)
+            changed = true
             // u.habits[i].from = TIME_FROM_MORNING
           }
 
           if (hour > 16 || hour === 0) {
-            console.log('too late, but not evening still')
+            console.log('too late, but not evening still', h.from, username)
             // u.habits[i].from = TIME_FROM_EVENING
+            changed = true
           }
         })
 
         UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then(r => {
-          console.log('made fixes for user', u.name || u.username || u.telegramId)
+          console.log('made fixes for user', username)
           // console.log({u, r})
         }).catch().finally()
       })
