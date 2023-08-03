@@ -174,9 +174,9 @@ var job = new CronJob(
             console.log('will send in TG', taskCount + '/' + u.habits.length + ' TASKS ', telegramId)
 
             // if (telegramId === ADMINS_ME || telegramId === ADMINS_KOSTYA) {
-            if (telegramId === ADMINS_ME) {
+            // if (telegramId === ADMINS_ME) {
               sendTGMessage(telegramId, message).then().catch().finally()
-            }
+            // }
           }
         })
       })
