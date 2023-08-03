@@ -113,11 +113,9 @@ var job = new CronJob(
           \nHere’s your plan for today:
 
           \nMorning: ${morningTasks.map(mapTasks).join(', ')}
-          
           \nAfternoon: ${afternoonTasks.map(mapTasks).join(', ')}
-          
           \nEvening: ${eveningTasks.map(mapTasks).join(', ')}
-        \nReady to grind? 💪🏽
+        \n\nReady to grind? 💪🏽
         \nHave a nice day! 🏆`
 
           if (hasTasks) {
