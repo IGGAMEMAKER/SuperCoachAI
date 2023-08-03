@@ -74,7 +74,23 @@ console.log('10AM is currently in UTC:' + morningIsAtTimezoneX())
 
 const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
-const TIME_FROM_EVENING = "16-00"
+const TIME_FROM_EVENING = "16:00"
+
+const fixDates = () => {
+  UserModel
+    .find({})
+    .then(users => {
+      users.forEach(u => {
+        u.habits.forEach((h, i) => {
+          if (h.from === "16-00") {
+            u.habits[i].from = TIME_FROM_EVENING
+          }
+        })
+
+        UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then().catch().finally()
+      })
+    })
+}
 
 var CronJob = require('cron').CronJob;
 var job = new CronJob(

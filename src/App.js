@@ -9,7 +9,7 @@ import {ping, post} from "./PingBrowser";
 
 const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
-const TIME_FROM_EVENING = "16-00"
+const TIME_FROM_EVENING = "16:00"
 
 const getLiteralDayOfWeek = (val) => {
   switch (val) {
