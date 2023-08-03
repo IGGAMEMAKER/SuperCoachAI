@@ -83,11 +83,14 @@ const fixDates = () => {
       users.forEach(u => {
         u.habits.forEach((h, i) => {
           if (h.from === "16-00") {
+            console.log('time is fucked')
             u.habits[i].from = TIME_FROM_EVENING
           }
         })
 
-        UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then().catch().finally()
+        UserModel.updateOne({telegramId: u.telegramId}, {habits: u.habits}).then(r => {
+          console.log({u, r})
+        }).catch().finally()
       })
     })
 }
