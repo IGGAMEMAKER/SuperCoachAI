@@ -528,7 +528,7 @@ function App() {
 
   return <div>
     <div className="App" data-theme={theme}>
-      <button onClick={() => {window.close()}}>Close</button>
+      <button onClick={() => {Window.close()}}>Close</button>
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
