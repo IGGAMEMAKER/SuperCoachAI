@@ -500,7 +500,7 @@ class MainPage extends Component {
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
     return <div className={"plan-day-container"}>
-      <h1>Your daily routine</h1>
+      <div className="menu-title">Your daily routine</div>
       <div className="habits-table">
         <div className="left">
           HABITS
