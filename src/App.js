@@ -444,10 +444,10 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
 const dow = (name, number) => {
   var isToday = number === new Date().getDate()
 
-  return <div className="">
+  return <div className={`calendar-day ${isToday ? 'current-day' : ''}`}>
     {name}
     <br/>
-    <div className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</div>
+    <div>{number}</div>
   </div>
 }
 const renderTableOfDays = () => {
@@ -521,12 +521,18 @@ class MainPage extends Component {
 
 function App() {
   // App-header
-  return <div style={{backgroundColor: '#282c34'}}>
-    <div className="App">
+  // style={{backgroundColor: '#282c34'}}
+  var seconds = 0 ; //new Date().getUTCSeconds()
+
+  var theme = seconds % 6 < 3 ? 'light' : 'dark'
+
+  return <div>
+    <div className="App" data-theme={theme}>
+      <button onClick={() => {window.close()}}>Close</button>
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
-          <Route path='/admin'                     element={<AdminPage/>}/>
+          <Route path='/admin'                element={<AdminPage/>}/>
         </Routes>
       </header>
     </div>
