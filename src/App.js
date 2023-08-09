@@ -51,8 +51,9 @@ function HabitEditor({habit, onCloseEditor}) {
 
   var days = [0, 1, 2, 3, 4, 5, 6]
 
-  return <div className="popup" key={"habit" + habit.id}>
-    <h2 className={"title"}>Edit habit {habit.name}</h2>
+  // return <div className="popup" key={"habit" + habit.id}>
+  return <div key={"habit" + habit.id}>
+    <div className="menu-title">{habit.name}</div>
     <br/>
     <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={(fr, to) => {
       actions.editHabitTime(habit.id, fr, to)
@@ -66,7 +67,7 @@ function HabitEditor({habit, onCloseEditor}) {
     {/*  <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange}/>*/}
     {/*</div>*/}
     <br/>
-    <div className="popup-label">Schedule</div>
+    {/*<div className="popup-label">Schedule</div>*/}
     <center>
     <table>
       <tr>
@@ -74,16 +75,9 @@ function HabitEditor({habit, onCloseEditor}) {
       </tr>
       <tr>
         {days.map(d => {
-          // var checked = !!habit.schedule.filter(vvv => {
-          //   var res = vvv === d
-          //   console.log({vvv, d}, vvv, d, res)
-          //   return res
-          // }).length
           var checked = habit.schedule[d]
-          console.log('checked ', checked, d)
 
           return <td>
-            {/*{d}*/}
             <input
               className="habit-checkbox" type="checkbox"
               checked={checked}
@@ -92,12 +86,6 @@ function HabitEditor({habit, onCloseEditor}) {
           </td>
         })}
       </tr>
-      {/*<tr>*/}
-      {/*  <td>{JSON.stringify(habit.schedule)}</td>*/}
-      {/*</tr>*/}
-      {/*<tr>*/}
-      {/*  <td>{JSON.stringify(days)}</td>*/}
-      {/*</tr>*/}
     </table>
     </center>
     <br/>
@@ -123,25 +111,16 @@ function HabitTimePicker({onSave, defaultFrom = TIME_FROM_MORNING, defaultTo="12
   var [timeTo, setTimeTo] = useState(defaultTo)
 
   const timeButton = (time, fr, to) => {
-    var st = {}
     var isChosen = timeFrom === fr;
 
-    if (isChosen) {
-      st.backgroundColor = 'green';
-      st.color = 'white'
-      st.fontWeight = '800'
-    } else {
-      st.backgroundColor = 'buttonface'
-    }
-
-    return <button style={st} onClick={() => {
+    return <button className={`time-picking-button ${isChosen ? 'chosen' : ''}`} onClick={() => {
       setTimeFrom(fr)
       setTimeTo(to)
       onSave(fr, to)
     }}>{time}</button>
   }
 
-  return <div>
+  return <div className="time-picking-container">
     {timeButton('Morning',    TIME_FROM_MORNING,    '12:00')}
     {timeButton('Afternoon',  TIME_FROM_AFTERNOON,  '16:00')}
     {timeButton('Evening',    TIME_FROM_EVENING,    '20:00')}
@@ -461,6 +440,12 @@ const renderTableOfDays = () => {
   })
 }
 
+class EditHabitPage extends Component {
+  render() {
+    return 'EDIT HABIT PAGE'
+  }
+}
+
 class MainPage extends Component {
   state = {
     habits: [],
@@ -499,22 +484,34 @@ class MainPage extends Component {
     var {habits} = this.state
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
-    return <div className={"plan-day-container"}>
+
+    const mainPage = <div>
       <div className="menu-title">Daily routine</div>
       <div className="habits-table">
         <div className="left">
           HABITS
           <br />
+          <Link to="/edit">Edit</Link>
         </div>
         {renderTableOfDays()}
         {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
-        <div className="left">
-          <br />
-          <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">+ new habit</button>
-        </div>
       </div>
-      <HabitEditor habit={editingHabit} onCloseEditor={() => {this.unsetEditingHabit()}}/>
-      <HabitAdder onCloseAddingPopup={() => this.toggleAddingPopup(false)} isOpen={this.state.isAddingHabitPopupOpened} />
+      <div className="left">
+        <br />
+        <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">Add habit</button>
+      </div>
+    </div>
+
+    if (editingHabit) {
+      return <HabitEditor habit={editingHabit} onCloseEditor={this.unsetEditingHabit}/>
+    }
+
+    return <div className={"plan-day-container"}>
+      {mainPage}
+      <HabitAdder
+        onCloseAddingPopup={() => this.toggleAddingPopup(false)}
+        isOpen={this.state.isAddingHabitPopupOpened}
+      />
     </div>
   }
 }
@@ -528,10 +525,10 @@ function App() {
 
   return <div>
     <div className="App" data-theme={theme}>
-      {/*<button onClick={() => {window.close()}}>Close</button>*/}
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
+          <Route path='/edit'                     element={<EditHabitPage/>}/>
           <Route path='/admin'                element={<AdminPage/>}/>
         </Routes>
       </header>

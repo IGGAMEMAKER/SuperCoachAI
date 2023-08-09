@@ -28,11 +28,21 @@ body {
 }
 
 .habit-date {
-  color: lightgray;
+  color: #ACAEBB;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+  letter-spacing: 0em;
 }
 
 .habit-container {
   position: relative;
+  color: #373A41;
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
 }
 .habit-container.intersects {
   background-color: pink;
@@ -72,6 +82,34 @@ body {
   margin-bottom: 15px;
 }
 
+.time-picking-container {
+  grid-template-columns: auto auto auto;
+  gap: 15px;
+  display: flex;
+  justify-content: center;
+
+  padding-left: 15px;
+  padding-right: 15px;
+}
+button {
+  border: 0;
+  border-radius: 8px;
+  height: 48px;
+}
+.time-picking-button {
+  height: 32px;
+  border-radius: 8px;
+  border: 0;
+  width: 115px;
+
+  background-color: #F1F9FF;
+  color: #0C8CE9;
+}
+.time-picking-button.chosen {
+  background-color: #0C8CE9;
+  color: white;
+}
+
 .plan-day-container {
   position: relative;
   /*height: 100%;*/
@@ -106,9 +144,21 @@ body {
 }
 
 .new-habit-button {
-  color: #00af00;
-  border-color: #00af00;
-  background-color: white;
+  /*color: #00af00;*/
+  /*border-color: #00af00;*/
+  /*background-color: white;*/
+  border: 0;
+  border-radius: 8px;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0em;
+
+  width: 100%;
+  text-align: center;
+  background: #0C8CE9;
+  color: white;
 }
 
 .close {
