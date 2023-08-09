@@ -444,7 +444,7 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
 const dow = (name, number) => {
   var isToday = number === new Date().getDate()
 
-  return <div>
+  return <div className="">
     {name}
     <br/>
     <div className={`calendar-day ${isToday ? 'current-day' : ''}`}>{number}</div>
@@ -500,7 +500,7 @@ class MainPage extends Component {
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
     return <div className={"plan-day-container"}>
-      <div className="menu-title">Your daily routine</div>
+      <div className="menu-title">Daily routine</div>
       <div className="habits-table">
         <div className="left">
           HABITS

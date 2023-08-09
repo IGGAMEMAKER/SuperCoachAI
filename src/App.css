@@ -53,6 +53,12 @@ body {
   text-align: left;
   margin-left: 15px;
   color: #373A41;
+
+  border-bottom-color: #0000004D;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .plan-day-container {
@@ -133,7 +139,6 @@ body {
 
 .current-day {
   border-style: solid;
-  /*border-radius: 100%;*/
   border-radius: 1000px;
   border-width: thin;
   border-color: white;
