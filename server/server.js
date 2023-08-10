@@ -367,8 +367,8 @@ const saveHabitProgress = (req, res) => {
 app.get('/', renderSPA)
 app.get('/edit', renderSPA)
 app.get('/admin', renderSPA)
-app.post('/profile', getUser)
 
+app.post('/profile', getUser)
 app.all('/admin/users', getAllUsers)
 app.post('/messages', saveMessagesRoute)
 app.post('/answer', answerToUserRoute)

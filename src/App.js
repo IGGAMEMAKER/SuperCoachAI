@@ -128,7 +128,7 @@ function HabitTimePicker({onSave, defaultFrom = TIME_FROM_MORNING, defaultTo="12
 }
 
 function HabitAdder({isOpen, onCloseAddingPopup}) {
-  var [text, setText] = useState("")
+  var [text, setText] = useState("Habit 1")
   var [timeFrom, setTimeFrom] = useState(TIME_FROM_MORNING)
   var [timeTo, setTimeTo] = useState(TIME_FROM_AFTERNOON)
 
@@ -139,13 +139,6 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var hasFromTime = timeFrom.length
   var canSave = hasText && hasFromTime && timeTo.length
 
-  var fromForm;
-  if (hasText) {
-    fromForm = <HabitTimePicker defaultFrom={TIME_FROM_MORNING} defaultTo={TIME_FROM_AFTERNOON} onSave={(fr, to) => {
-      setTimeFrom(fr)
-      setTimeTo(to)
-    }} />
-  }
 
   var onAdd = () => {
     onCloseAddingPopup()
@@ -157,26 +150,33 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
   var onTextChange = ev => setText(ev.target.value)
   // {/*min="09:00" max="18:00"*/}
-  return <div className="popup">
-    <h1>New habit</h1>
-    <br />
-    <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text} onChange={onTextChange} />
-    <div className={"from-to-form"}>
-      {fromForm}
-    </div>
-    {/*<FieldAdder*/}
-    {/*  placeholder="add new habit"*/}
-    {/*  onAdd={val => actions.addHabit(val)}*/}
-    {/*  defaultButtonClass="new-habit-button"*/}
-    {/*  defaultWord={"+ new habit"}*/}
-    {/*  defaultState={true}*/}
-    {/*/>*/}
+  return <div>
+    <div className="menu-title">New habit</div>
+    <br/>
+    <div className="wrapper">
 
-    <button className={`new-habit-button new-habit-button-confirm ${canSave ? '' : 'disabled'}`} onClick={onAdd} disabled={!canSave}>Add habit</button>
-    <br />
-    <br />
-    <br />
-    <button className="close" onClick={onCloseAddingPopup}>Close</button>
+      <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text}
+             onChange={onTextChange}/>
+      <div className={"from-to-form"}>
+        <HabitTimePicker defaultFrom={TIME_FROM_MORNING} defaultTo={TIME_FROM_AFTERNOON} onSave={(fr, to) => {
+          setTimeFrom(fr)
+          setTimeTo(to)
+        }}/>
+      </div>
+
+      <div className="new-habit-footer-wrapper">
+      <div className={"new-habit-footer"}>
+        <button className="secondary" onClick={onCloseAddingPopup}>Cancel</button>
+        <button
+          // className={`primary new-habit-button new-habit-button-confirm ${canSave ? '' : 'disabled'}`}
+          className={`primary ${canSave ? '' : 'disabled'}`}
+          onClick={onAdd}
+          disabled={!canSave}
+        >Save
+        </button>
+      </div>
+      </div>
+    </div>
   </div>
 }
 
@@ -451,7 +451,7 @@ class MainPage extends Component {
     habits: [],
     habitProgress: [],
     isAddingHabitPopupOpened: false,
-    editingHabitID: -1
+    editingHabitID: -1,
   }
 
   saveHabits() {
@@ -491,7 +491,7 @@ class MainPage extends Component {
         <div className="left">
           HABITS
           <br />
-          <a href="edit">Edit</a>
+          {/*<a href="edit">Edit</a>*/}
           {/*<Link to="/edit">Edit</Link>*/}
         </div>
         {renderTableOfDays()}
@@ -507,12 +507,16 @@ class MainPage extends Component {
       return <HabitEditor habit={editingHabit} onCloseEditor={this.unsetEditingHabit}/>
     }
 
+    var {isAddingHabitPopupOpened} = this.state
+    if (isAddingHabitPopupOpened) {
+      return <HabitAdder
+        onCloseAddingPopup={() => this.toggleAddingPopup(false)}
+        isOpen={isAddingHabitPopupOpened}
+      />
+    }
+
     return <div className={"plan-day-container"}>
       {mainPage}
-      <HabitAdder
-        onCloseAddingPopup={() => this.toggleAddingPopup(false)}
-        isOpen={this.state.isAddingHabitPopupOpened}
-      />
     </div>
   }
 }
