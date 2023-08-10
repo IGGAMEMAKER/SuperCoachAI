@@ -491,7 +491,8 @@ class MainPage extends Component {
         <div className="left">
           HABITS
           <br />
-          <Link to="/edit">Edit</Link>
+          <a href="/edit">Edit</a>
+          {/*<Link to="/edit">Edit</Link>*/}
         </div>
         {renderTableOfDays()}
         {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
