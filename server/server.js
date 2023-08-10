@@ -365,6 +365,7 @@ const saveHabitProgress = (req, res) => {
 
 // ROUTES
 app.get('/', renderSPA)
+app.get('/edit', renderSPA)
 app.get('/admin', renderSPA)
 app.post('/profile', getUser)
 
