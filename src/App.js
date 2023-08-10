@@ -491,7 +491,7 @@ class MainPage extends Component {
         <div className="left">
           HABITS
           <br />
-          <a href="/edit">Edit</a>
+          <a href="edit">Edit</a>
           {/*<Link to="/edit">Edit</Link>*/}
         </div>
         {renderTableOfDays()}
