@@ -214,6 +214,38 @@ button.remove {
   box-shadow: none;
 }
 
+.habit-created-title {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.015em;
+  text-align: center;
+  color: #373A41;
+}
+
+.full {
+  width: 100%;
+}
+
+.habit-created-close {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0em;
+}
+
+.habit-created-description {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.01em;
+  text-align: center;
+
+  margin-bottom: 25px;
+
+  color: #8C94A8;
+}
+
 .new-habit-button {
   border: 0;
   border-radius: 8px;

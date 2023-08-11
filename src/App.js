@@ -144,9 +144,21 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var [timeFrom, setTimeFrom] = useState(TIME_FROM_MORNING)
   var [timeTo, setTimeTo]     = useState(TIME_FROM_AFTERNOON)
   var [schedule, setSchedule] = useState({0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1})
+  var [isHabitCreated, setHabitCreated] = useState(false)
 
   if (!isOpen)
     return ''
+
+  if (isHabitCreated) {
+    return <div className={"wrapper"}>
+      <div className="habit-created-title">Habit created</div>
+      <div className="habit-created-description">You can edit this at any time</div>
+      <button className={"secondary full habit-created-close"} onClick={() => {
+        onCloseAddingPopup()
+        setHabitCreated(false)
+      }}>Close</button>
+    </div>
+  }
 
   var hasText = text.length
   var hasFromTime = timeFrom.length
@@ -154,8 +166,8 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
 
   var onAdd = () => {
-    onCloseAddingPopup()
     actions.addHabit(text, timeFrom, timeTo, schedule)
+    setHabitCreated(true)
     setText("")
     setTimeTo("00:00")
     setTimeFrom(timeTo)
@@ -532,7 +544,7 @@ class MainPage extends Component {
     if (editingHabit)
       return <HabitEditor habit={editingHabit} onCloseEditor={this.unsetEditingHabit} />
 
-    var {isAddingHabitPopupOpened} = this.state
+    var {isAddingHabitPopupOpened, isHabitCreated} = this.state
     if (isAddingHabitPopupOpened) {
       return <HabitAdder
         onCloseAddingPopup={() => this.toggleAddingPopup(false)}
@@ -558,7 +570,7 @@ function App() {
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
-          <Route path='/edit'                     element={<EditHabitPage/>}/>
+          <Route path='/edit'                 element={<EditHabitPage/>}/>
           <Route path='/admin'                element={<AdminPage/>}/>
         </Routes>
       </header>
