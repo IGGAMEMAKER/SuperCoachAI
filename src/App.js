@@ -140,9 +140,9 @@ function HabitTimePicker({onSave, defaultFrom = TIME_FROM_MORNING, defaultTo="12
 }
 
 function HabitAdder({isOpen, onCloseAddingPopup}) {
-  var [text, setText] = useState("Habit 1")
+  var [text, setText]         = useState("Habit 1")
   var [timeFrom, setTimeFrom] = useState(TIME_FROM_MORNING)
-  var [timeTo, setTimeTo] = useState(TIME_FROM_AFTERNOON)
+  var [timeTo, setTimeTo]     = useState(TIME_FROM_AFTERNOON)
   var [schedule, setSchedule] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0})
 
   if (!isOpen)
@@ -168,7 +168,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
     schedule[d] = newVal
     console.log({oldVal, newVal, schedule})
-    setSchedule(schedule)
+    setSchedule(JSON.parse(JSON.stringify(schedule)))
   }
 
   return <div>
