@@ -168,14 +168,14 @@ Dispatcher.register((p) => {
       break;
 
     case HABITS_REMOVE:
-      var ind = getIndexByID(habits, p.id)
-      habits[ind].name = p.name
+      removeById(habits, p.id)
 
       saveProfileChanges()
       break;
 
     case HABITS_RENAME:
-      removeById(habits, p.id)
+      var ind = getIndexByID(habits, p.id)
+      habits[ind].name = p.name
 
       saveProfileChanges()
       break;
