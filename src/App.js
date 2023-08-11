@@ -36,7 +36,7 @@ function HabitSchedulePicker({onToggle, schedule}) {
         <tr>
           {days.map(d => {
             var checked = schedule[d]; // habit.schedule[d]
-            console.log(schedule, {checked}, d)
+            // console.log(schedule, {checked}, d)
 
             return <td>
               <input
@@ -143,7 +143,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var [text, setText]         = useState("Habit 1")
   var [timeFrom, setTimeFrom] = useState(TIME_FROM_MORNING)
   var [timeTo, setTimeTo]     = useState(TIME_FROM_AFTERNOON)
-  var [schedule, setSchedule] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0})
+  var [schedule, setSchedule] = useState({0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1})
 
   if (!isOpen)
     return ''
@@ -155,7 +155,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
   var onAdd = () => {
     onCloseAddingPopup()
-    actions.addHabit(text, timeFrom, timeTo)
+    actions.addHabit(text, timeFrom, timeTo, schedule)
     setText("")
     setTimeTo("00:00")
     setTimeFrom(timeTo)
@@ -186,7 +186,10 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
       <div>
         <HabitSchedulePicker schedule={schedule} onToggle={onScheduleToggle} />
       </div>
-
+      <br />
+      <br />
+      <br />
+      <br />
       <div className="new-habit-footer-wrapper">
         <div className={"new-habit-footer"}>
           <button className="secondary" onClick={onCloseAddingPopup}>Cancel</button>

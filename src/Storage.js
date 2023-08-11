@@ -184,7 +184,7 @@ Dispatcher.register((p) => {
       console.log(HABITS_ADD, {p})
       pusher(habits, {
         name: p.text,
-        schedule: {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1}, // 1 - yes, 0 - no
+        schedule: p.schedule, // 1 - yes, 0 - no
         from: p.from,
         to: p.to
       })

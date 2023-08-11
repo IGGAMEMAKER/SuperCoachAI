@@ -27,10 +27,10 @@ export function renameHabit(id, name) {
   })
 }
 
-export function addHabit(text, from, to) {
+export function addHabit(text, from, to, schedule) {
   Dispatcher.dispatch({
     actionType: HABITS_ADD,
-    text, from, to
+    text, from, to, schedule
   })
 }
 
