@@ -143,7 +143,7 @@ body {
   /*padding-right: var(--offset);*/
 }
 button {
-  border: 0;
+  /*border: 0;*/
   border-radius: 8px;
   height: 48px;
 }
@@ -197,11 +197,23 @@ button {
 button.primary {
   background-color: var(--primary);
   color: white;
+  border: 0;
+  box-shadow: none;
 }
 button.secondary {
+  border: 0;
   background-color: #EEF7FF;
   color: var(--primary);
+  box-shadow: none;
 }
+button.remove {
+  background-color: white;
+  color: #ED584E;
+  border-color: #E7EAED;
+  border-width: thin;
+  box-shadow: none;
+}
+
 .new-habit-button {
   border: 0;
   border-radius: 8px;
@@ -227,8 +239,8 @@ button.secondary {
   padding-right: var(--offset);
 }
 .new-habit-footer-wrapper {
-  position: fixed;
-  width: var(--mobile-width);
+  /*position: fixed;*/
+  width: 100%; /*var(--mobile-width);*/
   bottom: 0;
   left: 0;
   right: 0;
@@ -238,6 +250,7 @@ button.secondary {
   flex-direction: column;
   /*grid-template-columns: 150px repeat(5, 1fr);*/
   grid-template-columns: auto auto;
+  grid-gap: 15px;
 }
 .new-habit-button-confirm.disabled {
   /*color: gray;*/

@@ -3,7 +3,7 @@ import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
-import actions, {renameHabit} from "./actions";
+import actions from "./actions";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
 
@@ -23,6 +23,34 @@ const getLiteralDayOfWeek = (val) => {
   }
 }
 
+function HabitSchedulePicker({onToggle, schedule}) {
+  var days = [0, 1, 2, 3, 4, 5, 6]
+            console.log(schedule)
+
+  return <div>
+    <center>
+      <table>
+        <tr>
+          {days.map(d => <td>{getLiteralDayOfWeek(d)}</td>)}
+        </tr>
+        <tr>
+          {days.map(d => {
+            var checked = schedule[d]; // habit.schedule[d]
+            console.log(schedule, {checked}, d)
+
+            return <td>
+              <input
+                className="habit-checkbox" type="checkbox"
+                checked={!!checked}
+                onChange={() => onToggle(d)}
+              />
+            </td>
+          })}
+        </tr>
+      </table>
+    </center>
+  </div>
+}
 function HabitEditor({habit, onCloseEditor}) {
   var [timeFrom, setTimeFrom] = useState(habit?.from)
   var [timeTo, setTimeTo]     = useState(habit?.to)
@@ -37,7 +65,6 @@ function HabitEditor({habit, onCloseEditor}) {
     onCloseEditor()
   }
 
-  var days = [0, 1, 2, 3, 4, 5, 6]
   var hasName = name.length > 0
 
   const removeAndExit = () => {
@@ -62,45 +89,28 @@ function HabitEditor({habit, onCloseEditor}) {
     <br/>
     <div className="wrapper">
       <div className="habit-name-editing">
+        <label>Name</label>
         <input placeholder="habit name" className="habit-name-editing-input" value={name}
                onInput={onRenameHabit} />
-        <label>Name</label>
       </div>
       <div style={{visibility: hasName ? 'hidden' : 'visible'}} className={"error"}>{name.length} Fill in the field</div>
       <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={onEditHabitTime}/>
       <br/>
-      <center>
-        <table>
-          <tr>
-            {days.map(d => <td>{getLiteralDayOfWeek(d)}</td>)}
-          </tr>
-          <tr>
-            {days.map(d => {
-              var checked = habit.schedule[d]
+      <HabitSchedulePicker schedule={habit.schedule} onToggle={d => actions.toggleHabitSchedule(habit.id, d)} />
 
-              return <td>
-                <input
-                  className="habit-checkbox" type="checkbox"
-                  checked={checked}
-                  onChange={() => actions.toggleHabitSchedule(habit.id, d)}
-                />
-              </td>
-            })}
-          </tr>
-        </table>
-      </center>
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
-      {/*<br/>*/}
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+
       <div className="new-habit-footer-wrapper">
         <div className="new-habit-footer">
-          <button className="secondary" onClick={removeAndExit}>[] Delete</button>
+          <button className="remove" onClick={removeAndExit}>[] Delete</button>
           <button className="primary" onClick={close}>Save</button>
         </div>
       </div>
@@ -133,6 +143,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   var [text, setText] = useState("Habit 1")
   var [timeFrom, setTimeFrom] = useState(TIME_FROM_MORNING)
   var [timeTo, setTimeTo] = useState(TIME_FROM_AFTERNOON)
+  var [schedule, setSchedule] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0})
 
   if (!isOpen)
     return ''
@@ -151,7 +162,15 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
   }
 
   var onTextChange = ev => setText(ev.target.value)
-  // {/*min="09:00" max="18:00"*/}
+  var onScheduleToggle = d => {
+    var oldVal = schedule[d]
+    var newVal = !schedule[d];
+
+    schedule[d] = newVal
+    console.log({oldVal, newVal, schedule})
+    setSchedule(schedule)
+  }
+
   return <div>
     <div className="menu-title">New habit</div>
     <br/>
@@ -163,6 +182,9 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
           setTimeFrom(fr)
           setTimeTo(to)
         }}/>
+      </div>
+      <div>
+        <HabitSchedulePicker schedule={schedule} onToggle={onScheduleToggle} />
       </div>
 
       <div className="new-habit-footer-wrapper">
