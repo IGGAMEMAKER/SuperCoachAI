@@ -6,7 +6,7 @@ import {
   HABITS_DATE_EDIT,
   HABITS_PROGRESS_TOGGLE,
   HABITS_REMOVE,
-  HABITS_RENAME,
+  HABITS_NAME_EDIT,
   HABITS_SCHEDULE_TOGGLE,
   PROFILE_LOAD
 } from "./constants/actionConstants";
@@ -173,7 +173,7 @@ Dispatcher.register((p) => {
       saveProfileChanges()
       break;
 
-    case HABITS_RENAME:
+    case HABITS_NAME_EDIT:
       var ind = getIndexByID(habits, p.id)
       habits[ind].name = p.name
 

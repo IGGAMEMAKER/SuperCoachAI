@@ -5,7 +5,7 @@ import {
   HABITS_DATE_EDIT,
   HABITS_PROGRESS_TOGGLE,
   HABITS_REMOVE,
-  HABITS_RENAME,
+  HABITS_NAME_EDIT,
   HABITS_SCHEDULE_TOGGLE,
   PROFILE_LOAD
 } from './constants/actionConstants';
@@ -22,7 +22,7 @@ export function loadProfile(telegramId) {
 
 export function renameHabit(id, name) {
   Dispatcher.dispatch({
-    actionType: HABITS_RENAME,
+    actionType: HABITS_NAME_EDIT,
     id, name
   })
 }

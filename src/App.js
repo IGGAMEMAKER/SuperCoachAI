@@ -52,7 +52,9 @@ function HabitEditor({habit, onCloseEditor}) {
   const onRenameHabit = ev => {
     var newName = ev.target.value;
     setHabitName(newName)
-    actions.renameHabit(habit.id, newName)
+
+    if (newName.length)
+      actions.renameHabit(habit.id, newName)
   }
 
   return <div key={"habit" + habit.id}>
