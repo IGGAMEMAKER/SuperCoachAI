@@ -1,7 +1,13 @@
 import Dispatcher from './Dispatcher';
 import {
   ADMIN_USERS,
-  HABITS_ADD, HABITS_DATE_EDIT, HABITS_PROGRESS_TOGGLE, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
+  HABITS_ADD,
+  HABITS_DATE_EDIT,
+  HABITS_PROGRESS_TOGGLE,
+  HABITS_REMOVE,
+  HABITS_RENAME,
+  HABITS_SCHEDULE_TOGGLE,
+  PROFILE_LOAD
 } from './constants/actionConstants';
 
 export function loadProfile(telegramId) {
@@ -11,6 +17,13 @@ export function loadProfile(telegramId) {
     actionType: PROFILE_LOAD,
     telegramId,
     timeZone: hrs
+  })
+}
+
+export function renameHabit(id, name) {
+  Dispatcher.dispatch({
+    actionType: HABITS_RENAME,
+    id, name
   })
 }
 
@@ -67,6 +80,7 @@ export default {
   loadProfile,
 
   addHabit,
+  renameHabit,
   removeHabit,
   editHabitTime,
   toggleHabitSchedule,

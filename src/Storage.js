@@ -2,7 +2,13 @@ import {EventEmitter} from 'events';
 import Dispatcher from './Dispatcher';
 import {
   ADMIN_USERS,
-  HABITS_ADD, HABITS_DATE_EDIT, HABITS_PROGRESS_TOGGLE, HABITS_REMOVE, HABITS_SCHEDULE_TOGGLE, PROFILE_LOAD
+  HABITS_ADD,
+  HABITS_DATE_EDIT,
+  HABITS_PROGRESS_TOGGLE,
+  HABITS_REMOVE,
+  HABITS_RENAME,
+  HABITS_SCHEDULE_TOGGLE,
+  PROFILE_LOAD
 } from "./constants/actionConstants";
 import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
 import {ping, post, update} from "./PingBrowser";
@@ -162,6 +168,13 @@ Dispatcher.register((p) => {
       break;
 
     case HABITS_REMOVE:
+      var ind = getIndexByID(habits, p.id)
+      habits[ind].name = p.name
+
+      saveProfileChanges()
+      break;
+
+    case HABITS_RENAME:
       removeById(habits, p.id)
 
       saveProfileChanges()

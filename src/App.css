@@ -1,7 +1,17 @@
 :root {
   --color-bg: #ffffff;
   --offset: 15px;
+  --primary: #0C8CE9;
+  --mobile-width: 420px;
+
+  /*font-family: 'Gilroy-Bold', sans-serif;*/
+  /*font-family: 'Gilroy-Heavy', sans-serif;*/
+  /*font-family: 'Gilroy-Light', sans-serif;*/
+  /*font-family: 'Gilroy-Medium', sans-serif;*/
+  /*font-family: 'Gilroy-Regular', sans-serif;*/
 }
+
+
 
 [data-theme="dark"] {
   --color-bg: #0D0D0D;
@@ -9,7 +19,7 @@
 
 
 body {
-  font-family: Gilroy;
+  font-family: 'Gilroy-Regular', sans-serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 16px;
@@ -80,7 +90,47 @@ body {
   border-bottom-style: solid;
   border-bottom-width: thin;
   padding-bottom: 15px;
+  padding-top: 5px;
   margin-bottom: 15px;
+}
+
+.habit-name-editing {
+  position: relative;
+  margin-bottom: 20px;
+}
+.habit-name-editing label {
+  position: absolute;
+  top: 5px;
+  left: 17px;
+}
+.error {
+  color: #DC3545;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.habit-name-editing-input.error {
+  color: #DC3545;
+}
+.habit-name-editing-input {
+  border-color: var(--primary);
+  height: 58px;
+  width: 100%;
+  border-radius: 8px;
+  border-width: 1px;
+
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: left;
+
+  color: #373A41;
+
+  padding-left: 15px;
+  box-sizing: border-box;
 }
 
 .time-picking-container {
@@ -104,10 +154,10 @@ button {
   width: 115px;
 
   background-color: #F1F9FF;
-  color: #0C8CE9;
+  color: var(--primary)
 }
 .time-picking-button.chosen {
-  background-color: #0C8CE9;
+  background-color: var(--primary);
   color: white;
 }
 
@@ -145,12 +195,12 @@ button {
 }
 
 button.primary {
-  background-color: #0C8CE9;
+  background-color: var(--primary);
   color: white;
 }
 button.secondary {
   background-color: #EEF7FF;
-  color: #0C8CE9;
+  color: var(--primary);
 }
 .new-habit-button {
   border: 0;
@@ -161,6 +211,7 @@ button.secondary {
   line-height: 20px;
   letter-spacing: 0em;
 
+  width: 100%;
   text-align: center;
 }
 
@@ -177,7 +228,7 @@ button.secondary {
 }
 .new-habit-footer-wrapper {
   position: fixed;
-  width: 100%;
+  width: var(--mobile-width);
   bottom: 0;
   left: 0;
   right: 0;
@@ -221,13 +272,7 @@ button.secondary {
 }
 
 .current-day {
-  /*border-style: solid;*/
-  /*border-radius: 1000px;*/
-  /*border-width: thin;*/
-  /*border-color: white;*/
-  /*background-color: green;*/
-  /*color: white;*/
-  color: #0C8CE9;
+  color: var(--primary);
 }
 
 .habits-table {

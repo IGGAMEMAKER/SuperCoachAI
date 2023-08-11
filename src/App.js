@@ -3,7 +3,7 @@ import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
-import actions from "./actions";
+import actions, {renameHabit} from "./actions";
 import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
 
@@ -25,7 +25,8 @@ const getLiteralDayOfWeek = (val) => {
 
 function HabitEditor({habit, onCloseEditor}) {
   var [timeFrom, setTimeFrom] = useState(habit?.from)
-  var [timeTo, setTimeTo] = useState(habit?.to)
+  var [timeTo, setTimeTo]     = useState(habit?.to)
+  var [name, setHabitName]    = useState(habit?.name)
 
   if (!habit)
     return ''
@@ -36,73 +37,72 @@ function HabitEditor({habit, onCloseEditor}) {
     onCloseEditor()
   }
 
-  const onToChange = (ev) => {
-    var time = ev.target.value;
-
-    setTimeTo(time)
-    actions.editHabitTime(habit.id, time, 'to')
-  }
-  const onFromChange = (ev) => {
-    var time = ev.target.value;
-
-    setTimeFrom(time)
-    actions.editHabitTime(habit.id, time, 'from')
-  }
-
   var days = [0, 1, 2, 3, 4, 5, 6]
+  var hasName = name.length > 0
 
-  // return <div className="popup" key={"habit" + habit.id}>
+  const removeAndExit = () => {
+    close();
+    actions.removeHabit(habit.id)
+  }
+
+  const onEditHabitTime = (fr, to) => {
+    actions.editHabitTime(habit.id, fr, to)
+  }
+
+  const onRenameHabit = ev => {
+    var newName = ev.target.value;
+    setHabitName(newName)
+    actions.renameHabit(habit.id, newName)
+  }
+
   return <div key={"habit" + habit.id}>
     <div className="menu-title">{habit.name}</div>
     <br/>
-    <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={(fr, to) => {
-      actions.editHabitTime(habit.id, fr, to)
-    }} />
-    {/*<div>*/}
-    {/*  <div className="popup-label">From {habit.from}</div>*/}
-    {/*  <input className="new-habit-input" type="time" value={timeFrom} required onChange={onFromChange}/>*/}
-    {/*</div>*/}
-    {/*<div>*/}
-    {/*  <div className="popup-label">To {habit.to}</div>*/}
-    {/*  <input className="new-habit-input" type="time" value={timeTo} required onChange={onToChange}/>*/}
-    {/*</div>*/}
-    <br/>
-    {/*<div className="popup-label">Schedule</div>*/}
-    <center>
-    <table>
-      <tr>
-        {days.map(d => <td>{getLiteralDayOfWeek(d)}</td>)}
-      </tr>
-      <tr>
-        {days.map(d => {
-          var checked = habit.schedule[d]
+    <div className="wrapper">
+      <div className="habit-name-editing">
+        <input placeholder="habit name" className="habit-name-editing-input" value={name}
+               onInput={onRenameHabit} />
+        <label>Name</label>
+      </div>
+      <div style={{visibility: hasName ? 'hidden' : 'visible'}} className={"error"}>{name.length} Fill in the field</div>
+      <HabitTimePicker defaultFrom={timeFrom} defaultTo={timeTo} onSave={onEditHabitTime}/>
+      <br/>
+      <center>
+        <table>
+          <tr>
+            {days.map(d => <td>{getLiteralDayOfWeek(d)}</td>)}
+          </tr>
+          <tr>
+            {days.map(d => {
+              var checked = habit.schedule[d]
 
-          return <td>
-            <input
-              className="habit-checkbox" type="checkbox"
-              checked={checked}
-              onChange={() => actions.toggleHabitSchedule(habit.id, d)}
-            />
-          </td>
-        })}
-      </tr>
-    </table>
-    </center>
-    <br/>
-    <br/>
-    <button className="close" onClick={close}>Close</button>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <button onClick={() => {
-      close();
-      actions.removeHabit(habit.id)
-    }}>Remove habit
-    </button>
+              return <td>
+                <input
+                  className="habit-checkbox" type="checkbox"
+                  checked={checked}
+                  onChange={() => actions.toggleHabitSchedule(habit.id, d)}
+                />
+              </td>
+            })}
+          </tr>
+        </table>
+      </center>
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      {/*<br/>*/}
+      <div className="new-habit-footer-wrapper">
+        <div className="new-habit-footer">
+          <button className="secondary" onClick={removeAndExit}>[] Delete</button>
+          <button className="primary" onClick={close}>Save</button>
+        </div>
+      </div>
+    </div>
   </div>
 }
 
@@ -154,7 +154,6 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     <div className="menu-title">New habit</div>
     <br/>
     <div className="wrapper">
-
       <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text}
              onChange={onTextChange}/>
       <div className={"from-to-form"}>
@@ -165,16 +164,16 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
       </div>
 
       <div className="new-habit-footer-wrapper">
-      <div className={"new-habit-footer"}>
-        <button className="secondary" onClick={onCloseAddingPopup}>Cancel</button>
-        <button
-          // className={`primary new-habit-button new-habit-button-confirm ${canSave ? '' : 'disabled'}`}
-          className={`primary ${canSave ? '' : 'disabled'}`}
-          onClick={onAdd}
-          disabled={!canSave}
-        >Save
-        </button>
-      </div>
+        <div className={"new-habit-footer"}>
+          <button className="secondary" onClick={onCloseAddingPopup}>Cancel</button>
+          <button
+            // className={`primary new-habit-button new-habit-button-confirm ${canSave ? '' : 'disabled'}`}
+            className={`primary ${canSave ? '' : 'disabled'}`}
+            onClick={onAdd}
+            disabled={!canSave}
+          >Save
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -499,13 +498,12 @@ class MainPage extends Component {
       </div>
       <div className="left">
         <br />
-        <button onClick={() => {this.toggleAddingPopup(true)}} className="new-habit-button">Add habit</button>
+        <button onClick={() => {this.toggleAddingPopup(true)}} className="primary new-habit-button">Add habit</button>
       </div>
     </div>
 
-    if (editingHabit) {
-      return <HabitEditor habit={editingHabit} onCloseEditor={this.unsetEditingHabit}/>
-    }
+    if (editingHabit)
+      return <HabitEditor habit={editingHabit} onCloseEditor={this.unsetEditingHabit} />
 
     var {isAddingHabitPopupOpened} = this.state
     if (isAddingHabitPopupOpened) {
