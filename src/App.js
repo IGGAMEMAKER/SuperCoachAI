@@ -150,10 +150,11 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     return ''
 
   if (isHabitCreated) {
-    return <div className={"wrapper"}>
+    return <div className="wrapper">
+      <img className="thumbs-up" src="thumbs up symbol.svg" />
       <div className="habit-created-title">Habit created</div>
       <div className="habit-created-description">You can edit this at any time</div>
-      <button className={"secondary full habit-created-close"} onClick={() => {
+      <button className="secondary full habit-created-close" onClick={() => {
         onCloseAddingPopup()
         setHabitCreated(false)
       }}>Close</button>

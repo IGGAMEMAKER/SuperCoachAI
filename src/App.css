@@ -227,6 +227,11 @@ button.remove {
   width: 100%;
 }
 
+.thumbs-up {
+  width: 144px;
+  height: 144px;
+  margin-top: 161px;
+}
 .habit-created-close {
   font-size: 16px;
   font-weight: 600;

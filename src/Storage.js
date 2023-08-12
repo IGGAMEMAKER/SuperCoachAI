@@ -66,6 +66,9 @@ const getTelegramId = () => {
   var initData = getInitDataSplit(webApp?.initData)
   var userData = initData[1]
 
+  colorScheme = webApp?.colorScheme ; // || "light"
+  console.log({colorScheme})
+
   try {
     console.log({userData})
     var id = parseUserInfo(userData)
@@ -80,8 +83,8 @@ const getTelegramId = () => {
   }
 }
 
+var colorScheme;
 var telegramId = getTelegramId()
-
 
 class Storage extends EventEmitter {
   addChangeListener(c) {
