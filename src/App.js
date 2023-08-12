@@ -110,7 +110,9 @@ function HabitEditor({habit, onCloseEditor}) {
 
       <div className="new-habit-footer-wrapper">
         <div className="new-habit-footer">
-          <button className="remove" onClick={removeAndExit}>[] Delete</button>
+          <button className="remove" onClick={removeAndExit}>
+            <img alt="delete habit" src="https://supercoach.site/public/can.png" />
+            Delete</button>
           <button className="primary" onClick={close}>Save</button>
         </div>
       </div>
