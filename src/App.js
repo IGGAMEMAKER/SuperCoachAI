@@ -153,7 +153,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
   if (isHabitCreated) {
     return <div className="wrapper">
-      <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.svg" />
+      <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
       {/*<div className="thumbs-up" />*/}
       <div className="habit-created-title">Habit created</div>
       <div className="habit-created-description">You can edit this at any time</div>
