@@ -232,7 +232,7 @@ button.remove {
   height: 144px;
   margin-top: 161px;
 
-  background-image: url("https://supercoach.site/public/thumbs_up_symbol.svg");
+  /*background-image: url("https://supercoach.site/public/thumbs_up_symbol.svg");*/
 }
 .habit-created-close {
   font-size: 16px;
