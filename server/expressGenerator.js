@@ -13,7 +13,8 @@ const createApp = (port) => {
 
   var path = __dirname.replace('server', 'build')
   console.log('APP.USE', path, __dirname)
-  app.use('/static', express.static(path + '/public'));
+  app.use('/static', express.static(path + '/static'));
+  app.use('/public', express.static(path + '/public'));
 
   app.use(cookieParser())
   app.use(cors(corsOptions))
