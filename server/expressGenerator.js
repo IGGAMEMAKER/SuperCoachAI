@@ -4,8 +4,6 @@ const createApp = (port) => {
   const cookieParser = require('cookie-parser')
 
   const corsOptions = {
-    // origin: '*',
-    // origin: 'http://indiemarketingtool.com',
     origin: true,
     credentials: true,            //access-control-allow-credentials:true
     optionSuccessStatus: 200,
@@ -15,7 +13,7 @@ const createApp = (port) => {
 
   var path = __dirname.replace('server', 'build')
   console.log('APP.USE', path, __dirname)
-  app.use('/static', express.static(path + '/static'));
+  app.use('/static', express.static(path + '/public'));
 
   app.use(cookieParser())
   app.use(cors(corsOptions))

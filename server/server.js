@@ -281,11 +281,6 @@ const saveHabits = async (req, res) => {
   res.json({r})
 }
 
-var seq = (progress) => progress.map((p, i) => ({
-  date: new Date(Date.now() - i * 24 * 3600 * 1000),
-  progress: p
-}))
-
 const getAllUsers = (req, res) => {
   UserModel.find()
     .then(users => {
