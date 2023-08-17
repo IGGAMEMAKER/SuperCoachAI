@@ -140,7 +140,6 @@ var job = new CronJob(
     console.log({tenAMCurrentlyInTimezoneX})
 
     UserModel.find({timeZone: tenAMCurrentlyInTimezoneX})
-    // UserModel.find({})
       .then(users => {
         users.forEach(u => {
           var telegramId = u.telegramId;
@@ -210,13 +209,13 @@ const renderSPA = (req, res) => {
   res.sendFile(appPath);
 }
 
-const getUser = async (req, res) => {
+const getUserRoute = async (req, res) => {
   // console.log('getUser', req.body)
   var telegramId = req.body.telegramId
   var timeZone = req.body.timeZone
   console.log({telegramId, timeZone})
 
-  UserModel.findOne({telegramId})
+  getCurrentUser(req)
     .then(u => {
       var mockUser = {telegramId, timeZone, habits: []}
 
@@ -262,7 +261,8 @@ const authenticate = async (req, res, next) => {
   if (telegramId === ADMINS_ME)
     req.me = true
 
-  UserModel.find({telegramId})
+  // TODO WAS UserModel.find({telegramId})
+  UserModel.findOne({telegramId})
     .then(u => {
       if (!u) {
         next(1)
@@ -367,7 +367,7 @@ const saveHabitProgress = (req, res) => {
   console.log(date, habitId)
   var telegramId = req.telegramId
 
-  UserModel.findOne({telegramId})
+  getCurrentUser(req)
     .then(u => {
       var progress = u.progress || [];
       console.log(progress)
@@ -406,7 +406,7 @@ app.get('/admin', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 
-app.post('/profile', getUser)
+app.post('/profile', getUserRoute)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
