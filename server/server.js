@@ -140,6 +140,7 @@ var job = new CronJob(
     console.log({tenAMCurrentlyInTimezoneX})
 
     UserModel.find({timeZone: tenAMCurrentlyInTimezoneX})
+    // UserModel.find({})
       .then(users => {
         users.forEach(u => {
           var telegramId = u.telegramId;
@@ -215,7 +216,7 @@ const getUser = async (req, res) => {
   var timeZone = req.body.timeZone
   console.log({telegramId, timeZone})
 
-  getCurrentUser(req)
+  UserModel.findOne({telegramId})
     .then(u => {
       var mockUser = {telegramId, timeZone, habits: []}
 
@@ -366,7 +367,7 @@ const saveHabitProgress = (req, res) => {
   console.log(date, habitId)
   var telegramId = req.telegramId
 
-  getCurrentUser(req)
+  UserModel.findOne({telegramId})
     .then(u => {
       var progress = u.progress || [];
       console.log(progress)
