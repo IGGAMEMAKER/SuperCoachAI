@@ -209,7 +209,7 @@ const renderSPA = (req, res) => {
   res.sendFile(appPath);
 }
 
-const getUserRoute = async (req, res) => {
+const getUser = async (req, res) => {
   // console.log('getUser', req.body)
   var telegramId = req.body.telegramId
   var timeZone = req.body.timeZone
@@ -261,8 +261,7 @@ const authenticate = async (req, res, next) => {
   if (telegramId === ADMINS_ME)
     req.me = true
 
-  // TODO WAS UserModel.find({telegramId})
-  UserModel.findOne({telegramId})
+  UserModel.find({telegramId})
     .then(u => {
       if (!u) {
         next(1)
@@ -406,7 +405,7 @@ app.get('/admin', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 
-app.post('/profile', getUserRoute)
+app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
