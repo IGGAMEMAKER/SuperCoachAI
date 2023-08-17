@@ -256,6 +256,15 @@ const isMe = async (req, res, next) => {
   }
 }
 
+const isTesting = async (req, res, next) => {
+  if (!req.isTesting) {
+    console.log('not TESTING, so operation will not be done')
+    next('not TESTING')
+  } else {
+    next()
+  }
+}
+
 const authenticate = async (req, res, next) => {
   // get telegramId here
   var c = getCookies(req)
@@ -263,6 +272,9 @@ const authenticate = async (req, res, next) => {
   var {telegramId} = c // '' // req.cookies(???) req.body?
   if (telegramId === ADMINS_ME)
     req.me = true
+
+  if (req.me || telegramId === 'myTGId')
+    req.isTesting = true
 
   UserModel.find({telegramId})
     .then(u => {
@@ -414,7 +426,7 @@ app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.put('/habits', authenticate, saveHabits)
-app.delete('/habits/:habitId', authenticate, isMe, removeHabitRoute)
+app.delete('/habits/:habitId', authenticate, isTesting, removeHabitRoute)
 app.post('/habits/progress', authenticate, saveHabitProgress)
 
 // ---------------- API ------------------------
