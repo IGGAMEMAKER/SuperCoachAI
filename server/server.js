@@ -245,11 +245,22 @@ const getUser = async (req, res) => {
     })
 }
 
+const isMe = async (req, res, next) => {
+  if (!req.me) {
+    console.log('not me, so operation will not be done')
+    next('not me')
+  } else {
+    next()
+  }
+}
+
 const authenticate = async (req, res, next) => {
   // get telegramId here
   var c = getCookies(req)
   console.log('authenticate', c)
   var {telegramId} = c // '' // req.cookies(???) req.body?
+  if (telegramId === ADMINS_ME)
+    req.me = true
 
   UserModel.find({telegramId})
     .then(u => {
@@ -278,6 +289,32 @@ const saveHabits = async (req, res) => {
   // if (r.modifiedCount) // then habits saved
 
   res.json({r})
+}
+
+const removeHabitRoute = async (req, res) => {
+  console.log('removeHabitRoute')
+  res.json({ok: 1})
+
+  var query = {telegramId: req.telegramId}
+  var habitId = req.params.habitId;
+
+  UserModel.find(query)
+    .then(u => {
+      if (u) {
+        var progress = u.progress.filter(p => p.habitId !== habitId);
+
+        UserModel.updateOne(query, {progress})
+          .then(r => {
+            console.log('removed habit progress??', r)
+          })
+          .catch(err => {
+            console.error('cannot remove habit progress cause', err)
+          })
+      }
+    })
+    .catch(err => {
+      console.log('remove habit progress: screwed', err)
+    })
 }
 
 const getAllUsers = (req, res) => {
@@ -362,13 +399,15 @@ app.get('/', renderSPA)
 app.get('/edit', renderSPA)
 app.get('/admin', renderSPA)
 
-app.post('/profile', getUser)
 app.all('/admin/users', getAllUsers)
-app.post('/messages', saveMessagesRoute)
+
+app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
+app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.put('/habits', authenticate, saveHabits)
+app.delete('/habits/:habitId', authenticate, isMe, removeHabitRoute)
 app.post('/habits/progress', authenticate, saveHabitProgress)
 
 // ---------------- API ------------------------

@@ -11,7 +11,7 @@ import {
   PROFILE_LOAD
 } from "./constants/actionConstants";
 import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
-import {ping, post, update} from "./PingBrowser";
+import {ping, post, update, remove} from "./PingBrowser";
 
 
 const CE = 'CHANGE_EVENT';
@@ -115,13 +115,13 @@ class Storage extends EventEmitter {
 const store = new Storage();
 
 
-Dispatcher.register((p) => {
+Dispatcher.register(async (p) => {
   const saveProfileChanges = () => {
     console.log('will update profile')
-    update('/habits', {habits})
+    return update('/habits', {habits})
       .finally(() => {
         store.emitChange()
-    })
+      })
   }
 
   switch (p.actionType) {
@@ -159,7 +159,7 @@ Dispatcher.register((p) => {
       var ind = getIndexByID(habits, p.id)
       habits[ind].schedule[p.dayOfWeek] = !habits[ind].schedule[p.dayOfWeek]
 
-      saveProfileChanges()
+      await saveProfileChanges()
       break;
     case HABITS_DATE_EDIT:
       var ind = getIndexByID(habits, p.id)
@@ -167,20 +167,28 @@ Dispatcher.register((p) => {
       habits[ind].from = p.from
       habits[ind].to = p.to
 
-      saveProfileChanges()
+      await saveProfileChanges()
       break;
 
     case HABITS_REMOVE:
       removeById(habits, p.id)
 
-      saveProfileChanges()
+      await saveProfileChanges()
+      remove('/habits/' + p.id, {})
+        .then(r => {
+          console.log({r})
+        })
+        .catch(err => {
+          console.error('remove habit', err)
+        })
+
       break;
 
     case HABITS_NAME_EDIT:
       var ind = getIndexByID(habits, p.id)
       habits[ind].name = p.name
 
-      saveProfileChanges()
+      await saveProfileChanges()
       break;
 
     case HABITS_ADD:
@@ -192,7 +200,7 @@ Dispatcher.register((p) => {
         to: p.to
       })
 
-      saveProfileChanges()
+      await saveProfileChanges()
       break
 
     case HABITS_PROGRESS_TOGGLE:
