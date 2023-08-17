@@ -155,8 +155,8 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     return <div className="wrapper">
       <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
       {/*<div className="thumbs-up" />*/}
-      <div className="habit-created-title">Habit created</div>
-      <div className="habit-created-description">You can edit this at any time</div>
+      <div className="habit-created-title">Habit added!</div>
+      <div className="habit-created-description">You can edit this any time</div>
       <button className="secondary full habit-created-close" onClick={() => {
         onCloseAddingPopup()
         setHabitCreated(false)
@@ -527,6 +527,14 @@ class MainPage extends Component {
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
 
+    var startAddingHabitsImage;
+    if (!habits.length) {
+      startAddingHabitsImage = <div className="wrapper">
+        <img alt="no habits yet" className="no-habits-img" src="https://supercoach.site/public/magnifying_glass.png" />
+        <div className="habit-created-description">Here's nothing yet...</div>
+      </div>
+    }
+
     const mainPage = <div>
       <div className="menu-title">Daily routine</div>
       <div className="habits-table">
@@ -539,6 +547,7 @@ class MainPage extends Component {
         {renderTableOfDays()}
         {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
       </div>
+      {startAddingHabitsImage}
       <div className="left">
         <br />
         <button onClick={() => {this.toggleAddingPopup(true)}} className="primary new-habit-button">Add habit</button>
@@ -548,7 +557,7 @@ class MainPage extends Component {
     if (editingHabit)
       return <HabitEditor habit={editingHabit} onCloseEditor={this.unsetEditingHabit} />
 
-    var {isAddingHabitPopupOpened, isHabitCreated} = this.state
+    var {isAddingHabitPopupOpened} = this.state
     if (isAddingHabitPopupOpened) {
       return <HabitAdder
         onCloseAddingPopup={() => this.toggleAddingPopup(false)}
