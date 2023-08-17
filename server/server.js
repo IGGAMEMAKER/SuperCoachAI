@@ -291,6 +291,8 @@ const saveHabits = async (req, res) => {
   res.json({r})
 }
 
+const getCurrentUser = req => UserModel.findOne({telegramId: req.telegramId})
+
 const removeHabitRoute = async (req, res) => {
   console.log('removeHabitRoute')
   res.json({ok: 1})
@@ -298,7 +300,7 @@ const removeHabitRoute = async (req, res) => {
   var query = {telegramId: req.telegramId}
   var habitId = req.params.habitId;
 
-  UserModel.find(query)
+  getCurrentUser(req)
     .then(u => {
       if (u) {
         console.log({u})
