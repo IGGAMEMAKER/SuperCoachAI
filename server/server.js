@@ -301,8 +301,10 @@ const removeHabitRoute = async (req, res) => {
   UserModel.find(query)
     .then(u => {
       if (u) {
-        console.log('progress', u.progress)
-        var progress = u.progress.filter(p => p.habitId !== habitId);
+        console.log({u})
+        var progress = u.progress;
+        console.log('progress', progress)
+        progress = progress.filter(p => p.habitId !== habitId);
 
         UserModel.updateOne(query, {progress})
           .then(r => {
