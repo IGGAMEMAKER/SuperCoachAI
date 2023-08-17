@@ -220,7 +220,6 @@ const getUser = async (req, res) => {
     .then(u => {
       var mockUser = {telegramId, timeZone, habits: []}
 
-      // console.log({u})
       // save cookies
       if (!u) {
         u = new UserModel(mockUser)
@@ -228,17 +227,20 @@ const getUser = async (req, res) => {
         u.save()
           .then(r => {
             console.log('user saved', r)
+
             setCookies(res, telegramId)
             res.json({profile: mockUser})
           })
           .catch(err => {
             console.error({err})
+
             flushCookies(res)
             res.json({profile: mockUser, error: 1})
           })
       } else {
         if (u.timeZone !== timeZone)
           UserModel.updateOne({telegramId}, {timeZone}).then().catch().finally()
+
         setCookies(res, telegramId)
         res.json({profile: u}) // progress??
       }

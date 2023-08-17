@@ -12,6 +12,7 @@ import {
 } from "./constants/actionConstants";
 import {getIndexByID, patchWithIDs, pusher, removeById} from "./utils";
 import {ping, post, update, remove} from "./PingBrowser";
+import actions from "./actions";
 
 
 const CE = 'CHANGE_EVENT';
@@ -124,6 +125,22 @@ Dispatcher.register(async (p) => {
       })
   }
 
+  const loadProfile = (telegramId, timeZone) => {
+    post('/profile', {telegramId, timeZone})
+      .then(r => {
+        console.log('load profile', r, telegramId)
+
+        habits        = r.profile.habits
+        habitProgress = r.profile.progress
+      })
+      .catch(err => {
+        console.error('caught on /profile', err)
+      })
+      .finally(() => {
+        store.emitChange()
+      })
+  }
+
   switch (p.actionType) {
     case ADMIN_USERS:
       post('/admin/users')
@@ -141,18 +158,8 @@ Dispatcher.register(async (p) => {
 
     case PROFILE_LOAD:
       console.log(PROFILE_LOAD, p)
-      post('/profile', {telegramId: p.telegramId, timeZone: p.timeZone})
-        .then(r => {
-          console.log('load profile', r, telegramId)
-          habits = r.profile.habits
-          habitProgress = r.profile.progress
-        })
-        .catch(err => {
-          console.error('caught on /profile', err)
-        })
-        .finally(() => {
-          store.emitChange()
-        })
+
+      loadProfile(p.telegramId, p.timeZone)
       break;
 
     case HABITS_SCHEDULE_TOGGLE:
@@ -180,6 +187,10 @@ Dispatcher.register(async (p) => {
         })
         .catch(err => {
           console.error('remove habit', err)
+        })
+        .finally(() => {
+          actions.loadProfile(getTelegramId())
+          // loadProfile(getTelegramId())
         })
 
       break;
