@@ -89,13 +89,16 @@ var telegramId = getTelegramId()
 
 var initializeTGApp = () => {
   try {
+    var webApp = window?.Telegram?.WebApp;
 
-  var webApp = window?.Telegram?.WebApp;
+    var {MainButton, BackButton} = webApp
 
-  var {MainButton, BackButton} = webApp
-  BackButton.show()
+    console.log(MainButton)
+
+    BackButton.show()
+
     setInterval(() => {
-  MainButton.hide()
+      MainButton.hide()
     }, 1000)
   } catch (e) {
     console.error('cannot initializeTGApp', e)
