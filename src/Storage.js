@@ -95,11 +95,11 @@ var initializeTGApp = () => {
 
     console.log('MAIN BUTTON', {MainButton})
 
-    BackButton.show()
+    // BackButton.show()
 
     setInterval(() => {
       // MainButton.hide()
-      MainButton.setText('MAAAAIN')
+      window?.Telegram?.WebApp.MainButton.setText('MAAAAIN')
     }, 1000)
   } catch (e) {
     console.error('cannot initializeTGApp', e)
