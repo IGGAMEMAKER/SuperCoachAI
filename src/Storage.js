@@ -87,6 +87,21 @@ const getTelegramId = () => {
 var colorScheme;
 var telegramId = getTelegramId()
 
+var initializeTGApp = () => {
+  try {
+
+  var webApp = window?.Telegram?.WebApp;
+
+  var {MainButton, BackButton} = webApp
+  BackButton.show()
+  MainButton.hide()
+  } catch (e) {
+    console.error('cannot initializeTGApp', e)
+  }
+}
+
+initializeTGApp()
+
 class Storage extends EventEmitter {
   addChangeListener(c) {
     this.addListener(CE, c);
