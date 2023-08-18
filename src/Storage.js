@@ -93,7 +93,7 @@ var initializeTGApp = () => {
 
     var {MainButton, BackButton} = webApp
 
-    console.log(MainButton)
+    console.log('MAIN BUTTON', {MainButton})
 
     BackButton.show()
 
