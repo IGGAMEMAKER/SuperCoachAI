@@ -98,7 +98,8 @@ var initializeTGApp = () => {
     BackButton.show()
 
     setInterval(() => {
-      MainButton.hide()
+      // MainButton.hide()
+      MainButton.setText('MAAAAIN')
     }, 1000)
   } catch (e) {
     console.error('cannot initializeTGApp', e)
