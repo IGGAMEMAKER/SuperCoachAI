@@ -536,24 +536,24 @@ class QuizPage extends Component {
   }
 
   render() {
-    if (this.state.passed) {
-      const onSaveQuiz = (name) => ev => {
-        console.log('onSaveQuiz', name)
-        post('/quiz/1', {quiz: this.state.quiz})
-          .then(r => {
-            console.log('response', r)
-          })
-          .catch(err => {
-            console.error('saving quiz1 failed', err)
-          })
-      }
+    const onSaveQuiz = (name) => {
+      console.log('onSaveQuiz', name)
+      post('/quiz/1', {quiz: this.state.quiz})
+        .then(r => {
+          console.log('response', r)
+        })
+        .catch(err => {
+          console.error('saving quiz1 failed', err)
+        })
+    }
 
+    if (this.state.passed) {
       return <div>
         <div className="wrapper">
           <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
           <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
-          <Link to={"/"} onClick={onSaveQuiz("link")}>
-            <button className="secondary full habit-created-close" onClick={onSaveQuiz("button")}>Start</button>
+          <Link to={"/"}>
+            <button className="secondary full habit-created-close">Start</button>
           </Link>
         </div>
       </div>
@@ -597,9 +597,7 @@ class QuizPage extends Component {
       },
     ]
 
-    const isAnswerChosen = (questionId, answerId) => {
-      return this.state.quiz[questionId].includes(answerId)
-    }
+    const isAnswerChosen = (questionId, answerId) => this.state.quiz[questionId].includes(answerId)
     const onToggleAnswer = (question, questionId, answerId) => {
       if (isAnswerChosen(questionId, answerId)) {
         // if was chosen => remove
@@ -632,7 +630,10 @@ class QuizPage extends Component {
       <button
         disabled={!canSaveQuiz}
         className={`quiz-done-button ${canSaveQuiz ? '' : 'disabled'} full ${canSaveQuiz ? 'primary' : 'secondary'}`}
-        onClick={() => {this.setState({passed: true})}}
+        onClick={() => {
+          onSaveQuiz("link")
+          this.setState({passed: true})}
+        }
       >Done</button>
     </div>
   }

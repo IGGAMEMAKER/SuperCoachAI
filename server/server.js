@@ -219,6 +219,8 @@ const saveQuiz = num => async (req, res) => {
   var upd = {}
   upd['quiz' + num] = quiz
 
+  console.log('will try saving', upd)
+
   UserModel.updateOne({telegramId}, upd)
     .then(r => {
       console.log('saved quiz', num, quiz, r)
@@ -437,8 +439,8 @@ app.get('/admin', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 
-app.post('/quiz/1', saveQuiz(1))
-app.post('/quiz/2', saveQuiz(2))
+app.post('/quiz/1', authenticate, saveQuiz(1))
+app.post('/quiz/2', authenticate, saveQuiz(2))
 app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
