@@ -537,16 +537,16 @@ class QuizPage extends Component {
 
   render() {
     if (this.state.passed) {
-      const onSaveQuiz = () => {
-        console.log('onSaveQuiz')
+      const onSaveQuiz = (name) => ev => {
+        console.log('onSaveQuiz', name)
       }
 
       return <div>
         <div className="wrapper">
           <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
           <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
-          <Link to={"/"} onClick={onSaveQuiz}>
-            <button className="secondary full habit-created-close" onClick={onSaveQuiz}>Start</button>
+          <Link to={"/"} onClick={onSaveQuiz("link")}>
+            <button className="secondary full habit-created-close" onClick={onSaveQuiz("button")}>Start</button>
           </Link>
         </div>
       </div>
