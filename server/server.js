@@ -221,6 +221,16 @@ const saveQuiz = num => async (req, res) => {
 
   console.log('will try saving', upd)
 
+  upd = {
+    quiz1: {
+      '1': [], // if it's just a number, it means, that answer was chosen
+      '2': [],
+      '3': [], // multiple answers
+
+      // '4': 'input text'
+    },
+  }
+
   UserModel.updateOne({telegramId}, upd)
     .then(r => {
       console.log('saved quiz', num, quiz, r)
@@ -439,13 +449,14 @@ app.get('/admin', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 
-app.post('/quiz/1', authenticate, saveQuiz(1))
-app.post('/quiz/2', authenticate, saveQuiz(2))
+
 app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
+app.post('/quiz/1', authenticate, saveQuiz(1))
+app.post('/quiz/2', authenticate, saveQuiz(2))
 app.put('/habits', authenticate, saveHabits)
 app.delete('/habits/:habitId', authenticate, isTesting, removeHabitRoute)
 app.post('/habits/progress', authenticate, saveHabitProgress)
