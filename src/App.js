@@ -4,7 +4,7 @@ import {Component, useEffect, useState} from 'react';
 import {Link, Route, Routes} from 'react-router-dom';
 import storage from "./Storage";
 import actions from "./actions";
-import {isHabitDoneOnDayX, patchWithIDs} from "./utils";
+import {getByID, isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
 
 const TIME_FROM_MORNING = "9:00"
@@ -488,6 +488,160 @@ class EditHabitPage extends Component {
   }
 }
 
+class Footer extends Component {
+  render() {
+    const menu = (src, text, url, needsClick) => {
+      // var isChosen =
+      return <Link to={url} className={"footer-menu-wrapper"}>
+        <img alt="" className={`footer-menu-img ${src}`}
+             src={`https://supercoach.site/public/${src}${document.location.pathname === url ? '-chosen' : ''}.png`}/>
+        <div className={"footer-menu-text"}>{text}</div>
+      </Link>
+    }
+
+    return <div className="footer">
+      <div className="footer-grid">
+        {menu("home", "Home", "/")}
+        {menu("coach", "Coach", "/coach")}
+        {/*{menu("habits", "Habits", "/habits")}*/}
+        {menu("habits", "Quiz", "/quiz")}
+        {/*{menu("account", "Account")}*/}
+      </div>
+    </div>
+  }
+}
+
+class HabitsPage extends Component {
+  render() {
+    return <div>
+      <div>
+        <div className="menu-title">Habits</div>
+      </div>
+      <Footer />
+    </div>
+  }
+}
+
+class QuizPage extends Component {
+  state = {
+    quiz: {
+      '1': [], // if it's just a number, it means, that answer was chosen
+      '2': [],
+      '3': [], // multiple answers
+
+      // '4': 'input text'
+    },
+
+    passed: false
+  }
+
+  render() {
+    if (this.state.passed) {
+      const onSaveQuiz = () => {
+        console.log('onSaveQuiz')
+      }
+
+      return <div>
+        <div className="wrapper">
+          <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
+          <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
+          <Link to={"/"} onClick={onSaveQuiz}>
+            <button className="secondary full habit-created-close" onClick={onSaveQuiz}>Start</button>
+          </Link>
+        </div>
+      </div>
+    }
+
+    var questions = [
+      {
+        id: 1,
+        text: 'Age',
+        answers: [
+          {id: 1, text: 'Under 20'},
+          {id: 2, text: '20-29'},
+          {id: 3, text: '30-39'},
+          {id: 4, text: '40-49'},
+          {id: 5, text: '50+'},
+        ]
+      },
+      {
+        id: 2,
+        text: 'Gender',
+        answers: [
+          {id: 1, text: 'Male'},
+          {id: 2, text: 'Female'},
+          {id: 3, text: 'Other'},
+        ]
+      },
+      {
+        id: 3,
+        text: 'Which of these do you often struggle with?',
+        vertical: true,
+        multiple: true,
+        answers: [
+          {id: 1, text: 'Low productivity'},
+          {id: 2, text: 'Lack of strategy/planning'},
+          {id: 3, text: 'Problems with concentration'},
+          {id: 4, text: 'Procrastination'},
+          {id: 5, text: 'Forgetting to do things'},
+          {id: 6, text: 'High level of stress'},
+          {id: 7, text: 'Mood swings'},
+        ]
+      },
+    ]
+
+    const isAnswerChosen = (questionId, answerId) => {
+      return this.state.quiz[questionId].includes(answerId)
+    }
+    const onToggleAnswer = (question, questionId, answerId) => {
+      if (isAnswerChosen(questionId, answerId)) {
+        // if was chosen => remove
+        this.state.quiz[questionId] = this.state.quiz[questionId].filter(a => a !== answerId);
+      } else {
+        if (!question.multiple)
+          this.state.quiz[questionId] = []
+
+        this.state.quiz[questionId].push(answerId)
+      }
+
+      this.setState({quiz: this.state.quiz})
+    }
+
+    const quiz = this.state.quiz
+    const canSaveQuiz = quiz[1].length && quiz[2].length && quiz[3].length
+
+    return <div className="wrapper">
+      <div className="quiz-lets-start">Let's start!</div>
+      {questions.map(q => {
+        return <div>
+          <div className="quiz-question-title">{q.text}</div>
+          <div className={`quiz-answers-container ${q.vertical ? 'vertical' : ''}`}>
+            {q.answers.map(a => <button className={`${isAnswerChosen(q.id, a.id) ? 'primary' : 'secondary'}`} onClick={() => {onToggleAnswer(q, q.id, a.id)}}>{a.text}</button>)}
+            {!q.answers.length ? <input/> : ''}
+          </div>
+        </div>
+      })}
+
+      <button
+        disabled={!canSaveQuiz}
+        className={`quiz-done-button ${canSaveQuiz ? '' : 'disabled'} full ${canSaveQuiz ? 'primary' : 'secondary'}`}
+        onClick={() => {this.setState({passed: true})}}
+      >Done</button>
+    </div>
+  }
+}
+
+class CoachPage extends Component {
+  render() {
+    return <div>
+      <div>
+        <div className="menu-title">Coach</div>
+      </div>
+      <Footer />
+    </div>
+  }
+}
+
 class MainPage extends Component {
   state = {
     habits: [],
@@ -548,9 +702,12 @@ class MainPage extends Component {
         {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
       </div>
       {startAddingHabitsImage}
-      <div className="left">
+      <div className="left new-habit-button-wrapper">
         <br />
-        <button onClick={() => {this.toggleAddingPopup(true)}} className="primary new-habit-button">Add habit</button>
+        <button
+          onClick={() => {this.toggleAddingPopup(true)}}
+          className="primary new-habit-button"
+        >Add habit</button>
       </div>
     </div>
 
@@ -567,6 +724,7 @@ class MainPage extends Component {
 
     return <div className={"plan-day-container"}>
       {mainPage}
+      <Footer />
     </div>
   }
 }
@@ -583,6 +741,9 @@ function App() {
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
+          <Route path='/quiz'                     element={<QuizPage/>}/>
+          <Route path='/coach'                     element={<CoachPage/>}/>
+          <Route path='/habits'                     element={<HabitsPage/>}/>
           <Route path='/edit'                 element={<EditHabitPage/>}/>
           <Route path='/admin'                element={<AdminPage/>}/>
         </Routes>
