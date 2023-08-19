@@ -219,17 +219,17 @@ const saveQuiz = num => async (req, res) => {
   var upd = {}
   upd['quiz' + num] = quiz
 
+
+  // upd = {
+  //   quiz1: {
+  //     '1': [], // if it's just a number, it means, that answer was chosen
+  //     '2': [],
+  //     '3': [], // multiple answers
+  //
+  //     // '4': 'input text'
+  //   },
+  // }
   console.log('will try saving', upd)
-
-  upd = {
-    quiz1: {
-      '1': [], // if it's just a number, it means, that answer was chosen
-      '2': [],
-      '3': [], // multiple answers
-
-      // '4': 'input text'
-    },
-  }
 
   UserModel.updateOne({telegramId}, upd)
     .then(r => {
