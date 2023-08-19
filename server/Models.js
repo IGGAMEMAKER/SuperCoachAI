@@ -10,7 +10,10 @@ var UserSchema = new Schema({
   name: String,
   username: String, // telegram @username
   goal: String,
-  timeZone: {type: Number, default: 0}
+  timeZone: {type: Number, default: 0},
+
+  quiz1: mongoose.Mixed,
+  quiz2: mongoose.Mixed,
 
   // habits?? entire profile?
   // save habit progress too?

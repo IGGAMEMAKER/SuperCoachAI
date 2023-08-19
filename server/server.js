@@ -210,8 +210,25 @@ const renderSPA = (req, res) => {
   res.sendFile(appPath);
 }
 
+const saveQuiz = num => async (req, res) => {
+  var telegramId = req.body.telegramId
+  var quiz = req.body.quiz;
+
+  res.json({ok: 1, num, quiz})
+
+  var upd = {}
+  upd['quiz' + num] = quiz
+
+  UserModel.updateOne({telegramId}, upd)
+    .then(r => {
+      console.log('saved quiz', num, quiz, r)
+    })
+    .catch(err => {
+      console.error('saving quiz failed', err, req.path)
+    })
+}
+
 const getUser = async (req, res) => {
-  // console.log('getUser', req.body)
   var telegramId = req.body.telegramId
   var timeZone = req.body.timeZone
   console.log({telegramId, timeZone})
@@ -420,6 +437,8 @@ app.get('/admin', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 
+app.post('/quiz/1', saveQuiz(1))
+app.post('/quiz/2', saveQuiz(2))
 app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)

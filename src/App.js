@@ -539,6 +539,13 @@ class QuizPage extends Component {
     if (this.state.passed) {
       const onSaveQuiz = (name) => ev => {
         console.log('onSaveQuiz', name)
+        post('/quiz/1', {quiz: this.state.quiz})
+          .then(r => {
+            console.log('response', r)
+          })
+          .catch(err => {
+            console.error('saving quiz1 failed', err)
+          })
       }
 
       return <div>
