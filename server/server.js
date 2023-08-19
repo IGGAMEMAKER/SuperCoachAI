@@ -211,7 +211,7 @@ const renderSPA = (req, res) => {
 }
 
 const saveQuiz = num => async (req, res) => {
-  var telegramId = req.body.telegramId
+  var telegramId = req.telegramId
   var quiz = req.body.quiz;
 
   res.json({ok: 1, num, quiz})
