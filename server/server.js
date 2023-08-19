@@ -446,6 +446,9 @@ const saveHabitProgress = (req, res) => {
 app.get('/', renderSPA)
 app.get('/edit', renderSPA)
 app.get('/admin', renderSPA)
+app.get('/quiz', renderSPA)
+app.get('/quiz/1', renderSPA)
+app.get('/quiz/2', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 

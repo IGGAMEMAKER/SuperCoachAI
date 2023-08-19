@@ -490,6 +490,7 @@ class EditHabitPage extends Component {
 
 class Footer extends Component {
   render() {
+    return ''
     const menu = (src, text, url, needsClick) => {
       // var isChosen =
       return <Link to={url} className={"footer-menu-wrapper"}>
