@@ -153,12 +153,13 @@ const store = new Storage();
 var domain = 'https://supercoach.site'
 const navigate = url => {
   // var newUrl = domain + url
-  var newUrl = window.location.origin + url
+  // var newUrl = window.location.origin + url
   // if (newUrl.startsWith('/'))
   //   newUrl = newUrl.substring(1)
 
-  console.log(newUrl)
-  window.location.href = newUrl
+  // console.log(newUrl)
+  // window.location.href = newUrl
+  window.location.pathname = url
 }
 
 Dispatcher.register(async (p) => {
