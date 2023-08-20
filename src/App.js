@@ -25,7 +25,7 @@ const getLiteralDayOfWeek = (val) => {
 
 function HabitSchedulePicker({onToggle, schedule}) {
   var days = [0, 1, 2, 3, 4, 5, 6]
-            console.log(schedule)
+  console.log(schedule)
 
   return <div>
     <center>
@@ -490,12 +490,13 @@ class EditHabitPage extends Component {
 
 class Footer extends Component {
   render() {
-    return ''
-    const menu = (src, text, url, needsClick) => {
-      // var isChosen =
+    // return ''
+    const menu = (name, text, url, needsClick) => {
+      var isChosen = document.location.pathname === url
+      var src = `https://supercoach.site/public/${name}${isChosen ? '-chosen' : ''}.png`
+
       return <Link to={url} className={"footer-menu-wrapper"}>
-        <img alt="" className={`footer-menu-img ${src}`}
-             src={`https://supercoach.site/public/${src}${document.location.pathname === url ? '-chosen' : ''}.png`}/>
+        <img alt="" className={`footer-menu-img ${name}`} src={src} />
         <div className={"footer-menu-text"}>{text}</div>
       </Link>
     }
@@ -566,13 +567,21 @@ class QuizPageBase extends Component {
       return [Q2_TOPIC_HEALTH, Q2_TOPIC_EMOTIONS, Q2_TOPIC_PRODUCTIVITY, Q2_TOPIC_SOCIAL];
   }
 
+  isAnsweredAll = (ids = []) => {
+    return ids.every(id => {
+      var a = this.state.quiz[id]
 
-  getGoNextButton = (quiz, num) => {
+      return a?.length
+      // return a?.id || a?.length
+    })
+  }
+
+  getGoNextButton = (quiz, num, questions) => {
     var canSaveQuiz
     if (this.isFirstQuiz())
-      canSaveQuiz = quiz[1].length && quiz[2].length && quiz[3].length
+      canSaveQuiz = this.isAnsweredAll([1, 2, 3]); // quiz[1].length && quiz[2].length && quiz[3].length
     else
-      canSaveQuiz = false
+      canSaveQuiz = this.isAnsweredAll([18, 19]) // TODO assuming, that other questions are filled!
 
     var saveQuizButton = <button
       disabled={!canSaveQuiz}
@@ -591,7 +600,10 @@ class QuizPageBase extends Component {
       this.setState({topic})
     }
 
-    var goNext = topic => <button className="primary" onClick={goToTopic(topic)}>Next</button>
+    var goNext = topic => {
+      var disabled = !this.isAnsweredAll(questions.map(q => q.id))
+      return <button disabled={disabled} className={`primary ${disabled ? 'disabled' : ''}`} onClick={goToTopic(topic)}>Next</button>
+    }
     var goPrevious = topic => <button className="secondary" onClick={goToTopic(topic)}>Previous</button>
 
     switch (this.state.topic) {
@@ -662,16 +674,35 @@ class QuizPageBase extends Component {
 
     const quiz = this.state.quiz
 
-    var goNextButton = this.getGoNextButton(quiz, num)
+    var goNextButton = this.getGoNextButton(quiz, num, questions)
+    var topicsTab = this.getTopics().map(t => <div className={`quiz-topics-item ${this.state.topic === t ? 'chosen' : ''}`}>{t}</div>)
+    var chosenTopicOffset = 0
+    if (this.isSecondQuiz()) {
+      chosenTopicOffset = this.getTopics().findIndex(t => t === this.state.topic);
+    }
 
+    //
     return <div className="wrapper">
       <div className="quiz-lets-start">Let's start!</div>
-      <div className="quiz-topics-container">{this.getTopics().map(t => <div className="quiz-topics-item">{t}</div>)}</div>
+      <div className="quiz-topics-container" style={{marginLeft: `calc(50% - ${chosenTopicOffset * 84}px - 50px)`}} >{topicsTab}</div>
       {questions.map(q => {
         var answers;
+        var maxLength = 86
 
         if (!q.answers.length) {
-          answers = <input/>
+          const onSaveInput = ev => {
+            var val = ev.target.value.substring(0, maxLength)
+            console.log("save input", q.id, val)
+
+            this.state.quiz[q.id] = val
+            this.setState({quiz: this.state.quiz})
+          }
+
+          // input
+          answers = <div style={{position: 'relative'}}>
+            <textarea maxLength={maxLength} onChange={onSaveInput} className="quiz-input-answer" placeholder="Write here" />
+            <span className={"quiz-input-answer-remaining-symbols"}>{quiz[q.id]?.length || 0}/{maxLength}</span>
+          </div>
         } else {
           answers = q.answers.map(a => <button
             className={`${isAnswerChosen(q.id, a.id) ? 'primary' : 'secondary'}`}
