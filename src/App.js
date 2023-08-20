@@ -958,7 +958,7 @@ class CoachPage extends Component {
 
   render() {
     if (this.state.passedQuiz2) {
-      return <div>
+      return <div className={"plan-day-container"}>
         <div>
           <div className="menu-title">Coach</div>
         </div>
@@ -977,7 +977,7 @@ class CoachPage extends Component {
       </div>
     }
 
-    return <div>
+    return <div className={"plan-day-container"}>
       <div>
         <div className="menu-title">Coach</div>
       </div>
