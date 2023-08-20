@@ -999,9 +999,9 @@ class CoachPage extends Component {
           <button className="primary full">Start session</button>
         </Link>
       </div>
+      <br />
+      <br />
       <Footer />
-      <br />
-      <br />
     </div>
   }
 }
