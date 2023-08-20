@@ -376,8 +376,10 @@ button.remove {
   width: 200px;
   height: 200px;
 
-  margin-top: 60px;
-  margin-bottom: 24px;
+  /*margin-top: 60px;*/
+  margin-top: 30px;
+  /*margin-bottom: 24px;*/
+  margin-bottom: 0px;
 }
 
 .quiz-done-button {
