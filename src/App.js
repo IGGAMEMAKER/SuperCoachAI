@@ -505,10 +505,10 @@ class Footer extends Component {
     return <div className="footer">
       <div className="footer-grid">
         {menu("home", "Home", "/")}
-        {/*{menu("coach", "Coach", "/coach")}*/}
-        {/*{menu("habits", "Habits", "/habits")}*/}
-        {menu("habits", "Quiz", "/quiz/1")}
-        {menu("habits", "Quiz2", "/quiz/2")}
+        {menu("coach", "Coach", "/coach")}
+        {menu("habits", "Habits", "/habits")}
+        {/*{menu("habits", "Quiz", "/quiz/1")}*/}
+        {/*{menu("habits", "Quiz2", "/quiz/2")}*/}
         {/*{menu("account", "Account")}*/}
       </div>
     </div>
