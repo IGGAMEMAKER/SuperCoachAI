@@ -1056,9 +1056,9 @@ class MainPage extends Component {
     if (!this.state.profileLoaded)
       return ''
 
-    if (!this.state.passedQuiz1) {
-      return <QuizPage />
-    }
+    // if (!this.state.passedQuiz1) {
+    //   return <QuizPage />
+    // }
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
 
