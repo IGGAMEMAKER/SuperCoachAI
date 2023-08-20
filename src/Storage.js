@@ -153,7 +153,11 @@ const store = new Storage();
 // var domain = location.host
 const navigate = url => {
   // window.location.href = domain + url
-  window.location.href = window.location.host.trimStart("/") + url
+  var newUrl = window.location.host + url
+  if (newUrl.startsWith('/'))
+    newUrl = newUrl.substring(1)
+  console.log(newUrl)
+  window.location.href = newUrl
 }
 
 Dispatcher.register(async (p) => {
