@@ -447,6 +447,7 @@ app.get('/', renderSPA)
 app.get('/edit', renderSPA)
 app.get('/admin', renderSPA)
 app.get('/quiz', renderSPA)
+app.get('/coach', renderSPA)
 app.get('/quiz/1', renderSPA)
 app.get('/quiz/2', renderSPA)
 
