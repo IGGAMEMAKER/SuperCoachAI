@@ -645,7 +645,7 @@ class QuizPageBase extends Component {
           <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
           <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
           <Link to={"/"}>
-            <button className="secondary full habit-created-close">{this.isFirstQuiz() ? 'Start' : 'Close'}</button>
+            <button onClick={() => {this.loadProfile()}} className="secondary full habit-created-close">{this.isFirstQuiz() ? 'Start' : 'Close'}</button>
           </Link>
         </div>
       </div>
@@ -1037,6 +1037,11 @@ class MainPage extends Component {
     })
 
     this.saveHabits()
+    // actions.loadProfile(storage.getTelegramId())
+    this.loadProfile()
+  }
+
+  loadProfile() {
     actions.loadProfile(storage.getTelegramId())
   }
 
