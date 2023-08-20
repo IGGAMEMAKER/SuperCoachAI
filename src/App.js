@@ -6,6 +6,7 @@ import storage from "./Storage";
 import actions from "./actions";
 import {getByID, isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
+import Storage from "./Storage";
 
 const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
@@ -930,7 +931,7 @@ class QuizPage2 extends Component {
       {
         id: 19,
         topic: Q2_TOPIC_SOCIAL,
-        text: 'How  would you rate  the quality of your social interactions and connections?',
+        text: 'How would you rate the quality of your social interactions and connections?',
         answers: ANSWERS_EMOJI
       },
     ]
@@ -940,8 +941,23 @@ class QuizPage2 extends Component {
 }
 
 class CoachPage extends Component {
+  saveQuizzes() {
+    this.setState({
+      passedQuiz2: storage.isPassedQuiz2()
+    })
+  }
+  componentWillMount() {
+    storage.addChangeListener(() => {
+      console.log('store listener')
+      this.saveQuizzes()
+    })
+
+    this.saveQuizzes()
+    actions.loadProfile(storage.getTelegramId())
+  }
+
   render() {
-    if (this.props.passedQuiz2 || true) {
+    if (this.state.passedQuiz2) {
       return <div>
         <div>
           <div className="menu-title">Coach</div>
@@ -992,12 +1008,16 @@ class MainPage extends Component {
     habitProgress: [],
     isAddingHabitPopupOpened: false,
     editingHabitID: -1,
+    passedQuiz1: true,
+    profileLoaded: false
   }
 
   saveHabits() {
     this.setState({
       habits: storage.getHabits(),
-      habitProgress: storage.getHabitProgress()
+      habitProgress: storage.getHabitProgress(),
+      passedQuiz1: storage.isPassedQuiz1(),
+      profileLoaded: storage.isProfileLoaded()
     })
   }
 
@@ -1022,6 +1042,13 @@ class MainPage extends Component {
 
   render() {
     var {habits} = this.state
+
+    if (!this.state.profileLoaded)
+      return ''
+
+    if (!this.state.passedQuiz1) {
+      return <QuizPage />
+    }
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
 

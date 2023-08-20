@@ -25,6 +25,9 @@ var habits = [
 ]
 var habitProgress = []
 var users = []
+var passedQuiz1 = false
+var passedQuiz2 = false
+var loadedProfile = false
 
 patchWithIDs(habits)
 
@@ -132,6 +135,18 @@ class Storage extends EventEmitter {
   getUsers() {
     return users
   }
+
+  isProfileLoaded() {
+    return loadedProfile
+  }
+
+  isPassedQuiz1() {
+    return passedQuiz1
+  }
+
+  isPassedQuiz2() {
+    return passedQuiz2
+  }
 }
 
 const store = new Storage();
@@ -153,6 +168,9 @@ Dispatcher.register(async (p) => {
 
         habits        = r.profile.habits
         habitProgress = r.profile.progress
+        passedQuiz1   = !!r.profile.quiz1
+        passedQuiz2   = !!r.profile.quiz2
+        loadedProfile = true
       })
       .catch(err => {
         console.error('caught on /profile', err)
@@ -211,7 +229,6 @@ Dispatcher.register(async (p) => {
         })
         .finally(() => {
           actions.loadProfile(getTelegramId())
-          // loadProfile(getTelegramId())
         })
 
       break;
