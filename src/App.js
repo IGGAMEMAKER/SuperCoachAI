@@ -941,6 +941,23 @@ class QuizPage2 extends Component {
 
 class CoachPage extends Component {
   render() {
+    if (this.props.passedQuiz2 || true) {
+      return <div>
+        <div>
+          <div className="menu-title">Coach</div>
+        </div>
+        <div className="wrapper">
+          <div className="coach-title">
+            You've already started a coaching session in Telegram chat!
+          </div>
+          <img alt="session started" className="coach-session-started-already-img" src="https://supercoach.site/public/mobile.png" />
+          <div className="coach-session-description">
+            close the app and send a message in telegram chat
+          </div>
+        </div>
+        <Footer />
+      </div>
+    }
     return <div>
       <div>
         <div className="menu-title">Coach</div>

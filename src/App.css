@@ -368,8 +368,13 @@ button.remove {
 .coach-session-start-img {
   width: 166px;
   height: 122px;
-  /*top: 508px;*/
-  /*left: 96px;*/
+
+  margin-top: 12px;
+  margin-bottom: 22px;
+}
+.coach-session-started-already-img {
+  width: 200px;
+  height: 200px;
 
   margin-top: 12px;
   margin-bottom: 22px;
