@@ -972,6 +972,8 @@ class CoachPage extends Component {
           </div>
         </div>
         <Footer />
+        <br />
+        <br />
       </div>
     }
 
@@ -998,6 +1000,8 @@ class CoachPage extends Component {
         </Link>
       </div>
       <Footer />
+      <br />
+      <br />
     </div>
   }
 }
