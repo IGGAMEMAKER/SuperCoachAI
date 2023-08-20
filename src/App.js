@@ -491,7 +491,7 @@ class EditHabitPage extends Component {
 
 class Footer extends Component {
   render() {
-    return ''
+    // return ''
     const menu = (name, text, url, needsClick) => {
       var isChosen = document.location.pathname === url
       var src = `https://supercoach.site/public/${name}${isChosen ? '-chosen' : ''}.png`
