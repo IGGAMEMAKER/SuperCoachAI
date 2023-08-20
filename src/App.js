@@ -1,12 +1,11 @@
 import './App.css';
 import {Component, useEffect, useState} from 'react';
-// import { BrowserRouter } from 'react-router-dom';
 import {Link, Route, Routes, redirect} from 'react-router-dom';
+
 import storage from "./Storage";
 import actions from "./actions";
 import {getByID, isHabitDoneOnDayX, patchWithIDs} from "./utils";
 import {ping, post} from "./PingBrowser";
-import Storage from "./Storage";
 
 const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
@@ -1014,15 +1013,17 @@ class MainPage extends Component {
 
   saveHabits() {
     if (storage.isProfileLoaded() && !storage.isPassedQuiz1()) {
+      console.log('will redirect')
       redirect('/quiz/1')
     } else {
-      this.setState({
-        habits: storage.getHabits(),
-        habitProgress: storage.getHabitProgress(),
-        passedQuiz1: storage.isPassedQuiz1(),
-        profileLoaded: storage.isProfileLoaded()
-      })
     }
+
+    this.setState({
+      habits: storage.getHabits(),
+      habitProgress: storage.getHabitProgress(),
+      passedQuiz1: storage.isPassedQuiz1(),
+      profileLoaded: storage.isProfileLoaded()
+    })
   }
 
   setEditingHabit = id => {
