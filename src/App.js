@@ -945,6 +945,24 @@ class CoachPage extends Component {
       <div>
         <div className="menu-title">Coach</div>
       </div>
+      <div className="wrapper">
+        <div className="coach-title">
+          Engage in a coaching session with <span>ChatGPT</span>, trained in line with ICF standards:
+        </div>
+        <div className="coach-goals">
+          <div className="coach-goals-item">Targeted questions for self-reflection</div>
+          <div className="coach-goals-item">Clear goals, actionable insights, in less time</div>
+          <div className="coach-goals-item">Seamless integration into your day</div>
+        </div>
+        <div className="coach-session-description">
+          Sessions take place in the Telegram chat.
+          It's recommended to allocate about 25 minutes per session, but you can also respond throughout the day. If no reply is given within 12 hours, the coach will conclude the session.
+        </div>
+        <img alt="start session" className="coach-session-start-img" src="https://supercoach.site/public/medical_cross.png" />
+        <Link to={"/quiz/2"}>
+          <button className="primary full">Start session</button>
+        </Link>
+      </div>
       <Footer />
     </div>
   }
