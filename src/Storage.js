@@ -150,12 +150,13 @@ class Storage extends EventEmitter {
 }
 
 const store = new Storage();
-// var domain = location.host
+var domain = 'https://supercoach.site'
 const navigate = url => {
-  // window.location.href = domain + url
-  var newUrl = window.location.host + url
+  var newUrl = domain + url
+  // var newUrl = window.location.host + url
   if (newUrl.startsWith('/'))
     newUrl = newUrl.substring(1)
+
   console.log(newUrl)
   window.location.href = newUrl
 }
