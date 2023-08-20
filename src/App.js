@@ -1001,6 +1001,7 @@ class CoachPage extends Component {
   }
 }
 
+
 class MainPage extends Component {
   state = {
     habits: [],
@@ -1012,11 +1013,14 @@ class MainPage extends Component {
   }
 
   saveHabits() {
-    if (storage.isProfileLoaded() && !storage.isPassedQuiz1()) {
-      console.log('will redirect')
-      redirect('/quiz/1')
-    } else {
-    }
+    // if (storage.isProfileLoaded() && !storage.isPassedQuiz1()) {
+    //   console.log('will redirect')
+    //   // const navigate = url => {
+    //   //   window.location.href = domain + url
+    //   // }
+    //   // redirect('/quiz/1')
+    // } else {
+    // }
 
     this.setState({
       habits: storage.getHabits(),
@@ -1056,9 +1060,9 @@ class MainPage extends Component {
     if (!this.state.profileLoaded)
       return ''
 
-    // if (!this.state.passedQuiz1) {
-    //   return <QuizPage />
-    // }
+    if (!this.state.passedQuiz1) {
+      return <QuizPage />
+    }
 
     var editingHabit = habits.find(h => h.id === this.state.editingHabitID)
 

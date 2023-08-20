@@ -150,7 +150,11 @@ class Storage extends EventEmitter {
 }
 
 const store = new Storage();
-
+// var domain = location.host
+const navigate = url => {
+  // window.location.href = domain + url
+  window.location.href = window.location.host + url
+}
 
 Dispatcher.register(async (p) => {
   const saveProfileChanges = () => {
@@ -171,6 +175,10 @@ Dispatcher.register(async (p) => {
         passedQuiz1   = !!r.profile.quiz1
         passedQuiz2   = !!r.profile.quiz2
         loadedProfile = true
+
+        if (!passedQuiz1) {
+          navigate('/quiz/1')
+        }
       })
       .catch(err => {
         console.error('caught on /profile', err)
