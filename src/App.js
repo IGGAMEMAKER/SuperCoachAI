@@ -994,7 +994,7 @@ class CoachPage extends Component {
           Sessions take place in the Telegram chat.
           It's recommended to allocate about 25 minutes per session, but you can also respond throughout the day. If no reply is given within 12 hours, the coach will conclude the session.
         </div>
-        <img alt="start session" className="coach-session-start-img" src="https://supercoach.site/public/medical_cross.png" />
+        {/*<img alt="start session" className="coach-session-start-img" src="https://supercoach.site/public/medical_cross.png" />*/}
         <Link to={"/quiz/2"}>
           <button className="primary full">Start session</button>
         </Link>
