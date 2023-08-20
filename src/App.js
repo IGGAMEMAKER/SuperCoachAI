@@ -490,7 +490,6 @@ class EditHabitPage extends Component {
 
 class Footer extends Component {
   render() {
-    return ''
     const menu = (src, text, url, needsClick) => {
       // var isChosen =
       return <Link to={url} className={"footer-menu-wrapper"}>
@@ -503,9 +502,10 @@ class Footer extends Component {
     return <div className="footer">
       <div className="footer-grid">
         {menu("home", "Home", "/")}
-        {menu("coach", "Coach", "/coach")}
+        {/*{menu("coach", "Coach", "/coach")}*/}
         {/*{menu("habits", "Habits", "/habits")}*/}
-        {menu("habits", "Quiz", "/quiz")}
+        {menu("habits", "Quiz", "/quiz/1")}
+        {menu("habits", "Quiz2", "/quiz/2")}
         {/*{menu("account", "Account")}*/}
       </div>
     </div>
@@ -523,7 +523,24 @@ class HabitsPage extends Component {
   }
 }
 
-class QuizPage extends Component {
+
+const onSaveQuiz = (quiz, num) => {
+  console.log('onSaveQuiz', num)
+  post('/quiz/' + num, {quiz})
+    .then(r => {
+      console.log('response', r)
+    })
+    .catch(err => {
+      console.error('saving quiz1 failed', err)
+    })
+}
+
+const Q2_TOPIC_HEALTH = 'Health'
+const Q2_TOPIC_EMOTIONS = 'Emotions'
+const Q2_TOPIC_PRODUCTIVITY = 'Productivity'
+const Q2_TOPIC_SOCIAL = 'Social'
+
+class QuizPageBase extends Component {
   state = {
     quiz: {
       '1': [], // if it's just a number, it means, that answer was chosen
@@ -533,19 +550,79 @@ class QuizPage extends Component {
       // '4': 'input text'
     },
 
-    passed: false
+    passed: false,
+    topic: Q2_TOPIC_HEALTH
+  }
+
+  isFirstQuiz = () => this.props.num === 1;
+  isSecondQuiz = () => this.props.num === 2;
+
+  getTopics = () => {
+    if (this.isFirstQuiz())
+      return []
+
+    if (this.isSecondQuiz())
+      return [Q2_TOPIC_HEALTH, Q2_TOPIC_EMOTIONS, Q2_TOPIC_PRODUCTIVITY, Q2_TOPIC_SOCIAL];
+  }
+
+
+  getGoNextButton = (quiz, num) => {
+    var canSaveQuiz
+    if (this.isFirstQuiz())
+      canSaveQuiz = quiz[1].length && quiz[2].length && quiz[3].length
+    else
+      canSaveQuiz = false
+
+    var saveQuizButton = <button
+      disabled={!canSaveQuiz}
+      className={`quiz-done-button ${canSaveQuiz ? '' : 'disabled'} full ${canSaveQuiz ? 'primary' : 'secondary'}`}
+      onClick={() => {
+        onSaveQuiz(this.state.quiz, num)
+        this.setState({passed: true})}
+      }
+    >Done</button>
+
+    if (this.isFirstQuiz())
+      return saveQuizButton;
+
+    const goToTopic = topic => () => {
+      window.scrollTo(0, 0);
+      this.setState({topic})
+    }
+
+    var goNext = topic => <button className="primary" onClick={goToTopic(topic)}>Next</button>
+    var goPrevious = topic => <button className="secondary" onClick={goToTopic(topic)}>Previous</button>
+
+    switch (this.state.topic) {
+      case Q2_TOPIC_HEALTH:
+        return <div className="quiz-navigation-container">
+          {goNext(Q2_TOPIC_EMOTIONS)}
+        </div>
+
+      case Q2_TOPIC_EMOTIONS:
+        return <div className="quiz-navigation-container two">
+          {goPrevious(Q2_TOPIC_HEALTH)}
+          {goNext(Q2_TOPIC_PRODUCTIVITY)}
+        </div>
+
+      case Q2_TOPIC_PRODUCTIVITY:
+        return <div className="quiz-navigation-container two">
+          {goPrevious(Q2_TOPIC_EMOTIONS)}
+          {goNext(Q2_TOPIC_SOCIAL)}
+        </div>
+
+      case Q2_TOPIC_SOCIAL:
+        return <div className="quiz-navigation-container">
+          {saveQuizButton}
+        </div>
+    }
   }
 
   render() {
-    const onSaveQuiz = (name) => {
-      console.log('onSaveQuiz', name)
-      post('/quiz/1', {quiz: this.state.quiz})
-        .then(r => {
-          console.log('response', r)
-        })
-        .catch(err => {
-          console.error('saving quiz1 failed', err)
-        })
+    var {questions, num} = this.props;
+
+    if (this.isSecondQuiz()) {
+      questions = this.props.questions.filter(q => q.topic === this.state.topic)
     }
 
     if (this.state.passed) {
@@ -554,12 +631,69 @@ class QuizPage extends Component {
           <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
           <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
           <Link to={"/"}>
-            <button className="secondary full habit-created-close">Start</button>
+            <button className="secondary full habit-created-close">{this.isFirstQuiz() ? 'Start' : 'Close'}</button>
           </Link>
         </div>
       </div>
     }
 
+    const isAnswerChosen = (questionId, answerId) => {
+      try {
+        return this.state.quiz[questionId].includes(answerId)
+      } catch (e) {
+        return false;
+      }
+    }
+
+    const onToggleAnswer = (question, questionId, answerId) => {
+      if (isAnswerChosen(questionId, answerId)) {
+        // if was chosen => remove
+        this.state.quiz[questionId] = this.state.quiz[questionId].filter(a => a !== answerId);
+      } else {
+        if (!question.multiple)
+          this.state.quiz[questionId] = []
+
+        this.state.quiz[questionId].push(answerId)
+      }
+
+      this.setState({quiz: this.state.quiz})
+    }
+
+    const quiz = this.state.quiz
+
+    var goNextButton = this.getGoNextButton(quiz, num)
+
+    return <div className="wrapper">
+      <div className="quiz-lets-start">Let's start!</div>
+      <div className="quiz-topics-container">{this.getTopics().map(t => <div className="quiz-topics-item">{t}</div>)}</div>
+      {questions.map(q => {
+        var answers;
+
+        if (!q.answers.length) {
+          answers = <input/>
+        } else {
+          answers = q.answers.map(a => <button
+            className={`${isAnswerChosen(q.id, a.id) ? 'primary' : 'secondary'}`}
+            onClick={() => {onToggleAnswer(q, q.id, a.id)}}
+          >{a.text}
+          </button>)
+        }
+
+        return <div>
+          <div className="quiz-question-title">{q.text}</div>
+          <div className={`quiz-answers-container ${q.vertical ? 'vertical' : ''}`}>
+            {answers}
+          </div>
+        </div>
+      })}
+
+      {goNextButton}
+    </div>
+  }
+}
+
+class QuizPage extends Component {
+  render() {
     var questions = [
       {
         id: 1,
@@ -598,45 +732,178 @@ class QuizPage extends Component {
       },
     ]
 
-    const isAnswerChosen = (questionId, answerId) => this.state.quiz[questionId].includes(answerId)
-    const onToggleAnswer = (question, questionId, answerId) => {
-      if (isAnswerChosen(questionId, answerId)) {
-        // if was chosen => remove
-        this.state.quiz[questionId] = this.state.quiz[questionId].filter(a => a !== answerId);
-      } else {
-        if (!question.multiple)
-          this.state.quiz[questionId] = []
+    return <QuizPageBase questions={questions} num={1} />
+  }
+}
 
-        this.state.quiz[questionId].push(answerId)
-      }
+class QuizPage2 extends Component {
+  render() {
+    const ANSWERS_NEVER_TO_OFTEN = [
+      {id: 1, text: 'Never'},
+      {id: 2, text: 'Rarely'},
+      {id: 3, text: 'Sometimes'},
+      {id: 4, text: 'Often'},
+    ]
+    const ANSWERS_EMOJI = [
+      {id: 1, text: '😫'},
+      {id: 2, text: '😞'},
+      {id: 3, text: '😐'},
+      {id: 4, text: '🙂'},
+      {id: 5, text: '😍'},
+    ]
+    const ANSWERS_INPUT_TEXT = []
 
-      this.setState({quiz: this.state.quiz})
-    }
+    var questions = [
+      {
+        id: 1,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How many hours of uninterrupted sleep do you get on an average night?',
+        answers: [
+          {id: 1, text: '<4'},
+          {id: 2, text: '5'},
+          {id: 3, text: '6'},
+          {id: 4, text: '7'},
+          {id: 5, text: '8+'},
+        ]
+      },
+      {
+        id: 2,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'Do you often wake up feeling refreshed and rested?',
+        answers: [
+          {id: 1, text: 'Yes'},
+          {id: 2, text: 'No'},
+        ]
+      },
+      {
+        id: 3,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How many times a week do you engage in physical activity for more than 30 minutes?',
+        answers: [
+          {id: 1, text: '<4'},
+          {id: 2, text: '5'},
+          {id: 3, text: '6'},
+          {id: 4, text: '7'},
+          {id: 5, text: '8+'},
+        ]
+      },
+      {
+        id: 4,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How would you describe your average daily diet in terms of nutritional balance? Are you happy with your diet?',
+        answers: ANSWERS_INPUT_TEXT
+      },
+      {
+        id: 5,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How many cups of coffee do you usually \ndrink daily?',
+        answers: [
+          {id: 1, text: '1'},
+          {id: 2, text: '2'},
+          {id: 3, text: '3'},
+          {id: 4, text: '4'},
+          {id: 5, text: '5+'},
+        ]
+      },
+      {
+        id: 6,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How many ml of water do you usually drink?',
+        answers: [
+          {id: 1, text: '0'},
+          {id: 2, text: '500'},
+          {id: 3, text: '1000'},
+          {id: 4, text: '1500'},
+          {id: 5, text: '2000+'},
+        ]
+      },
+      {
+        id: 7,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How often do you consume alcoholic beverages?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 8,
+        topic: Q2_TOPIC_HEALTH,
+        text: 'How often do you consume tobacco products?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
 
-    const quiz = this.state.quiz
-    const canSaveQuiz = quiz[1].length && quiz[2].length && quiz[3].length
+      {
+        id: 9,
+        topic: Q2_TOPIC_EMOTIONS,
+        text: 'How would you describe your mood \n' +
+          'on most days?',
+        answers: ANSWERS_EMOJI
+      },
+      {
+        id: 10,
+        topic: Q2_TOPIC_EMOTIONS,
+        text: 'How often in a week do you feel emotions that seem uncontrollable or overwhelming?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 11,
+        topic: Q2_TOPIC_EMOTIONS,
+        text: 'How often do you feel truly motivated \n' +
+          'to pursue your goals?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 12,
+        topic: Q2_TOPIC_EMOTIONS,
+        text: 'How often do you feel comfortable expressing your emotions to others?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 13,
+        topic: Q2_TOPIC_EMOTIONS,
+        text: 'What activities or hobbies bring you the most happiness or satisfaction?',
+        answers: ANSWERS_INPUT_TEXT
+      },
 
-    return <div className="wrapper">
-      <div className="quiz-lets-start">Let's start!</div>
-      {questions.map(q => {
-        return <div>
-          <div className="quiz-question-title">{q.text}</div>
-          <div className={`quiz-answers-container ${q.vertical ? 'vertical' : ''}`}>
-            {q.answers.map(a => <button className={`${isAnswerChosen(q.id, a.id) ? 'primary' : 'secondary'}`} onClick={() => {onToggleAnswer(q, q.id, a.id)}}>{a.text}</button>)}
-            {!q.answers.length ? <input/> : ''}
-          </div>
-        </div>
-      })}
 
-      <button
-        disabled={!canSaveQuiz}
-        className={`quiz-done-button ${canSaveQuiz ? '' : 'disabled'} full ${canSaveQuiz ? 'primary' : 'secondary'}`}
-        onClick={() => {
-          onSaveQuiz("link")
-          this.setState({passed: true})}
-        }
-      >Done</button>
-    </div>
+      {
+        id: 14,
+        topic: Q2_TOPIC_PRODUCTIVITY,
+        text: 'How often do you end your day feeling like you\'ve accomplished what you set out to do?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 15,
+        topic: Q2_TOPIC_PRODUCTIVITY,
+        text: 'How often do you set daily goals, and how frequently are they met?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 16,
+        topic: Q2_TOPIC_PRODUCTIVITY,
+        text: 'What is a goal that you’ve wanted to achieve but haven’t yet taken steps towards?',
+        answers: ANSWERS_INPUT_TEXT
+      },
+      {
+        id: 17,
+        topic: Q2_TOPIC_PRODUCTIVITY,
+        text: 'How would you rate your ability to relax and switch off from work or responsibilities?',
+        answers: ANSWERS_EMOJI
+      },
+
+      {
+        id: 18,
+        topic: Q2_TOPIC_SOCIAL,
+        text: 'How often do you engage in social activities or meet with friends/family?',
+        answers: ANSWERS_NEVER_TO_OFTEN
+      },
+      {
+        id: 19,
+        topic: Q2_TOPIC_SOCIAL,
+        text: 'How  would you rate  the quality of your social interactions and connections?',
+        answers: ANSWERS_EMOJI
+      },
+    ]
+
+    return <QuizPageBase questions={questions} num={2} />
   }
 }
 
@@ -750,7 +1017,8 @@ function App() {
       <header className="" style={{height: '100%', minHeight: '100vh'}}>
         <Routes>
           <Route path='/'                     element={<MainPage/>}/>
-          <Route path='/quiz'                     element={<QuizPage/>}/>
+          <Route path='/quiz/1'                     element={<QuizPage/>}/>
+          <Route path='/quiz/2'                     element={<QuizPage2/>}/>
           <Route path='/coach'                     element={<CoachPage/>}/>
           <Route path='/habits'                     element={<HabitsPage/>}/>
           <Route path='/edit'                 element={<EditHabitPage/>}/>
