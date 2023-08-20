@@ -1,7 +1,7 @@
 import './App.css';
 import {Component, useEffect, useState} from 'react';
 // import { BrowserRouter } from 'react-router-dom';
-import {Link, Route, Routes} from 'react-router-dom';
+import {Link, Route, Routes, redirect} from 'react-router-dom';
 import storage from "./Storage";
 import actions from "./actions";
 import {getByID, isHabitDoneOnDayX, patchWithIDs} from "./utils";
@@ -1013,12 +1013,16 @@ class MainPage extends Component {
   }
 
   saveHabits() {
-    this.setState({
-      habits: storage.getHabits(),
-      habitProgress: storage.getHabitProgress(),
-      passedQuiz1: storage.isPassedQuiz1(),
-      profileLoaded: storage.isProfileLoaded()
-    })
+    if (storage.isProfileLoaded() && !storage.isPassedQuiz1()) {
+      redirect('/quiz/1')
+    } else {
+      this.setState({
+        habits: storage.getHabits(),
+        habitProgress: storage.getHabitProgress(),
+        passedQuiz1: storage.isPassedQuiz1(),
+        profileLoaded: storage.isProfileLoaded()
+      })
+    }
   }
 
   setEditingHabit = id => {
