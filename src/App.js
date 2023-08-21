@@ -127,7 +127,8 @@ function HabitTimePicker({onSave, defaultFrom = TIME_FROM_MORNING, defaultTo="12
   const timeButton = (time, fr, to) => {
     var isChosen = timeFrom === fr;
 
-    return <button className={`time-picking-button ${isChosen ? 'chosen' : ''}`} onClick={() => {
+    // return <button className={`time-picking-button ${isChosen ? 'chosen' : ''}`} onClick={() => {
+    return <button className={`${isChosen ? 'primary' : 'secondary'}`} onClick={() => {
       setTimeFrom(fr)
       setTimeTo(to)
       onSave(fr, to)
@@ -191,7 +192,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
     <div className="menu-title">New habit</div>
     <br/>
     <div className="wrapper">
-      <input autoFocus className="new-habit-input" type="text" placeholder="add new habit" value={text}
+      <input autoFocus className="new-habit-input" type="text" placeholder="Name" value={text}
              onChange={onTextChange}/>
       <div className={"from-to-form"}>
         <HabitTimePicker defaultFrom={TIME_FROM_MORNING} defaultTo={TIME_FROM_AFTERNOON} onSave={(fr, to) => {

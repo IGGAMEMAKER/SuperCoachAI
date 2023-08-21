@@ -1,12 +1,20 @@
 :root {
-  --color-bg: #ffffff;
-  --offset: 15px;
   --mobile-width: 420px;
+
+  --color-bg: #ffffff;
+
+
+  --offset: 15px;
+
   --primary: #0C8CE9;
   --primary-button-text-color: white;
 
   --secondary-button-bg-color: #EEF7FF;
   --quiz-question-title-color: #282D3C;
+
+  --input-border-color: var(--primary);
+  --input-placeholder-color: gray;
+  --input-text-color: #373A41;
 
   /*font-family: 'Gilroy-Bold', sans-serif;*/
   /*font-family: 'Gilroy-Heavy', sans-serif;*/
@@ -19,11 +27,16 @@
 
 [data-theme="dark"] {
   --color-bg: #0D0D0D;
+
   --primary: #1B99F3;
   --primary-button-text-color: #0D0D0D;
 
   --secondary-button-bg-color: #141414;
   --quiz-question-title-color: #C3C8D7;
+
+  --input-border-color: gray;
+  --input-placeholder-color: white;
+  --input-text-color: white;
 }
 
 
@@ -40,11 +53,9 @@ body {
   text-align: center;
   max-width: 420px;
   width: 100%;
-  /*background-color: white;*/
   background-color: var(--color-bg);
 
   color: #898989;
-  /*color: lightgray;*/
 }
 
 .habit-date {
@@ -120,13 +131,17 @@ body {
   letter-spacing: 0em;
   text-align: left;
 }
+
 .habit-name-editing-input.error {
   color: #DC3545;
 }
 .habit-name-editing-input {
-  border-color: var(--primary);
-  height: 58px;
   width: 100%;
+  height: 58px;
+
+  padding-left: 15px;
+
+  border-color: var(--input-border-color);
   border-radius: 8px;
   border-width: 1px;
 
@@ -136,20 +151,37 @@ body {
   letter-spacing: 0em;
   text-align: left;
 
-  color: #373A41;
+  color: var(--input-text-color);
+  background-color: var(--color-bg);
 
-  padding-left: 15px;
   box-sizing: border-box;
+}
+.new-habit-input {
+  width: 100%;
+  height: 28px;
+
+  margin-bottom: 18px;
+  margin-top: 2px;
+
+
+  border-radius: 8px;
+  border-color: #1D2227;
+
+  text-indent: 16px;
+
+  font-size: medium;
+  background-color: var(--color-bg);
+  color: var(--input-text-color);
+  box-shadow: none;
+  border-width: 1px;
 }
 
 .time-picking-container {
-  grid-template-columns: auto auto auto;
+  /*grid-template-columns: auto auto auto;*/
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
-  display: flex;
+  display: grid;
   justify-content: center;
-
-  /*padding-left: var(--offset);*/
-  /*padding-right: var(--offset);*/
 }
 button {
   /*border: 0;*/
@@ -559,13 +591,7 @@ button.remove {
   font-size: large;
 }
 
-.new-habit-input {
-  width: 100%;
-  margin-bottom: 18px;
 
-  height: 28px;
-  font-size: medium;
-}
 
 .left {
   text-align: left;
