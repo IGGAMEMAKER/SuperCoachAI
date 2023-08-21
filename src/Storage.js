@@ -150,7 +150,6 @@ class Storage extends EventEmitter {
 }
 
 const store = new Storage();
-var domain = 'https://supercoach.site'
 const navigate = url => {
   // var newUrl = domain + url
   // var newUrl = window.location.origin + url
@@ -212,7 +211,7 @@ Dispatcher.register(async (p) => {
     case PROFILE_LOAD:
       console.log(PROFILE_LOAD, p)
 
-      loadProfile(p.telegramId, p.timeZone)
+      loadProfile(getTelegramId(), p.timeZone)
       break;
 
     case HABITS_SCHEDULE_TOGGLE:
@@ -242,7 +241,7 @@ Dispatcher.register(async (p) => {
           console.error('remove habit', err)
         })
         .finally(() => {
-          actions.loadProfile(getTelegramId())
+          actions.loadProfile()
         })
 
       break;

@@ -489,23 +489,45 @@ class EditHabitPage extends Component {
 }
 
 class Footer extends Component {
+  state={
+    passedQuiz2: true
+  }
+  saveQuizzes() {
+    this.setState({
+      passedQuiz2: storage.isPassedQuiz2()
+    })
+  }
+  componentWillMount() {
+    storage.addChangeListener(() => {
+      console.log('store listener')
+      this.saveQuizzes()
+    })
+
+    this.saveQuizzes()
+    actions.loadProfile()
+  }
+
   render() {
     // return ''
     const menu = (name, text, url, needsClick) => {
       var isChosen = document.location.pathname === url
       var src = `https://supercoach.site/public/${name}${isChosen ? '-chosen' : ''}.png`
+      var badge;
+      if (needsClick)
+        badge = <div className="footer-menu-click-badge" />
 
       return <Link to={url} className={"footer-menu-wrapper"}>
         <img alt="" className={`footer-menu-img ${name}`} src={src} />
         <div className={"footer-menu-text"}>{text}</div>
+        {badge}
       </Link>
     }
 
     return <div className="footer">
       <div className="footer-grid">
-        {menu("home", "Home", "/")}
-        {menu("coach", "Coach", "/coach")}
-        {menu("habits", "Habits", "/habits")}
+        {menu("home", "Home", "/", false)}
+        {menu("coach", "Coach", "/coach", !this.state.passedQuiz2)}
+        {menu("habits", "Habits", "/habits", false)}
         {/*{menu("habits", "Quiz", "/quiz/1")}*/}
         {/*{menu("habits", "Quiz2", "/quiz/2")}*/}
         {/*{menu("account", "Account")}*/}
@@ -644,7 +666,7 @@ class QuizPageBase extends Component {
           <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
           <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
           <Link to={"/"}>
-            <button onClick={() => {this.loadProfile()}} className="secondary full habit-created-close">{this.isFirstQuiz() ? 'Start' : 'Close'}</button>
+            <button onClick={() => {actions.loadProfile()}} className="secondary full habit-created-close">{this.isFirstQuiz() ? 'Start' : 'Close'}</button>
           </Link>
         </div>
       </div>
@@ -952,7 +974,7 @@ class CoachPage extends Component {
     })
 
     this.saveQuizzes()
-    actions.loadProfile(storage.getTelegramId())
+    actions.loadProfile()
   }
 
   render() {
@@ -1046,12 +1068,7 @@ class MainPage extends Component {
     })
 
     this.saveHabits()
-    // actions.loadProfile(storage.getTelegramId())
-    this.loadProfile()
-  }
-
-  loadProfile() {
-    actions.loadProfile(storage.getTelegramId())
+    actions.loadProfile()
   }
 
   render() {

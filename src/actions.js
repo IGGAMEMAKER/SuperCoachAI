@@ -10,12 +10,12 @@ import {
   PROFILE_LOAD
 } from './constants/actionConstants';
 
-export function loadProfile(telegramId) {
+export function loadProfile() {
   var hrs = -(new Date().getTimezoneOffset() / 60)
 
   Dispatcher.dispatch({
     actionType: PROFILE_LOAD,
-    telegramId,
+    // telegramId,
     timeZone: hrs
   })
 }

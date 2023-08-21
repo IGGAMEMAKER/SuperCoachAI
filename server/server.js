@@ -459,11 +459,11 @@ app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
-app.post('/quiz/1', authenticate, saveQuiz(1))
-app.post('/quiz/2', authenticate, saveQuiz(2))
-app.put('/habits', authenticate, saveHabits)
-app.delete('/habits/:habitId', authenticate, isTesting, removeHabitRoute)
-app.post('/habits/progress', authenticate, saveHabitProgress)
+app.post  ('/quiz/1',           authenticate, saveQuiz(1))
+app.post  ('/quiz/2',           authenticate, saveQuiz(2))
+app.put   ('/habits',           authenticate, saveHabits)
+app.delete('/habits/:habitId',  authenticate, /*isTesting,*/ removeHabitRoute)
+app.post  ('/habits/progress',  authenticate, saveHabitProgress)
 
 // ---------------- API ------------------------
 
