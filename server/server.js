@@ -210,6 +210,15 @@ const renderSPA = (req, res) => {
   res.sendFile(appPath);
 }
 
+const resetQuizzes = async (req, res) => {
+  var telegramId = req.params.telegramId;
+
+  var r = await UserModel.updateOne({telegramId}, {$unset: {quiz1: '', quiz2: ''} })
+
+  res.json({
+    r
+  })
+}
 const saveQuiz = num => async (req, res) => {
   var telegramId = req.telegramId
   var quiz = req.body.quiz;
@@ -458,6 +467,8 @@ app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
+
+app.get('/quiz/remove/:telegramId', resetQuizzes)
 
 app.post  ('/quiz/1',           authenticate, saveQuiz(1))
 app.post  ('/quiz/2',           authenticate, saveQuiz(2))
