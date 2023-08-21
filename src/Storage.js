@@ -65,6 +65,15 @@ const parseUserInfo = s => {
   return s5;
 }
 
+const getColorScheme = () => {
+  var webApp = window?.Telegram?.WebApp;
+
+  colorScheme = webApp?.colorScheme ; // || "light"
+  console.log({colorScheme})
+
+  return colorScheme;
+}
+
 const getTelegramId = () => {
   var webApp = window?.Telegram?.WebApp;
   var initData = getInitDataSplit(webApp?.initData)
@@ -146,6 +155,10 @@ class Storage extends EventEmitter {
 
   isPassedQuiz2() {
     return passedQuiz2
+  }
+
+  getTheme() {
+    return getColorScheme()
   }
 }
 

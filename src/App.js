@@ -1133,10 +1133,10 @@ class MainPage extends Component {
 
 function App() {
   // App-header
-  // style={{backgroundColor: '#282c34'}}
   var seconds = 0 ; //new Date().getUTCSeconds()
 
   var theme = seconds % 6 < 3 ? 'light' : 'dark'
+  theme = storage.getTheme();
 
   return <div>
     <div className="App" data-theme={theme}>
