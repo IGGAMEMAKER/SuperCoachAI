@@ -119,7 +119,7 @@ var initializeTGApp = () => {
   }
 }
 
-// initializeTGApp()
+initializeTGApp()
 
 class Storage extends EventEmitter {
   addChangeListener(c) {
