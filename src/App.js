@@ -1105,13 +1105,20 @@ class MainPage extends Component {
         {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
       </div>
       {startAddingHabitsImage}
-      <div className="left new-habit-button-wrapper">
-        <br />
+
+      <div className="new-habit-button-wrapper">
         <button
           onClick={() => {this.toggleAddingPopup(true)}}
           className="primary new-habit-button"
         >Add habit</button>
       </div>
+      {/*<div className="left new-habit-button-wrapper">*/}
+      {/*  <br />*/}
+      {/*  <button*/}
+      {/*    onClick={() => {this.toggleAddingPopup(true)}}*/}
+      {/*    className="primary new-habit-button"*/}
+      {/*  >Add habit</button>*/}
+      {/*</div>*/}
     </div>
 
     if (editingHabit)
