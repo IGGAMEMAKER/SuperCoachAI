@@ -13,7 +13,7 @@ async function main() {
 
   console.log(completion.choices);
   console.log('CHOICES')
-  console.log(completion)
+  console.log(JSON.stringify(completion, null, 2))
 }
 
 main()
