@@ -7,7 +7,7 @@ const openai = new OpenAI({
 
 async function main() {
   const completion = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: 'Say this is a test' }],
+    messages: [{ role: 'user', content: 'Say Hi!' }],
     model: 'gpt-3.5-turbo',
   });
 
