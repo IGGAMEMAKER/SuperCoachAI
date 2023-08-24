@@ -52,8 +52,8 @@ const getRecentMessagesForUser = async chatId => {
     .filter(m => {
       var msg = new Date(m.date).getTime()
 
-      console.log(msg)
-      console.log(GPT_creation_time)
+      console.log({msg})
+      console.log({GPT_creation_time})
 
       return msg >= GPT_creation_time
     }) // don't take into account preGPT messages
