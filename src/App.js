@@ -302,14 +302,14 @@ class UserView extends Component {
         }
 
         if (isUser) {
-          style.backgroundColor = 'red';
-          style.color = 'white'
+          style.color = 'red';
+          // style.color = 'white'
           style.fontWeight = '900'
         }
 
         if (isSenderAdmin) {
-          style.backgroundColor = 'lightgreen'
-          style.color = 'white'
+          style.color = 'lightgreen'
+          // style.color = 'white'
         }
 
         if (isSenderAI) {
