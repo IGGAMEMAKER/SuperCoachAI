@@ -1,4 +1,5 @@
 const OpenAI = require('openai')
+const {ADMINS_ME} = require("../src/constants/admins");
 const {MessageModel} = require("./Models");
 const {UserModel} = require("./Models");
 const {OPENAI_API_KEY} = require("../CD/Configs");
@@ -42,13 +43,13 @@ const ai = content => ({role: 'assistant', content})
 
 var GPT_creation_time = new Date(1692877074343);
 
-const getAIResponse = async (chatId) => {
+const getRecentMessagesForUser = async chatId => {
   var messages = await MessageModel.find({chatId})
   const SENDER_GPT = "-2";
   const SENDER_ADMIN = "-1"
 
   messages = messages
-    // .filter(m => new Date(m.date).getTime() >= GPT_creation_time) // don't take into account preGPT messages
+    .filter(m => new Date(m.date).getTime() >= GPT_creation_time) // don't take into account preGPT messages
     .filter(m => m.sender === SENDER_GPT || m.sender === chatId) // user and ai
 
   console.log('GOT MESSAGES FROM DB', messages);
@@ -64,6 +65,20 @@ const getAIResponse = async (chatId) => {
 
   messages.unshift({role: 'system', content: systemMessage})
   console.log('messages PATCHED WITH ROLES', JSON.stringify(messages, null, 2))
+
+  return Promise.resolve(messages)
+}
+
+getRecentMessagesForUser(ADMINS_ME)
+  .then(m => {
+
+  })
+  .catch(err => {
+    console.error({err})
+  })
+
+const getAIResponse = async (chatId) => {
+  var messages = getRecentMessagesForUser(chatId)
 
   try {
     const completion = await openai.chat.completions.create({
