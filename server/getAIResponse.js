@@ -48,7 +48,7 @@ const getAIResponse = async (chatId) => {
   const SENDER_ADMIN = "-1"
 
   messages = messages
-    .filter(m => new Date(m.date).getTime() >= GPT_creation_time) // don't take into account preGPT messages
+    // .filter(m => new Date(m.date).getTime() >= GPT_creation_time) // don't take into account preGPT messages
     .filter(m => m.sender === SENDER_GPT || m.sender === chatId) // user and ai
 
   console.log('GOT MESSAGES FROM DB', messages);
