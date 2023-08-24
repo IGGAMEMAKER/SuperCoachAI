@@ -15,7 +15,7 @@ const saveMessage = async (text, sender, chatId, date=new Date()) => {
   return s
 }
 
-const changeAnswerStatus = (chatId, status) => UserModel.updateOne({telegramId: chatId + ""}, {hasAnswer: status})
+const changeAnswerStatus = (chatId, status, isAIAnswer = false) => UserModel.updateOne({telegramId: chatId + ""}, {hasAnswer: status, isAIAnswer})
 module.exports = {
   saveMessage,
   changeAnswerStatus,

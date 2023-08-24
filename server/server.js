@@ -210,14 +210,57 @@ const renderSPA = (req, res) => {
   res.sendFile(appPath);
 }
 
+const isMe = async (req, res, next) => {
+  if (!req.me) {
+    console.log('not me, so operation will not be done')
+    next('not me')
+  } else {
+    next()
+  }
+}
+
+const isTesting = async (req, res, next) => {
+  if (!req.isTesting) {
+    console.log('not TESTING, so operation will not be done')
+    next('not TESTING')
+  } else {
+    next()
+  }
+}
+
+const authenticate = async (req, res, next) => {
+  // get telegramId here
+  var c = getCookies(req)
+  console.log('authenticate', c)
+  var {telegramId} = c // '' // req.cookies(???) req.body?
+  if (telegramId === ADMINS_ME)
+    req.me = true
+
+  if (req.me || telegramId === 'myTGId')
+    req.isTesting = true
+
+  UserModel.find({telegramId})
+    .then(u => {
+      if (!u) {
+        next(1)
+      } else {
+        req.telegramId = telegramId
+        next()
+      }
+    })
+    .catch(err => {
+      next(err)
+    })
+}
+
+
+
 const resetQuizzes = async (req, res) => {
   var telegramId = req.params.telegramId;
 
   var r = await UserModel.updateOne({telegramId}, {$unset: {quiz1: '', quiz2: ''} })
 
-  res.json({
-    r
-  })
+  res.json({r})
 }
 const saveQuiz = num => async (req, res) => {
   var telegramId = req.telegramId
@@ -285,48 +328,7 @@ const getUser = async (req, res) => {
     })
 }
 
-const isMe = async (req, res, next) => {
-  if (!req.me) {
-    console.log('not me, so operation will not be done')
-    next('not me')
-  } else {
-    next()
-  }
-}
 
-const isTesting = async (req, res, next) => {
-  if (!req.isTesting) {
-    console.log('not TESTING, so operation will not be done')
-    next('not TESTING')
-  } else {
-    next()
-  }
-}
-
-const authenticate = async (req, res, next) => {
-  // get telegramId here
-  var c = getCookies(req)
-  console.log('authenticate', c)
-  var {telegramId} = c // '' // req.cookies(???) req.body?
-  if (telegramId === ADMINS_ME)
-    req.me = true
-
-  if (req.me || telegramId === 'myTGId')
-    req.isTesting = true
-
-  UserModel.find({telegramId})
-    .then(u => {
-      if (!u) {
-        next(1)
-      } else {
-        req.telegramId = telegramId
-        next()
-      }
-    })
-    .catch(err => {
-      next(err)
-    })
-}
 
 const saveHabits = async (req, res) => {
   var habits = req.body.habits

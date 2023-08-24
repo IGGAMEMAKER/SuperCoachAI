@@ -1,3 +1,4 @@
+const {getAIResponse} = require("./getAIResponse");
 const {ADMINS_ME, ADMINS_KOSTYA} = require("../src/constants/admins");
 const {UserModel} = require("./Models");
 const {changeAnswerStatus} = require("./saveMessagesInDB");
@@ -39,6 +40,7 @@ bot.on(message('text'), async (ctx) => {
   // if there are some command/trigger messages, respond to them!
   if (text === '/start') {
     isCommandMessage = true;
+
     const initialText = 'Hi!\n' +
       '\n' +
       'The app allows you to track habits and the AI Coach will help you along the way. \n\n' +
@@ -63,6 +65,11 @@ bot.on(message('text'), async (ctx) => {
       'After you\'re done, you can already start tracking your execution and then I will send you some tasks.\n\n' +
       'Also, if you want AI assistance, ask questions in this chat'
     await respondAsAdmin(chatId, launchAppMessage)
+  } else {
+    console.log('got message and needs AI response', text)
+
+    var aiResponse = await getAIResponse(chatId)
+    await respondAsChatGPT(chatId, aiResponse)
   }
 
 
@@ -103,6 +110,14 @@ const respondAsAdmin = async (chatId, text) => {
   await sendTGMessage(chatId, text)
 }
 
+const respondAsChatGPT = async (chatId, text) => {
+  var sender = '-2'
+
+  await saveMessage(text, sender, chatId, new Date())
+  await changeAnswerStatus(chatId, true, true)
+  await sendTGMessage(chatId, text)
+}
+
 const launch = () => {
   console.log('bot activation')
 }
@@ -110,5 +125,6 @@ const launch = () => {
 module.exports = {
   sendTGMessage,
   respondAsAdmin,
+  respondAsChatGPT,
   launch
 }
