@@ -454,8 +454,8 @@ const getMappedHabits = (habits, habitProgress, setEditingHabit) => {
       }
       // habitsMapped.push(<div onClick={() => {this.setEditingHabit(h.id)}} className={`left habit-container`}>
       habitsMapped.push(<div onClick={onEditHabit} className={`left habit-container`}>
-        {h.name}
-        <br />
+        <div className="habit-name">{h.name}</div>
+        {/*<br />*/}
         <div className="habit-date"><span>{getTimePeriod()}</span></div>
         {/*{getHour(h.from)}, {h.from},*/}
       </div>)

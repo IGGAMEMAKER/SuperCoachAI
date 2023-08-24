@@ -16,6 +16,9 @@
   --input-placeholder-color: gray;
   --input-text-color: #373A41;
 
+  --calendar-primary-color: #373a41;
+  --calendar-secondary-color: #ACAEBB;
+
   /*font-family: 'Gilroy-Bold', sans-serif;*/
   /*font-family: 'Gilroy-Heavy', sans-serif;*/
   /*font-family: 'Gilroy-Light', sans-serif;*/
@@ -37,6 +40,9 @@
   --input-border-color: gray;
   --input-placeholder-color: white;
   --input-text-color: white;
+
+  --calendar-primary-color: #ACAEBB; /*Just swap*/
+  --calendar-secondary-color: #373a41;
 }
 
 
@@ -58,8 +64,12 @@ body {
   color: #898989;
 }
 
+.habit-name {
+  color: var(--calendar-primary-color);
+}
 .habit-date {
-  color: #ACAEBB;
+  /*color: #ACAEBB;*/
+  color: var(--calendar-secondary-color);
   font-size: 12px;
   font-weight: 500;
   line-height: 15px;
