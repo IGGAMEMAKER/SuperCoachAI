@@ -51,7 +51,7 @@ const getAIResponse = async (chatId) => {
     .filter(m => new Date(m.date).getDate() >= GPT_creation_time) // don't take into account preGPT messages
     .filter(m => m.sender === SENDER_GPT || m.sender === chatId) // user and ai
 
-  console.log(messages);
+  console.log('GOT MESSAGES FROM DB', messages);
 
   messages = messages
     .map(m => {
@@ -63,27 +63,17 @@ const getAIResponse = async (chatId) => {
     })
 
   messages.unshift({role: 'system', content: systemMessage})
-  console.log('messages', JSON.stringify(messages, null, 2))
+  console.log('messages PATCHED WITH ROLES', JSON.stringify(messages, null, 2))
 
   try {
     const completion = await openai.chat.completions.create({
-      /*messages: [
-      { role: 'system', content: systemMessage},
-      // { role: 'user', content: 'Hi, i seem to be nervous' },
-      usr(`Hi, i seem to be nervous`),
-      ai(`I understand that you're feeling nervous. Can you tell me more about what's causing this nervousness?`),
-      usr(`I hate it, that I can't release my projects`),
-      ai(`It sounds like you're feeling frustrated that you're unable to complete your projects. Can you tell me more about what's been going on with your projects and why it's important for you to release them?`),
-      usr(`I was always inspired by films aka "Social Network" and "Silicon Valley" and dreamed to make something great, that would prove that I am worth something and capable`),
-      ai(`It sounds like you have a strong desire to create something meaningful and prove your worth through your projects, inspired by films like \\"Social Network\\" and \\"Silicon Valley.\\" Can you tell me more about what specifically you want to achieve with your projects? What result do you want at the end of the coaching practice?`),
-    ],*/
       messages,
       model: 'gpt-3.5-turbo',
     });
 
-    console.log(completion.choices);
-    console.log('CHOICES')
-    console.log(JSON.stringify(completion, null, 2))
+    // console.log(completion.choices);
+    // console.log('CHOICES')
+    // console.log(JSON.stringify(completion, null, 2))
 
     var answer = completion.choices[0].message.content
 
