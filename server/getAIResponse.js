@@ -41,7 +41,7 @@ ask questions one at a time. Don't talk about anything not related to coaching p
 const usr = content => ({role: 'user', content})
 const ai = content => ({role: 'assistant', content})
 
-var GPT_creation_time = 1692877074343
+var GPT_creation_time = 1692877968536
 
 const getRecentMessagesForUser = async chatId => {
   var messages = await MessageModel.find({chatId})
@@ -51,9 +51,6 @@ const getRecentMessagesForUser = async chatId => {
   messages = messages
     .filter(m => {
       var msg = new Date(m.date).getTime()
-
-      // console.log(msg)
-      // console.log(GPT_creation_time)
 
       return msg >= GPT_creation_time
     }) // don't take into account preGPT messages
@@ -78,13 +75,13 @@ const getRecentMessagesForUser = async chatId => {
   return Promise.resolve(messages)
 }
 
-getRecentMessagesForUser(ADMINS_ME)
-  .then(m => {
-
-  })
-  .catch(err => {
-    console.error({err})
-  })
+// getRecentMessagesForUser(ADMINS_ME)
+//   .then(m => {
+//
+//   })
+//   .catch(err => {
+//     console.error({err})
+//   })
 
 const getAIResponse = async (chatId) => {
   var messages = getRecentMessagesForUser(chatId)
