@@ -81,7 +81,7 @@ const getRecentMessagesForUser = async chatId => {
 //   })
 
 const getAIResponse = async (chatId, text) => {
-  var rawMessages = getRecentMessagesForUser(chatId)
+  var rawMessages = await getRecentMessagesForUser(chatId)
   var s = {role: 'system', content: systemMessage}
 
   var messages = []
