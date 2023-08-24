@@ -307,14 +307,13 @@ class UserView extends Component {
           style.fontWeight = '900'
         }
 
-        if (isSenderAdmin) {
+        if (isSenderAI) {
+          style.backgroundColor = 'lightblue'
+        } else if (isSenderAdmin) {
           style.color = 'lightgreen'
           // style.color = 'white'
         }
 
-        if (isSenderAI) {
-          style.backgroundColor = 'lightblue'
-        }
 
         return <div style={style}>{m.text}</div>
       })}
