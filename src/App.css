@@ -610,6 +610,7 @@ button.remove {
 
 .habits-table-wrapper {
   height: 60vh;
+  width: 100%;
 }
 .habits-table {
   width: 100%;
