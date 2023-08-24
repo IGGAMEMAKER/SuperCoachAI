@@ -339,7 +339,7 @@ class UserView extends Component {
     if (!this.state.showProgress)
       return ''
 
-    return <div>
+    return <div className="habits-table-wrapper">
       <div className="habits-table">
         <div className="left">
           HABITS

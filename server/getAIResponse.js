@@ -42,6 +42,7 @@ const usr = content => ({role: 'user', content})
 const ai = content => ({role: 'assistant', content})
 
 var GPT_creation_time = 1692881744060
+// https://currentmillis.com/
 
 const getRecentMessagesForUser = async chatId => {
   var rawMessages = await MessageModel.find({chatId})
