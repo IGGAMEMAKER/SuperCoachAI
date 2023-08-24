@@ -20,6 +20,7 @@
   --calendar-secondary-color: #ACAEBB;
 
   --quiz-input-background-color: #F3F5F7;
+  --quiz-input-text-color: #282D3C;
   --unchecked-background-opacity: 1;
 
   /*font-family: 'Gilroy-Bold', sans-serif;*/
@@ -48,6 +49,7 @@
   --calendar-secondary-color: #373a41;
 
   --quiz-input-background-color: #171717;
+  --quiz-input-text-color: #ACAEBB;
   --unchecked-background-opacity: 0.1;
 }
 
@@ -74,7 +76,6 @@ body {
   color: var(--calendar-primary-color);
 }
 .habit-date {
-  /*color: #ACAEBB;*/
   color: var(--calendar-secondary-color);
   font-size: 12px;
   font-weight: 500;
@@ -323,7 +324,7 @@ button.remove {
   /*gap: 20px;*/
 
   background-color: var(--quiz-input-background-color);
-  color: #282D3C;
+  color: var(--quiz-input-text-color);
 
   font-size: 16px;
   font-weight: 400;
