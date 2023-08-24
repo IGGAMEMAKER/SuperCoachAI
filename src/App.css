@@ -19,6 +19,8 @@
   --calendar-primary-color: #373a41;
   --calendar-secondary-color: #ACAEBB;
 
+  --quiz-input-background-color: #F3F5F7;
+
   /*font-family: 'Gilroy-Bold', sans-serif;*/
   /*font-family: 'Gilroy-Heavy', sans-serif;*/
   /*font-family: 'Gilroy-Light', sans-serif;*/
@@ -43,6 +45,8 @@
 
   --calendar-primary-color: #ACAEBB; /*Just swap*/
   --calendar-secondary-color: #373a41;
+
+  --quiz-input-background-color: #171717;
 }
 
 
@@ -316,7 +320,7 @@ button.remove {
   border: 0;
   /*gap: 20px;*/
 
-  background-color: #F3F5F7;
+  background-color: var(--quiz-input-background-color);
   color: #282D3C;
 
   font-size: 16px;
