@@ -41,14 +41,14 @@ ask questions one at a time. Don't talk about anything not related to coaching p
 const usr = content => ({role: 'user', content})
 const ai = content => ({role: 'assistant', content})
 
-var GPT_creation_time = 1692877968536
+var GPT_creation_time = 1692878462723
 
 const getRecentMessagesForUser = async chatId => {
-  var messages = await MessageModel.find({chatId})
+  var rawMessages = await MessageModel.find({chatId})
   const SENDER_GPT = "-2";
   const SENDER_ADMIN = "-1"
 
-  messages = messages
+  rawMessages = rawMessages
     .filter(m => {
       var msg = new Date(m.date).getTime()
 
@@ -56,11 +56,11 @@ const getRecentMessagesForUser = async chatId => {
     }) // don't take into account preGPT messages
     .filter(m => m.sender === SENDER_GPT || m.sender === chatId) // user and ai
 
-  console.log(`GOT [${messages.length}] MESSAGES FROM DB`, messages, `GOT [${messages.length}] MESSAGES FROM DB`);
+  console.log(`GOT [${rawMessages.length}] MESSAGES FROM DB`, rawMessages, `GOT [${rawMessages.length}] MESSAGES FROM DB`);
   console.log('-----------------------------')
   console.log('-----------------------------')
 
-  messages = messages
+  rawMessages = rawMessages
     .map(m => {
       if (m.sender === SENDER_GPT) {
         return ai(m.text)
@@ -69,10 +69,7 @@ const getRecentMessagesForUser = async chatId => {
       return usr(m.text)
     })
 
-  messages.unshift({role: 'system', content: systemMessage})
-  console.log('messages PATCHED WITH ROLES', JSON.stringify(messages, null, 2))
-
-  return Promise.resolve(messages)
+  return Promise.resolve(rawMessages)
 }
 
 // getRecentMessagesForUser(ADMINS_ME)
@@ -83,8 +80,16 @@ const getRecentMessagesForUser = async chatId => {
 //     console.error({err})
 //   })
 
-const getAIResponse = async (chatId) => {
-  var messages = getRecentMessagesForUser(chatId)
+const getAIResponse = async (chatId, text) => {
+  var rawMessages = getRecentMessagesForUser(chatId)
+  var s = {role: 'system', content: systemMessage}
+
+  var messages = []
+  messages.push(s);
+  messages.push(...rawMessages)
+  messages.push(usr(text))
+
+  console.log('messages PATCHED WITH ROLES', JSON.stringify(rawMessages, null, 2))
 
   try {
     const completion = await openai.chat.completions.create({

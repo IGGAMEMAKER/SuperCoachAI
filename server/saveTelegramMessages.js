@@ -68,7 +68,7 @@ bot.on(message('text'), async (ctx) => {
   } else {
     console.log('got message and needs AI response', text)
 
-    var aiResponse = await getAIResponse(chatId)
+    var aiResponse = await getAIResponse(chatId, text)
 
     console.log('AI response will be: ', aiResponse)
     await respondAsChatGPT(chatId, aiResponse)
