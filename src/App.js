@@ -294,8 +294,18 @@ class UserView extends Component {
       {this.state.messages.map(m => {
         var isSenderAdmin = m.sender.length < 3
         var isSenderAI = m.sender === "-2"
+        var isUser = !isSenderAdmin
 
-        var style = {textAlign: isSenderAdmin ? 'right' : 'left', backgroundColor: 'darkgreen'}
+        var style = {
+          textAlign: isUser ? 'left' : 'right',
+          marginBottom: '5px'
+        }
+
+        if (isUser) {
+          style.backgroundColor = 'red';
+          style.color = 'white'
+          style.fontWeight = '900'
+        }
 
         if (isSenderAdmin) {
           style.backgroundColor = 'blue'
