@@ -323,6 +323,7 @@ button.remove {
   border: 0;
   /*gap: 20px;*/
 
+
   background-color: var(--quiz-input-background-color);
   color: var(--quiz-input-text-color);
 
