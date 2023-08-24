@@ -298,7 +298,7 @@ class UserView extends Component {
 
         var style = {
           textAlign: isUser ? 'left' : 'right',
-          marginBottom: '5px'
+          paddingBottom: '5px'
         }
 
         if (isUser) {
@@ -308,7 +308,8 @@ class UserView extends Component {
         }
 
         if (isSenderAdmin) {
-          style.backgroundColor = 'blue'
+          style.backgroundColor = 'lightgreen'
+          style.color = 'white'
         }
 
         if (isSenderAI) {
