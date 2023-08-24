@@ -20,6 +20,7 @@
   --calendar-secondary-color: #ACAEBB;
 
   --quiz-input-background-color: #F3F5F7;
+  --unchecked-background-opacity: 1;
 
   /*font-family: 'Gilroy-Bold', sans-serif;*/
   /*font-family: 'Gilroy-Heavy', sans-serif;*/
@@ -47,6 +48,7 @@
   --calendar-secondary-color: #373a41;
 
   --quiz-input-background-color: #171717;
+  --unchecked-background-opacity: 0.1;
 }
 
 
@@ -644,6 +646,13 @@ button.remove {
 .habit-checkbox {
   width: 25px;
   height: 25px;
+
+/*input[type="checkbox"] {*/
+/*  accent-color: yellow*/
+/*}*/
+}
+.habit-checkbox:not(:checked){
+  opacity: var(--unchecked-background-opacity);
 }
 .intersecting-habits-warning {
   color: red;
