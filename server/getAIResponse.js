@@ -43,7 +43,7 @@ const ai = content => ({role: 'assistant', content})
 var GPT_creation_time = new Date(1692872407383);
 
 const getAIResponse = async (chatId) => {
-  var messages = await MessageModel.findOne({chatId})
+  var messages = await MessageModel.find({chatId})
   const SENDER_GPT = "-2";
   const SENDER_ADMIN = "-1"
 
