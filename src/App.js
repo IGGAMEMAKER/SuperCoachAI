@@ -1114,25 +1114,25 @@ class MainPage extends Component {
     const mainPage = <div>
       <div className="menu-title">Daily routine</div>
       <div className="habits-table-wrapper">
-      <div className="habits-table">
-        <div className="left">
-          HABITS
-          <br />
-          {/*<a href="edit">Edit</a>*/}
-          {/*<Link to="/edit">Edit</Link>*/}
+        <div className="habits-table">
+          <div className="left">
+            HABITS
+            <br />
+          </div>
+          {renderTableOfDays()}
+          {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
         </div>
-        {renderTableOfDays()}
-        {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
-      </div>
+        <br />
+        <br />
+        <div className="new-habit-button-wrapper">
+          <button
+            onClick={() => {this.toggleAddingPopup(true)}}
+            className="primary new-habit-button"
+          >Add habit</button>
+        </div>
       </div>
       {startAddingHabitsImage}
 
-      <div className="new-habit-button-wrapper">
-        <button
-          onClick={() => {this.toggleAddingPopup(true)}}
-          className="primary new-habit-button"
-        >Add habit</button>
-      </div>
       {/*<div className="left new-habit-button-wrapper">*/}
       {/*  <br />*/}
       {/*  <button*/}
