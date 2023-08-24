@@ -1,5 +1,5 @@
 cmt=$1
-nvm use stable
+nvm use 16
 
 git commit -a -m "Site update: $cmt"
 git push
