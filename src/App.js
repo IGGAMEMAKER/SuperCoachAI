@@ -339,7 +339,7 @@ class UserView extends Component {
     if (!this.state.showProgress)
       return ''
 
-    return <div className="habits-table-wrapper">
+    return <div>
       <div className="habits-table">
         <div className="left">
           HABITS
@@ -1113,6 +1113,7 @@ class MainPage extends Component {
 
     const mainPage = <div>
       <div className="menu-title">Daily routine</div>
+      <div className="habits-table-wrapper">
       <div className="habits-table">
         <div className="left">
           HABITS
@@ -1122,6 +1123,7 @@ class MainPage extends Component {
         </div>
         {renderTableOfDays()}
         {getMappedHabits(habits, this.state.habitProgress, this.setEditingHabit)}
+      </div>
       </div>
       {startAddingHabitsImage}
 
