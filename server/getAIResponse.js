@@ -41,7 +41,7 @@ ask questions one at a time. Don't talk about anything not related to coaching p
 const usr = content => ({role: 'user', content})
 const ai = content => ({role: 'assistant', content})
 
-var GPT_creation_time = new Date(1692877074343);
+var GPT_creation_time = 1692877074343
 
 const getRecentMessagesForUser = async chatId => {
   var messages = await MessageModel.find({chatId})
