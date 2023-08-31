@@ -114,7 +114,7 @@ const askGPT = async (rawMessages, wrapper, request, dbg) => {
   var s = {role: 'system', content: systemMessage}
 
   var messages = []
-  messages.push(s);
+  // messages.push(s);
   messages.push(...rawMessages)
   messages.push(usr(request))
 
