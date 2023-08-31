@@ -314,7 +314,7 @@ class UserView extends Component {
         }
 
         return <div style={style}>
-          <p>{new Date(m.date).getTime()}</p>
+          <p style={{color: 'gray'}}>{new Date(m.date).getTime()}</p>
           {m.text}
         </div>
       })}
