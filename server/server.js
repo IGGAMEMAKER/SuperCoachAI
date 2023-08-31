@@ -392,8 +392,11 @@ const getAllUsers = (req, res) => {
 
 const getMessagesOfUser = async (req, res) => {
   var {telegramId} = req.params
+
+  var messages = await MessageModel.find({chatId: telegramId}) //['hi, zyabl']
   res.json({
-    messages: await MessageModel.find({chatId: telegramId}) //['hi, zyabl']
+    count: messages.length,
+    messages,
   })
 }
 
