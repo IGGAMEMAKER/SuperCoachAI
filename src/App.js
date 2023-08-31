@@ -313,7 +313,10 @@ class UserView extends Component {
           style.color = 'green'
         }
 
-        return <div style={style}>{m.text}</div>
+        return <div style={style}>
+          <p>{new Date(m.date).getTime()}</p>
+          {m.text}
+        </div>
       })}
       <br />
       <AdminSender onSend={(text) => {
