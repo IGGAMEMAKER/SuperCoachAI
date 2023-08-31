@@ -1,3 +1,4 @@
+const {getSummarizedDialog} = require("./getAIResponse");
 const {ADMINS_KOSTYA} = require("../src/constants/admins");
 const {ADMINS_ME} = require("../src/constants/admins");
 const {respondAsAdmin, launch, sendTGMessage} = require("./saveTelegramMessages");
@@ -408,6 +409,16 @@ const saveMessagesRoute = async (req, res) => {
   })
 }
 
+const saveSessionSummaryRoute = async (req, res) => {
+  var {telegramId} = req.params;
+
+  var resp = await getSummarizedDialog(telegramId);
+
+  res.json({
+    resp
+  })
+}
+
 const answerToUserRoute = async (req, res) => {
   var {text, chatId} = req.body;
   await respondAsAdmin(chatId, text)
@@ -468,6 +479,7 @@ app.all('/admin/users', getAllUsers)
 app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
+app.get('/summarize/:telegramId', saveSessionSummaryRoute)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.get('/quiz/remove/:telegramId', resetQuizzes)

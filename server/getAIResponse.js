@@ -98,10 +98,6 @@ const getAIResponse = async (chatId, text) => {
       model: 'gpt-3.5-turbo',
     });
 
-    // console.log(completion.choices);
-    // console.log('CHOICES')
-    // console.log(JSON.stringify(completion, null, 2))
-
     var answer = completion.choices[0].message.content
 
     console.log('answer is', answer)
@@ -114,7 +110,40 @@ const getAIResponse = async (chatId, text) => {
   }
 }
 
+const askGPT = async (rawMessages, wrapper, request, dbg) => {
+  var s = {role: 'system', content: systemMessage}
+
+  var messages = []
+  messages.push(s);
+  messages.push(...rawMessages)
+  messages.push(usr(request))
+
+  try {
+    const completion = await openai.chat.completions.create({
+      messages,
+      model: 'gpt-3.5-turbo',
+    });
+
+    var answer = completion.choices[0].message.content
+
+    console.log('answer is', answer)
+
+    return Promise.resolve(answer)
+  } catch (e) {
+    console.error('Failed to get answer from ChatGPT', e, {dbg})
+
+    return Promise.resolve('Failed to get answer from ChatGPT')
+  }
+}
+
+const getSummarizedDialog = async (chatId) => {
+  var rawMessages = await getRecentMessagesForUser(chatId)
+
+  return askGPT(rawMessages, systemMessage, `Summarize what we've talked about`)
+}
+
 
 module.exports = {
-  getAIResponse
+  getAIResponse,
+  getSummarizedDialog
 }
