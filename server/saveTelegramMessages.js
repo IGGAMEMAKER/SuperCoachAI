@@ -99,7 +99,7 @@ bot.on(message('text'), async (ctx) => {
     if (last) {
       console.log({last})
 
-      var messageId = last._id
+      var messageId = last._id.toString()
       console.log(messageId)
 
       const p = await MessageModel.findByIdAndUpdate(messageId, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})

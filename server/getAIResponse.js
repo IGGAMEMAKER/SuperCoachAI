@@ -68,6 +68,7 @@ const getRecentMessagesForUser = async chatId => {
       return time >= GPT_creation_time && time > lastSummaryTime
     })
     .filter(m => m.sender === SENDER_GPT || m.sender === chatId) // user and ai
+    .filter(m => m.type === MESSAGE_TYPE_DEFAULT)
 
   console.log(`GOT [${rawMessages.length}] MESSAGES FROM DB`, rawMessages, `GOT [${rawMessages.length}] MESSAGES FROM DB`);
   console.log('-----------------------------')
