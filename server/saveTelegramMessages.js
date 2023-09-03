@@ -102,9 +102,9 @@ bot.on(message('text'), async (ctx) => {
       var messageId = last._id.toString()
       console.log(messageId)
 
-      const p = await MessageModel.findByIdAndUpdate(messageId, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
+      // const p = await MessageModel.findByIdAndUpdate(messageId, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
 
-      console.log('message magic results', p)
+      // console.log('message magic results', {p})
       await sendTGMessage(chatId, 'The session will be continued')
     }
   } else {
