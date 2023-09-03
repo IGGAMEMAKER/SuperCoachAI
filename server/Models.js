@@ -1,4 +1,4 @@
-import {SESSION_STATUS_NULL, SESSION_STATUS_SESSION_SUMMARIZED} from "./constants";
+const {SESSION_STATUS_NULL, SESSION_STATUS_SESSION_SUMMARIZED} = require("./constants")
 
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
