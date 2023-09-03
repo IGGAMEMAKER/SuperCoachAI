@@ -1,3 +1,4 @@
+const {getLastSummaryMessage} = require("./getLastSummaryMessage");
 const {
   MESSAGE_TYPE_MISTAKEN_SUMMARY,
   SESSION_STATUS_ADMIN_RESPONDED,
@@ -31,16 +32,6 @@ bot.command('quit', async (ctx) => {
   // Using context shortcut
   await ctx.leaveChat();
 });
-
-const getLastSummaryMessage = async chatId => {
-  var messages = await MessageModel.find({chatId, type: MESSAGE_TYPE_SUMMARY}).sort({$natural:-1}); //.limit(1);
-
-  console.log('getLastSummaryMessage', {messages})
-  if (messages.length)
-    return Promise.resolve(messages.slice(-1)[0])
-
-  return Promise.resolve(null)
-}
 
 bot.on(message('text'), async (ctx) => {
   // Explicit usage

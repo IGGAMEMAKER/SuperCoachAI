@@ -1,4 +1,6 @@
 const OpenAI = require('openai')
+const {getLastSummaryMessage} = require("./getLastSummaryMessage");
+const {MESSAGE_TYPE_DEFAULT} = require("./constants");
 const {SENDER_GPT} = require("./constants");
 const {ADMINS_ME} = require("../src/constants/admins");
 const {MessageModel} = require("./Models");
@@ -46,15 +48,25 @@ var GPT_creation_time = 1693458987095; //1692881744060
 // https://currentmillis.com/
 
 const getRecentMessagesForUser = async chatId => {
+  // TODO load raw messages since lastSummary time
+  // for better performance
+  var lastSummary = await getLastSummaryMessage(chatId)
+  var lastSummaryTime = 0;
+  if (lastSummary)
+    lastSummaryTime = new Date(lastSummary.date).getTime()
+
   var rawMessages = await MessageModel.find({chatId})
 
   // TODO only include messages after last summary message
   rawMessages = rawMessages
     .filter(m => {
-      var msg = new Date(m.date).getTime()
+      var time = new Date(m.date).getTime()
 
-      return msg >= GPT_creation_time
-    }) // don't take into account preGPT messages
+      // don't take into account preGPT messages
+      // && don't take previous sessions into account
+
+      return time >= GPT_creation_time && time > lastSummaryTime
+    })
     .filter(m => m.sender === SENDER_GPT || m.sender === chatId) // user and ai
 
   console.log(`GOT [${rawMessages.length}] MESSAGES FROM DB`, rawMessages, `GOT [${rawMessages.length}] MESSAGES FROM DB`);
