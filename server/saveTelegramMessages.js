@@ -1,11 +1,11 @@
-import {
+const {
   MESSAGE_TYPE_MISTAKEN_SUMMARY,
   SESSION_STATUS_ADMIN_RESPONDED,
   SESSION_STATUS_AI_RESPONDED,
   SESSION_STATUS_SESSION_SUMMARIZED,
   SESSION_STATUS_USER_RESPONDED, SESSION_STATUS_WANNA_CLOSE_SESSION
-} from "./constants";
-import {MessageModel} from "./Models";
+} = require("./constants")
+const {MessageModel} = require("./Models")
 
 const {sendTGMessage} = require("./sendTGMessage");
 const {getTGBot} = require("./getTGBot")
