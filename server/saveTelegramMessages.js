@@ -116,7 +116,7 @@ bot.on(message('text'), async (ctx) => {
     // notify admin
 
     // await changeAnswerStatus(chatId, false)
-    await sendTGMessage(ADMINS_KOSTYA, 'You got new message from users! Reply: supercoach.site/admin')
+    // await sendTGMessage(ADMINS_KOSTYA, 'You got new message from users! Reply: supercoach.site/admin')
   }
 });
 
