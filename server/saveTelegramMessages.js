@@ -37,8 +37,8 @@ const getLastSummaryMessage = async chatId => {
 
   console.log('getLastSummaryMessage', {messages})
   if (messages.length)
-    return messages.slice(-1)[0]
-  return null
+    return Promise.resolve(messages.slice(-1)[0])
+  return Promise.resolve(null)
 }
 
 bot.on(message('text'), async (ctx) => {
