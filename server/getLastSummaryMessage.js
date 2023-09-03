@@ -7,9 +7,12 @@ const getLastSummaryMessage = async chatId => {
     .sort({$natural:-1}); //.limit(1);
 
   console.log('getLastSummaryMessage', messages.length)
-  if (messages.length)
+  if (messages.length) {
     // return Promise.resolve(messages.slice(-1)[0])
-    return Promise.resolve(messages[0])
+    var m = messages[0]
+    m.totalSessions = messages.length
+    return Promise.resolve(m)
+  }
 
   return Promise.resolve(null)
 }

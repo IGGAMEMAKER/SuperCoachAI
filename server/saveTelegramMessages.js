@@ -107,7 +107,7 @@ bot.on(message('text'), async (ctx) => {
       const p = await MessageModel.findByIdAndUpdate(messageId, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
 
       // console.log('message magic results', {p})
-      await sendTGMessage(chatId, 'The session will be continued')
+      await sendTGMessage(chatId, `The session #${last.totalSessions} will be continued`)
     }
   } else {
     console.log('got message and needs AI response', text)
