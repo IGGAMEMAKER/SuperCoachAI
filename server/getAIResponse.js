@@ -1,4 +1,5 @@
 const OpenAI = require('openai')
+const {SENDER_GPT} = require("./constants");
 const {ADMINS_ME} = require("../src/constants/admins");
 const {MessageModel} = require("./Models");
 const {UserModel} = require("./Models");
@@ -46,9 +47,8 @@ var GPT_creation_time = 1693458987095; //1692881744060
 
 const getRecentMessagesForUser = async chatId => {
   var rawMessages = await MessageModel.find({chatId})
-  const SENDER_GPT = "-2";
-  const SENDER_ADMIN = "-1"
 
+  // TODO only include messages after last summary message
   rawMessages = rawMessages
     .filter(m => {
       var msg = new Date(m.date).getTime()
@@ -111,12 +111,17 @@ const getAIResponse = async (chatId, text) => {
 }
 
 const askGPT = async (rawMessages, wrapper, request, dbg) => {
-  var s = {role: 'system', content: systemMessage}
+  var s = {role: 'system', content: wrapper}
 
   var messages = []
-  // messages.push(s);
+
+  if (wrapper?.length)
+    messages.push(s);
+
   messages.push(...rawMessages)
-  messages.push(usr(request))
+
+  if (request?.length)
+    messages.push(usr(request))
 
   try {
     const completion = await openai.chat.completions.create({

@@ -1,3 +1,5 @@
+const {endSession} = require("./saveTelegramMessages");
+const {MESSAGE_TYPE_SUMMARY} = require("./constants");
 const {getSummarizedDialog} = require("./getAIResponse");
 const {ADMINS_KOSTYA} = require("../src/constants/admins");
 const {ADMINS_ME} = require("../src/constants/admins");
@@ -393,7 +395,7 @@ const getAllUsers = (req, res) => {
 const getMessagesOfUser = async (req, res) => {
   var {telegramId} = req.params
 
-  var messages = await MessageModel.find({chatId: telegramId}) //['hi, zyabl']
+  var messages = await MessageModel.find({chatId: telegramId})
   var total = messages.map(m => m.text).join(' ')
 
   res.json({
@@ -408,7 +410,7 @@ const getMessagesOfUser = async (req, res) => {
 const saveMessagesRoute = async (req, res) => {
   var {chatId, text, sender} = req.body;
 
-  var s = await saveMessage(text, sender, chatId, new Date())
+  var s = await saveMessage(text, sender, chatId)
 
   console.log(s, 'save message')
   res.json({
@@ -419,10 +421,11 @@ const saveMessagesRoute = async (req, res) => {
 const saveSessionSummaryRoute = async (req, res) => {
   var {telegramId} = req.params;
 
-  var resp = await getSummarizedDialog(telegramId);
+  var summary = await getSummarizedDialog(telegramId);
+  await endSession(telegramId, summary)
 
   res.json({
-    resp
+    summary
   })
 }
 

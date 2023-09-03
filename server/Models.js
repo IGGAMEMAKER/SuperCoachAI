@@ -1,3 +1,5 @@
+import {SESSION_STATUS_NULL, SESSION_STATUS_SESSION_SUMMARIZED} from "./constants";
+
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
@@ -7,6 +9,12 @@ var UserSchema = new Schema({
   habits: Array,
   progress: Array, // [{habitId, date}]
   hasAnswer: {type: Boolean, default: true},
+  isAIAnswer: {type: Boolean, default: false},
+
+  sessionStatus: {type: Number, default: SESSION_STATUS_NULL},
+
+  lastMessageTime: {type: Number, default: 0},
+
   name: String,
   username: String, // telegram @username
   goal: String,
@@ -23,7 +31,12 @@ var MessageSchema = new Schema({
   sender: String, // telegramId
   text: String,
   date: Date,
-  chatId: String
+  chatId: String,
+
+  type: {type: Number, default: 0}, // 0 - default, 1 - you wanna end session? 2 - summary
+  error: String,
+
+  // summary: {type: Boolean, default: false}
 })
 
 UserSchema.index({telegramId: 1}, {unique: true})
