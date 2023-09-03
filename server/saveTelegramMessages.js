@@ -38,6 +38,7 @@ const getLastSummaryMessage = async chatId => {
   console.log('getLastSummaryMessage', {messages})
   if (messages.length)
     return Promise.resolve(messages.slice(-1)[0])
+
   return Promise.resolve(null)
 }
 
@@ -56,8 +57,12 @@ bot.on(message('text'), async (ctx) => {
 
   // console.log({sender}, message)
   var user = await UserModel.findOne({telegramId: chatId})
+  var isSummarized = user.sessionStatus === SESSION_STATUS_SESSION_SUMMARIZED
+
   await saveMessage(text, sender, chatId)
-  await changeAnswerStatus(chatId, SESSION_STATUS_USER_RESPONDED)
+
+  if (!isSummarized)
+    await changeAnswerStatus(chatId, SESSION_STATUS_USER_RESPONDED)
 
   var isCommandMessage = false;
   const userQuery = {telegramId: chatId}
@@ -90,8 +95,9 @@ bot.on(message('text'), async (ctx) => {
       'After you\'re done, you can already start tracking your execution and then I will send you some tasks.\n\n' +
       'Also, if you want AI assistance, ask questions in this chat'
     await respondAsAdmin(chatId, launchAppMessage)
-  } else if (user.sessionStatus === SESSION_STATUS_SESSION_SUMMARIZED && text.toUpperCase() === "CONTINUE") {
+  } else if (isSummarized && text.toUpperCase() === "CONTINUE") {
     // if session was mistakenly closed, you can resume it by typing CONTINUE
+    isCommandMessage = true
 
     // resume session
     // remove summary, change status to
@@ -101,9 +107,10 @@ bot.on(message('text'), async (ctx) => {
     var last = await getLastSummaryMessage(chatId)
     if (last) {
       console.log({last})
-      await MessageModel.findByIdAndUpdate(last._id, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
-    }
 
+      await MessageModel.findByIdAndUpdate(last._id, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
+      await sendTGMessage(chatId, 'The session will be continued')
+    }
   } else {
     console.log('got message and needs AI response', text)
 
