@@ -20,7 +20,7 @@ const {changeAnswerStatus, saveMessage} = require("./saveMessagesInDB");
 
 // const {TG_BOT_API_KEY} = require("../CD/Configs");
 // const { Telegraf } = require('telegraf')
-// const { message } = require('telegraf/filters')
+const { message } = require('telegraf/filters')
 
 const bot = getTGBot(); // new Telegraf(TG_BOT_API_KEY);
 
