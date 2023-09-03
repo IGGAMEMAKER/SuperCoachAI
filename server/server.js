@@ -1,3 +1,4 @@
+const {MESSAGE_TYPE_MISTAKEN_SUMMARY} = require("./constants");
 const {endSession} = require("./saveTelegramMessages");
 const {MESSAGE_TYPE_SUMMARY} = require("./constants");
 const {getSummarizedDialog} = require("./getAIResponse");
@@ -429,6 +430,16 @@ const saveSessionSummaryRoute = async (req, res) => {
   })
 }
 
+const clearUnsuccessfulSummaries = async (req, res) => {
+  var {telegramId} = req.params;
+
+  const p = await MessageModel.remove({chatId: telegramId, type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
+
+  res.json({
+    p
+  })
+}
+
 const answerToUserRoute = async (req, res) => {
   var {text, chatId} = req.body;
   await respondAsAdmin(chatId, text)
@@ -490,6 +501,7 @@ app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 app.get('/summarize/:telegramId', saveSessionSummaryRoute)
+app.get('/summaries/flush/:telegramId', clearUnsuccessfulSummaries)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.get('/quiz/remove/:telegramId', resetQuizzes)
