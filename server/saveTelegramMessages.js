@@ -98,7 +98,7 @@ bot.on(message('text'), async (ctx) => {
     // / Just change summary message status to MISTAKENLY_SUMMARIZED,
     // so it won't count in getRecentMessages() function
 
-    var last = getLastSummaryMessage(chatId)
+    var last = await getLastSummaryMessage(chatId)
     if (last) {
       console.log({last})
       await MessageModel.findByIdAndUpdate(last._id, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
