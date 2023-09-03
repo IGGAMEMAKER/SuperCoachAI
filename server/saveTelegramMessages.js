@@ -42,6 +42,8 @@ bot.on(message('text'), async (ctx) => {
   var text = message.text
   // await ctx.telegram.sendMessage(chatId, text);
 
+  const TYPED = t => t.toUpperCase() === text.toUpperCase()
+
   console.log('got text', text)
   // console.log(ctx, {ctx}, {chat})
   var sender = chatId;
@@ -86,7 +88,7 @@ bot.on(message('text'), async (ctx) => {
       'After you\'re done, you can already start tracking your execution and then I will send you some tasks.\n\n' +
       'Also, if you want AI assistance, ask questions in this chat'
     await respondAsAdmin(chatId, launchAppMessage)
-  } else if (isSummarized && text.toUpperCase() === "CONTINUE") {
+  } else if (isSummarized && TYPED("CONTINUE")) {
     // if session was mistakenly closed, you can resume it by typing CONTINUE
     isCommandMessage = true
 
@@ -102,7 +104,7 @@ bot.on(message('text'), async (ctx) => {
       var messageId = last._id.toString()
       console.log(messageId)
 
-      // const p = await MessageModel.findByIdAndUpdate(messageId, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
+      const p = await MessageModel.findByIdAndUpdate(messageId, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
 
       // console.log('message magic results', {p})
       await sendTGMessage(chatId, 'The session will be continued')
