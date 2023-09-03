@@ -36,8 +36,9 @@ const getLastSummaryMessage = async chatId => {
   var messages = await MessageModel.find({chatId, type: MESSAGE_TYPE_SUMMARY}).sort({$natural:-1}); //.limit(1);
 
   console.log('getLastSummaryMessage', {messages})
-  // if (messages.length)
-  return messages.find.slice(-1)
+  if (messages.length)
+    return messages.slice(-1)[0]
+  return null
 }
 
 bot.on(message('text'), async (ctx) => {
@@ -98,8 +99,10 @@ bot.on(message('text'), async (ctx) => {
     // so it won't count in getRecentMessages() function
 
     var last = getLastSummaryMessage(chatId)
-    console.log('last')
-    await MessageModel.findByIdAndUpdate(last._id, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
+    if (last) {
+      console.log({last})
+      await MessageModel.findByIdAndUpdate(last._id, {type: MESSAGE_TYPE_MISTAKEN_SUMMARY})
+    }
 
   } else {
     console.log('got message and needs AI response', text)
