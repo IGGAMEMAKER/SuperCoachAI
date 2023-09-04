@@ -195,10 +195,9 @@ var job = new CronJob(
       .then(users => {
         users.forEach(async u => {
           var telegramId = u.telegramId
+          console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY', telegramId)
 
           if (telegramId === ADMINS_ME) {
-            console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY')
-
             getSummarizedDialog(telegramId)
               .then(summary => {
                 endSession(telegramId, summary)
