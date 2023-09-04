@@ -193,6 +193,7 @@ var job = new CronJob(
       // lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
     })
       .then(users => {
+        console.log('got users?', users.length)
         users.forEach(async u => {
           var telegramId = u.telegramId
           console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY', telegramId)
