@@ -190,7 +190,7 @@ var job = new CronJob(
     const finishTime = 1 // 5 minutes
     UserModel.find({
       sessionStatus: SESSION_STATUS_AI_RESPONDED,
-      lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
+      // lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
     })
       .then(users => {
         users.forEach(async u => {
