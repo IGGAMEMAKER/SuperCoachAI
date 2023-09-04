@@ -135,10 +135,48 @@ const fixDates = () => {
 fixDates()
 
 var CronJob = require('cron').CronJob;
+var sessionTerminatorJob = new CronJob(
+  '0 * * * * *',
+  function() {
+    console.log('You will see this message every minute');
+
+    const finishTime = 1 // 5 minutes
+    UserModel.find({
+      sessionStatus: SESSION_STATUS_AI_RESPONDED,
+      // lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
+    })
+      .then(users => {
+        console.log('got users?', users.length)
+        users.forEach(async u => {
+          var telegramId = u.telegramId
+          console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY', telegramId)
+
+          if (telegramId === ADMINS_ME) {
+            getSummarizedDialog(telegramId)
+              .then(summary => {
+                endSession(telegramId, summary)
+                  .then(f => {
+                    console.log('maybe finish session?', f)
+                  })
+                  .catch(err => {
+                    console.error('cannot endSession for ', telegramId, err)
+                  })
+              })
+              .catch(err => {
+                console.error('cannot summarize dialog', telegramId, err)
+              })
+          }
+        })
+      })
+  },
+  null,
+  true,
+  // 'America/Los_Angeles'
+)
 var job = new CronJob(
   '0 0 * * * *',
   function() {
-    console.log('You will see this message every minute');
+    console.log('You will see this message every HOUR');
     // var serverOffset = new Date().getTimezoneOffset() / -60; // 3
 
     var tenAMCurrentlyInTimezoneX = morningIsAtTimezoneX()
@@ -186,40 +224,13 @@ var job = new CronJob(
           }
         })
       })
-
-    const finishTime = 1 // 5 minutes
-    UserModel.find({
-      sessionStatus: SESSION_STATUS_AI_RESPONDED,
-      // lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
-    })
-      .then(users => {
-        console.log('got users?', users.length)
-        users.forEach(async u => {
-          var telegramId = u.telegramId
-          console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY', telegramId)
-
-          if (telegramId === ADMINS_ME) {
-            getSummarizedDialog(telegramId)
-              .then(summary => {
-                endSession(telegramId, summary)
-                  .then(f => {
-                    console.log('maybe finish session?', f)
-                  })
-                  .catch(err => {
-                    console.error('cannot endSession for ', telegramId, err)
-                  })
-              })
-              .catch(err => {
-                console.error('cannot summarize dialog', telegramId, err)
-              })
-          }
-        })
-      })
   },
   null,
   true,
   // 'America/Los_Angeles'
 );
+
+
 
 const getCookies = req => {
   return {
