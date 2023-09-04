@@ -47,9 +47,10 @@ const ai = content => ({role: 'assistant', content})
 var GPT_creation_time = 1693458987095; //1692881744060
 // https://currentmillis.com/
 
-const getRecentMessagesForUser = async chatId => {
+const getLastSessionMessages = async (chatId) => {
   // TODO load raw messages since lastSummary time
   // for better performance
+
   var lastSummary = await getLastSummaryMessage(chatId)
   var lastSummaryTime = 0;
   if (lastSummary)
@@ -73,6 +74,12 @@ const getRecentMessagesForUser = async chatId => {
   console.log(`GOT [${rawMessages.length}] MESSAGES FROM DB`, rawMessages, `GOT [${rawMessages.length}] MESSAGES FROM DB`);
   console.log('-----------------------------')
   console.log('-----------------------------')
+
+  return rawMessages
+}
+
+const getRecentMessagesForUser = async chatId => {
+  var rawMessages = await getLastSessionMessages(chatId)
 
   rawMessages = rawMessages
     .map(m => {
@@ -163,5 +170,6 @@ const getSummarizedDialog = async (chatId) => {
 
 module.exports = {
   getAIResponse,
-  getSummarizedDialog
+  getSummarizedDialog,
+  getLastSessionMessages
 }

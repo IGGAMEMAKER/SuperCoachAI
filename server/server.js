@@ -1,3 +1,4 @@
+const {getLastSessionMessages} = require("./getAIResponse");
 const {SESSION_STATUS_AI_RESPONDED} = require("./constants");
 const {MESSAGE_TYPE_MISTAKEN_SUMMARY} = require("./constants");
 const {endSession} = require("./saveTelegramMessages");
@@ -461,6 +462,14 @@ const saveMessagesRoute = async (req, res) => {
   })
 }
 
+const getSessionMessagesRoute = async (req, res) => {
+  var session = await getLastSessionMessages(req.params.telegramId);
+
+  res.json({
+    session
+  })
+}
+
 const saveSessionSummaryRoute = async (req, res) => {
   var {telegramId} = req.params;
 
@@ -538,12 +547,17 @@ app.get('/quiz/2', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 
+const adminOnly = (req, res, next) => {
+  next()
+}
 
 app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
-app.get('/summarize/:telegramId', saveSessionSummaryRoute)
-app.get('/summaries/flush/:telegramId', clearUnsuccessfulSummaries)
+
+app.get('/session/:telegramId', adminOnly, getSessionMessagesRoute);
+app.get('/summarize/:telegramId', adminOnly, saveSessionSummaryRoute)
+app.get('/summaries/flush/:telegramId', adminOnly, clearUnsuccessfulSummaries)
 app.get('/messages/:telegramId', getMessagesOfUser)
 
 app.get('/quiz/remove/:telegramId', resetQuizzes)
