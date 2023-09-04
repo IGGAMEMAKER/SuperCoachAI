@@ -374,7 +374,7 @@ class UserView extends Component {
     }
 
     return <div>
-      <b>{user.telegramId}</b> UTC:{user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks {progressButton}
+      <b> <Link target={"_blank"} to={`/session/${user.telegramId}`}>{user.telegramId}</Link></b> UTC:{user.timeZone} [{user.habits.length}] habits [{user.progress.length}] marks {progressButton}
       <br/>{user.habits.map(h => h.name).join(', ')}
       <br />
       {lastProgress}
