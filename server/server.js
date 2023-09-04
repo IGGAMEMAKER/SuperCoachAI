@@ -140,7 +140,7 @@ var sessionTerminatorJob = new CronJob(
   function() {
     console.log('You will see this message every minute');
 
-    const finishTime = 1 // 5 minutes
+    const finishTime = 5 // 5 minutes
     UserModel.find({
       sessionStatus: SESSION_STATUS_AI_RESPONDED,
       lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
@@ -149,7 +149,7 @@ var sessionTerminatorJob = new CronJob(
         console.log('got users?', users.length)
         users.forEach(async u => {
           var telegramId = u.telegramId
-          console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY', telegramId)
+          console.log('WILL FINISH SESSION AUTOMATICALLY', telegramId)
 
           if (telegramId === ADMINS_ME) {
             console.log('IT WAS ME!!!')
