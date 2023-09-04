@@ -151,7 +151,7 @@ var sessionTerminatorJob = new CronJob(
           var telegramId = u.telegramId
           console.log('WILL FINISH SESSION AUTOMATICALLY', telegramId)
 
-          if (telegramId === ADMINS_ME) {
+          if (telegramId === ADMINS_ME || telegramId === ADMINS_KOSTYA) {
             console.log('IT WAS ME!!!')
             getSummarizedDialog(telegramId)
               .then(summary => {

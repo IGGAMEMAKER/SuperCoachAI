@@ -1,3 +1,4 @@
+const {SESSION_STATUS_SESSION_MISTAKENLY_SUMMARIZED} = require("./constants");
 const {getLastSummaryMessage} = require("./getLastSummaryMessage");
 const {
   MESSAGE_TYPE_MISTAKEN_SUMMARY,
@@ -108,6 +109,9 @@ bot.on(message('text'), async (ctx) => {
 
       // console.log('message magic results', {p})
       await sendTGMessage(chatId, `The session #${last.totalSessions} will be continued`)
+
+      // Prevent CONTINUE from killing sessions 1 by 1
+      await UserModel.updateOne(userQuery, {sessionStatus: SESSION_STATUS_SESSION_MISTAKENLY_SUMMARIZED})
     }
   } else {
     console.log('got message and needs AI response', text)
