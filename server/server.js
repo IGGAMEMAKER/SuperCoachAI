@@ -144,35 +144,6 @@ var job = new CronJob(
     var tenAMCurrentlyInTimezoneX = morningIsAtTimezoneX()
     console.log({tenAMCurrentlyInTimezoneX})
 
-    const finishTime = 5 // 5 minutes
-    UserModel.find({
-      sessionStatus: SESSION_STATUS_AI_RESPONDED,
-      lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
-    })
-      .then(users => {
-        users.forEach(async u => {
-          var telegramId = u.telegramId
-
-          if (telegramId === ADMINS_ME) {
-            console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY')
-
-            getSummarizedDialog(telegramId)
-              .then(summary => {
-                endSession(telegramId, summary)
-                  .then(f => {
-                    console.log('maybe finish session?', f)
-                  })
-                  .catch(err => {
-                    console.error('cannot endSession for ', telegramId, err)
-                  })
-              })
-              .catch(err => {
-                console.error('cannot summarize dialog', telegramId, err)
-              })
-          }
-        })
-      })
-
     UserModel.find({timeZone: tenAMCurrentlyInTimezoneX})
     // UserModel.find({})
       .then(users => {
@@ -212,6 +183,35 @@ var job = new CronJob(
             // if (telegramId === ADMINS_ME) {
               sendTGMessage(telegramId, message).then().catch().finally()
             // }
+          }
+        })
+      })
+
+    const finishTime = 5 // 5 minutes
+    UserModel.find({
+      sessionStatus: SESSION_STATUS_AI_RESPONDED,
+      lastMessageTime: {$lt: Date.now() - finishTime * 60 * 1000}
+    })
+      .then(users => {
+        users.forEach(async u => {
+          var telegramId = u.telegramId
+
+          if (telegramId === ADMINS_ME) {
+            console.log('WILL TRY TO FINISH SESSION AUTOMATICALLY')
+
+            getSummarizedDialog(telegramId)
+              .then(summary => {
+                endSession(telegramId, summary)
+                  .then(f => {
+                    console.log('maybe finish session?', f)
+                  })
+                  .catch(err => {
+                    console.error('cannot endSession for ', telegramId, err)
+                  })
+              })
+              .catch(err => {
+                console.error('cannot summarize dialog', telegramId, err)
+              })
           }
         })
       })
