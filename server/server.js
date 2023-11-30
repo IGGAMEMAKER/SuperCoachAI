@@ -1,15 +1,15 @@
-const {getLastSessionMessages} = require("./getAIResponse");
-const {SESSION_STATUS_AI_RESPONDED} = require("./constants");
-const {MESSAGE_TYPE_MISTAKEN_SUMMARY} = require("./constants");
-const {endSession} = require("./saveTelegramMessages");
-const {MESSAGE_TYPE_SUMMARY} = require("./constants");
-const {getSummarizedDialog} = require("./getAIResponse");
-const {ADMINS_KOSTYA} = require("../src/constants/admins");
-const {ADMINS_ME} = require("../src/constants/admins");
-const {respondAsAdmin, launch, sendTGMessage} = require("./saveTelegramMessages");
+// const {PORTS} = require("../CD/Configs/servers");
+const {
+  SESSION_STATUS_AI_RESPONDED,
+  MESSAGE_TYPE_MISTAKEN_SUMMARY
+} = require("./constants");
+const {getLastSessionMessages, getSummarizedDialog} = require("./getAIResponse");
+const {ADMINS_KOSTYA, ADMINS_ME} = require("../src/constants/admins");
+const {respondAsAdmin, launch, sendTGMessage, endSession} = require("./saveTelegramMessages");
 const {saveMessage} = require("./saveMessagesInDB");
 const {isHabitDoneOnDayX} = require("../utils");
 
+// const {app} = require('./expressGenerator')(PORTS.PORT_DB);
 const {app} = require('./expressGenerator')(3333);
 
 const {UserModel, MessageModel} = require('./Models')
@@ -91,6 +91,7 @@ var getHour = h => {
 
   return parseInt(sp[0]) * 10000 + parseInt(sp[1])
 }
+
 const fixDates = () => {
   UserModel
     .find({})
@@ -555,8 +556,8 @@ app.post('/profile', getUser)
 app.post('/answer', answerToUserRoute)
 app.post('/messages', saveMessagesRoute)
 
-app.get('/session/:telegramId', adminOnly, getSessionMessagesRoute);
-app.get('/summarize/:telegramId', adminOnly, saveSessionSummaryRoute)
+app.get('/session/:telegramId',         adminOnly, getSessionMessagesRoute);
+app.get('/summarize/:telegramId',       adminOnly, saveSessionSummaryRoute)
 app.get('/summaries/flush/:telegramId', adminOnly, clearUnsuccessfulSummaries)
 app.get('/messages/:telegramId', getMessagesOfUser)
 

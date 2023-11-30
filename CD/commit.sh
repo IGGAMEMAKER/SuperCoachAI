@@ -1,6 +1,6 @@
 cmt=$1
 libs=$2
-nvm use 16
+source nvmuse.sh
 if [ -z "$cmt" ]
 then
   echo 'Type commit name!'

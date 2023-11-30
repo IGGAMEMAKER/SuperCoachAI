@@ -1,5 +1,5 @@
 cmt=$1
-nvm use 16
+source nvmuse.sh
 
 git commit -a -m "Site update: $cmt"
 git push

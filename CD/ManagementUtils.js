@@ -1,24 +1,68 @@
 const fs = require('fs')
-const path = require('path')
-const servers = require("./Configs/servers");
-const {getServerType, formatServerName} = require("./Configs/servers");
+const open = require('open')
 const {NodeSSH} = require('node-ssh')
 
-const open = require('open')
-const {isLogger} = require("./Configs/servers");
+const servers = require("./Configs/servers");
+const {formatServerName} = require("./Configs/servers");
+
+const {gitUsername, gitToken} = require('./Configs/Passwords');
+const mainConfigs = [
+  'confs.json',
+  'Passwords.js',
+  'hosts.json',
+]
+
+const customBlock = () => {}
+
+customBlock()
 
 const projectDir = '/usr/projects/';
 const projectName = 'SuperCoachAI'
+
 const gitPath = `${projectDir}${projectName}`;
-// const pathToConfigs = gitPath + '/app/my-app/CD'
 const pathToConfigs = gitPath + '/CD'
 
-
-// const frontendURL = 'http://www.indiemarketingtool.com'
 const frontendURL = 'http://supercoach.site/'
+const goToFrontendRoot = ''
 
-const {gitUsername, gitToken} = require('./Configs/Passwords');
+const uploadCertificates = false
+const uploadDefaultFiles = false
+const uploadNginxConfig  = false
 
+const sslFiles = [
+  "supercoach_site.crt",
+  "supercoach.site.key",
+  "supercoach_site_chain.crt",
+  "supercoach_site.ca-bundle"
+]
+
+const hostsJSONPath = "./Configs/hosts.json";
+// customs?
+
+const RunSystem = async () => {
+  customBlock()
+
+  // DB
+  await RunService(servers.DB_IP, 'server/server', 'DB');
+
+  // FRONTEND
+  await RestartFrontend();
+}
+
+const RestartFrontend = async () => {
+  console.log('RestartFrontend');
+
+  const ssh = await conn(servers.FRONTEND_IP)
+
+  await BuildFrontendApp(ssh)
+
+  // await countdown(2);
+
+  await open(frontendURL);
+}
+
+
+/// STANDARD stuff
 const printStdOut = chunk => {
   console.log('stdout', chunk.toString('utf8'))
 }
@@ -64,20 +108,11 @@ const refreshTokens = () => {
   servers.REMOTE.forEach(async ip => {
     var ssh = await conn(ip);
 
-    await uploadConfigs(ssh, ip, {});
+    await uploadConfigs(ssh, ip);
     await sleep(1);
-
-    try {
-      // https://stackoverflow.com/questions/2432764/how-to-change-the-uri-url-for-a-remote-git-repository
-      await ssh.exec(`git remote set-url origin https://${gitToken}@github.com/${gitUsername}/OpenseaCrawler.git`, [], crawlerOptions)
-    }
-    catch (err) {
-      console.error('UPDATE GITHUB TOKEN', err);
-    }
 
     console.log('updated??!', ip)
   })
-  // console.log('ALL DONE. You can CTrl-C')
 }
 
 const prepareServer = async (ip, forceProjectRemoval = false) => {
@@ -122,59 +157,72 @@ const prepareServer = async (ip, forceProjectRemoval = false) => {
   await checkEnvironmentStatus(ssh, ip)
 }
 
-const uploadFile = (ssh, local, remote) => {
-  return ssh.putFile(local, remote)
-    .then(r => {
-      //console.log(`UPLOADED ${remote}`);
-    })
-    .catch(r => {
-      //console.log(`FAILED to upload ${remote}`)
-    })
-}
+// const uploadFile = (ssh, local, remote) => {
+//   return ssh.putFile(local, remote)
+//     .then(r => {
+//       //console.log(`UPLOADED ${remote}`);
+//     })
+//     .catch(r => {
+//       //console.log(`FAILED to upload ${remote}`)
+//     })
+// }
 
-const uploadAndLog = async (ssh, local, remote, filename) => {
-  return uploadFile(ssh, local, remote)
+const uploadAndLog = async (ssh, local, remote) => {
+  return ssh.putFile(local, remote) // uploadFile(ssh, local, remote)
     .then(r => {
-      console.log(`${filename} uploaded OK`);
+      console.log(`${local} uploaded OK`);
     })
     .catch(err => {
-      logError({}, `${filename} upload failed`, err);
+      logError({}, `${local} upload failed`, err);
     });
 }
 
-const uploadConfigs = async (ssh, ip, check = {}) => {
-  // Main Configs
-  await uploadAndLog(ssh, './Configs/confs.json', pathToConfigs + '/Configs/confs.json', 'confs.json')
+const uploadFileFromConfigsFolder = async (ssh, file) => {
+  await uploadAndLog(ssh, './Configs/' + file, pathToConfigs + '/Configs/' + file);
+}
+const uploadFiles = (ssh, files) => {
+  files.forEach(async f => {
+    await uploadFileFromConfigsFolder(ssh, f)
+  })
+}
 
-  // Passwords.js
-  await uploadAndLog(ssh, './Configs/Passwords.js', pathToConfigs + '/Configs/Passwords.js', 'Passwords.js')
+const uploadConfigs = async (ssh, ip) => {
+  if (uploadDefaultFiles) {
+    uploadFiles(ssh, mainConfigs)
 
-  // hosts.json
-  await uploadAndLog(ssh, './Configs/hosts.json', pathToConfigs + '/Configs/hosts.json', 'hosts.json')
+    // Server IP
+    const myHost = `./Configs/myHost-${ip}.js`;
+    const content = `module.exports = { ip: "${ip}" };` // module.exports = { ip: 'http://localhost' };
+    fs.writeFileSync(myHost, content)
 
-  // SSL
-  // await uploadAndLog(ssh, './Configs/supercoach_site.crt', pathToConfigs + '/Configs/supercoach_site.crt', 'supercoach_site.crt')
-  // await uploadAndLog(ssh, './Configs/supercoach.site.key', pathToConfigs + '/Configs/supercoach.site.key', 'supercoach.site.key')
-  // await uploadAndLog(ssh, './Configs/supercoach_site_chain.crt', pathToConfigs + '/Configs/supercoach_site_chain.crt', 'supercoach_site_chain.crt')
-  // await uploadAndLog(ssh, './Configs/supercoach_site.ca-bundle', pathToConfigs + '/Configs/supercoach_site.ca-bundle', 'supercoach_site.ca-bundle')
+    await uploadAndLog(ssh, myHost, pathToConfigs + '/Configs/myHost.js')
+  }
 
-  // Server IP
-  const myHost = `./Configs/myHost-${ip}.js`;
-  const content = `module.exports = { ip: "${ip}" };` // module.exports = { ip: 'http://localhost' };
-  fs.writeFileSync(myHost, content)
+  if (uploadCertificates) {
+    uploadFiles(ssh, sslFiles)
+  }
 
-  await uploadAndLog(ssh, myHost, pathToConfigs + '/Configs/myHost.js', 'myHost.js')
+  if (uploadNginxConfig) {
+    await uploadFileFromConfigsFolder(ssh, 'nginx', projectName)
+
+    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+  }
 }
 
 const gitPull = async (ssh, ip, updateNPMLibs = false, check = {}) => {
   console.log('trying to UPDATE CODE');
 
-  await uploadConfigs(ssh, ip, check);
+  await uploadConfigs(ssh, ip);
 
   //await cloneRepo(ssh);
   // await ssh.exec('rm -fr ".git/rebase-apply"', [], crawlerOptions)
   //   .finally()
   // await ssh.exec('git checkout\ngit pull --rebase --autostash', [], crawlerOptions)
+
   await ssh.exec('git pull', [], crawlerOptions)
     .then(r => {
       check['pull'] = true;
@@ -202,20 +250,6 @@ const gitPull = async (ssh, ip, updateNPMLibs = false, check = {}) => {
         //logError(check, 'updating packages failed', err);
       })
   }
-}
-
-const resetGitDirectory = async (ssh, ip) => {
-  await ssh.exec(`rm ${projectDir}`, [], crawlerOptions)
-    .catch(err => err);
-
-  console.log('RM dir')
-
-  await ssh.mkdir(projectDir)
-    .catch(err => err);
-
-  console.log('made a dir')
-
-  await cloneRepo(ssh);
 }
 
 
@@ -288,14 +322,11 @@ const installPM2 = async (ssh, check) => {
 
 
 const openPorts = async (ssh) => {
-  await openPort(ssh, servers.PORT_LOGGER);
-  await openPort(ssh, servers.PORT_DB);
-  await openPort(ssh, servers.PORT_FRONTEND);
-  await openPort(ssh, servers.PORT_WORKER);
-  await openPort(ssh, servers.PORT_WEB3);
-  await openPort(ssh, servers.PORT_FLOOR_TRACKER);
-  //await openPort(ssh, servers.PORT_SERVER_MANAGER);
+  servers.PORTS.forEach(async p => {
+    await openPort(ssh, p)
+  })
 }
+
 const openPort = async (ssh, port) => await ssh.exec(`ufw allow ${port}/tcp`, [], handlers);
 
 const encodeToken = str => {
@@ -315,6 +346,7 @@ const encodeToken = str => {
 
   return str;
 }
+
 const cloneRepo = async (ssh) => {
   const clone = `git clone https://${encodeToken(gitToken)}@github.com/${gitUsername}/${projectName}.git`
 
@@ -331,6 +363,7 @@ const cloneRepo = async (ssh) => {
     })
 }
 
+const getHostsManually = () => JSON.parse(fs.readFileSync(hostsJSONPath));
 
 const getIPProfile = (ip) => {
   return getHostsManually().find(h => h.ip === ip);
@@ -374,19 +407,8 @@ const UpdateCodeOnFrontend = async (updateNPMLibs = false) => {
 const UpdateCode = async (updateNPMLibs = false) => {
   servers.REMOTE.forEach(async ip => {
     await UpdateCodeOnServer(ip, updateNPMLibs)
-    // const ssh = await conn(ip);
-    //
-    // gitPull(ssh, ip, updateNPMLibs, {});
   })
 };
-
-const UpdateRepos = async (updateNPMLibs = false) => {
-  servers.REMOTE.forEach(async ip => {
-    const ssh = await conn(ip);
-
-    resetGitDirectory(ssh, ip);
-  })
-}
 
 const UpdateSystem = async (updateNPMLibs = false) => {
   UpdateCode(updateNPMLibs);
@@ -394,55 +416,14 @@ const UpdateSystem = async (updateNPMLibs = false) => {
   setTimeout(RunFullSystem, 8000);
 }
 
-const StopSystem = async (forceLogStopping = false) => {
-  var stoppable = servers.REMOTE.filter(ip => {
-    var logger = isLogger(ip);
-
-    return !logger || forceLogStopping;
-  })
-
-  stoppable.forEach(async ip => {
+const StopSystem = async () => {
+  servers.REMOTE.forEach(async ip => {
     const ssh = await conn(ip);
 
     StopServer(ssh);
   })
 }
 
-const RestartFrontend = async () => {
-  const ssh = new NodeSSH();
-
-  var ip = servers.FRONTEND_IP
-
-  console.log('RestartFrontend on ' + ip);
-
-  await ssh.connect(getSSHConfig(ip))
-
-  var check = {}
-  // await ssh.exec('cd app/my-app/', [], crawlerOptions)
-  //   .finally()
-  // await ssh.exec('cd app/my-app/ ; npm run build', [], crawlerOptions)
-  await ssh.exec('npm run build', [], crawlerOptions)
-    .then(r => {
-      check['pull'] = true;
-
-      console.log('BUILT')
-    })
-    .catch(err => {
-      check['pull'] = false;
-
-      logError(check, 'BUILD failed', err);
-    })
-
-  const url = frontendURL
-  if (url) {
-    console.log('Trying to open', url);
-
-    await countdown(2);
-
-    console.log('You can start using website');
-    await open(url);
-  }
-}
 
 const countdown = async seconds => {
   for (var i = seconds; i >= 0; i--) {
@@ -455,18 +436,11 @@ const RunFullSystem = async () => {
   await RunSystem();
 }
 
-const RunSystem = async () => {
-  // DB
-  await RunService(servers.DB_IP, 'server/server', 'DB');
-
-  // FRONTEND
-  await RestartFrontend();
-}
-
 const StopServer = async (ssh) => {
   await ssh.exec('pm2 delete all', [], handlers)
     .then(r => r)
     .catch(r => r);
+
   await ssh.exec('pm2 flush', [], handlers)
     .then(r => r)
     .catch(r => r);
@@ -474,34 +448,66 @@ const StopServer = async (ssh) => {
   console.log('stopped server');
 }
 
-const RunService = async (ip, scriptName, appName = scriptName) => {
-  const ssh = new NodeSSH();
+const BuildFrontendApp = async (ssh) => {
+  var check = {}
 
-  console.log('Trying to run service ' + scriptName + ' on ' + ip);
+  await ssh.exec(`${goToFrontendRoot} npm run build`, [], crawlerOptions)
+    .then(r => {
+      check['pull'] = true;
 
-  await ssh.connect(getSSHConfig(ip))
-    .then(async r => {
-      await StopServer(ssh);
-
-      console.log('Stopped server ' + ip)
-
-      await ssh.exec(`pm2 start ${scriptName}.js --name ${appName}`, [], { cwd: gitPath, onStderr, onStdout })
-        .then(r => {
-          console.log('started ' + scriptName + '.js on ' + ip);
-        })
-        .catch(err => {
-          logError({}, 'cannot start ' + scriptName + '.js on ' + ip, err);
-        });
+      console.log('BUILT')
     })
     .catch(err => {
-      console.error('ERROR WHEN RUNNING SERVICE', ip, scriptName, err);
+      check['pull'] = false;
+
+      logError(check, 'BUILD failed', err);
     })
+}
+
+const RunService = async (ip, scriptName, appName) => {
+  console.log('Trying to run service ' + scriptName + ' on ' + ip);
+
+  // const ssh = new NodeSSH();
+  //
+  // await ssh.connect(getSSHConfig(ip))
+
+  try {
+    const ssh = await conn(ip)
+    await StopServer(ssh)
+
+    // stop service (if had any)
+    await ssh.exec(`pm2 delete ${appName}-${projectName}`, [], {cwd: gitPath, onStderr, onStdout})
+      .then(r => {
+        console.log('deleted service ' + scriptName + '.js on ' + ip);
+      })
+      .catch(err => {
+        logError({}, 'cannot delete ' + scriptName + '.js on ' + ip, err);
+      });
+
+    console.log('Stopped service ' + appName + ' on ' + ip)
+
+    // start service
+    await ssh.exec(`pm2 start ${scriptName}.js --name ${appName}-${projectName}`, [], {cwd: gitPath, onStderr, onStdout})
+      .then(r => {
+        console.log('started ' + scriptName + '.js on ' + ip);
+      })
+      .catch(err => {
+        logError({}, 'cannot start ' + scriptName + '.js on ' + ip, err);
+      });
+  } catch (err) {
+    console.error('ERROR WHEN RUNNING SERVICE', ip, scriptName, err);
+  }
+
+  // .then(async r => {
+  // })
+  // .catch(err => {
+  //   console.error('ERROR WHEN RUNNING SERVICE', ip, scriptName, err);
+  // })
 }
 
 const HealthCheck = () => {
   servers.REMOTE.forEach(async ip => {
     const ssh = await conn(ip);
-
 
     await ssh.exec(`pm2 list`, [], { cwd: gitPath, onStderr, onStdout: idle })
       .then(async r => {
@@ -511,18 +517,13 @@ const HealthCheck = () => {
   })
 }
 
-const hostJSONPath = "./Configs/hosts.json";
-const getHostsManually = () => JSON.parse(fs.readFileSync(hostJSONPath));
-
 const refreshIPs = () => {
   // make IPs file from hosts
   const IPonly = getHostsManually().map(h => h.ip);
 
   const ipStringified = JSON.stringify(IPonly, null, 2);
-  //console.log(ipStringified);
 
-  const data = `// Logger\n// DB\n// FRONTEND\n// WEB3\n\nconst IPs = ${ipStringified}\n\nmodule.exports = IPs;\n`;
-  //console.log(data);
+  const data = `// Is automatically generated from hosts.json\n\nconst IPs = ${ipStringified}\n\nmodule.exports = IPs;\n`;
 
   fs.writeFileSync("./Configs/IPs.js", data)
 }
@@ -540,7 +541,7 @@ const addIPs = async (username, password, IPs) => {
       hosts.push(h)
   })
 
-  fs.writeFileSync(hostJSONPath, JSON.stringify(hosts, null, 2));
+  fs.writeFileSync(hostsJSONPath, JSON.stringify(hosts, null, 2));
   refreshIPs();
 
   IPs.forEach(ip => {
