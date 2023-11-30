@@ -25,9 +25,9 @@ const pathToConfigs = gitPath + '/CD'
 const frontendURL = 'http://supercoach.site/'
 const goToFrontendRoot = ''
 
-const uploadCertificates = false
-const uploadDefaultFiles = false
-const uploadNginxConfig  = false
+const uploadCertificates = true
+const uploadDefaultFiles = true
+const uploadNginxConfig  = true
 
 const sslFiles = [
   "supercoach_site.crt",
@@ -115,6 +115,16 @@ const refreshTokens = () => {
   })
 }
 
+const loadLibs = async (ssh, check={}) => {
+  await updateAPT(ssh, check);
+
+
+  await installNPM(ssh, check);
+  await installPM2(ssh, check);
+  await installN(ssh, check);
+
+  await installNodeWithN(ssh, check);
+}
 const prepareServer = async (ip, forceProjectRemoval = false) => {
   const check = {};
 
@@ -143,14 +153,7 @@ const prepareServer = async (ip, forceProjectRemoval = false) => {
   await openPorts(ssh);
   check['opened_ports'] = true;
 
-  await updateAPT(ssh, check);
-
-
-  await installNPM(ssh, check);
-  await installPM2(ssh, check);
-  await installN(ssh, check);
-
-  await installNodeWithN(ssh, check);
+  await loadLibs(ssh, check)
 
   await gitPull(ssh, ip, true);
 
@@ -322,7 +325,7 @@ const installPM2 = async (ssh, check) => {
 
 
 const openPorts = async (ssh) => {
-  servers.PORTS.forEach(async p => {
+  Object.values(servers.PORTS).forEach(async p => {
     await openPort(ssh, p)
   })
 }
@@ -473,7 +476,7 @@ const RunService = async (ip, scriptName, appName) => {
 
   try {
     const ssh = await conn(ip)
-    await StopServer(ssh)
+    // await StopServer(ssh)
 
     // stop service (if had any)
     await ssh.exec(`pm2 delete ${appName}-${projectName}`, [], {cwd: gitPath, onStderr, onStdout})
