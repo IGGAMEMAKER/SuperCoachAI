@@ -209,7 +209,7 @@ const uploadConfigs = async (ssh, ip) => {
     const nginxName = projectName.toLowerCase()
 
     await uploadAndLog(ssh, './Configs/nginx', '/etc/nginx/sites-available/' + nginxName)
-    await ssh.exec(`ln -s /etc/nginx/sites-available/${nginxName} /etc/nginx/sites-enabled/${nginxName}`)
+    await ssh.exec(`ln -s /etc/nginx/sites-available/${nginxName} /etc/nginx/sites-enabled/${nginxName}`, [], crawlerOptions)
 
     console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
     console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
