@@ -4,46 +4,21 @@ const {NodeSSH} = require('node-ssh')
 
 const servers = require("./Configs/servers");
 const {formatServerName} = require("./Configs/servers");
+const {hostsJSONPath, runSystemConfigs, mainConfigs, pathToConfigs, sslFiles, projectName, uploadNginxConfig, uploadCertificates, uploadDefaultFiles, gitPath, projectDir, runFrontendConfigs, frontendURL, goToFrontendRoot} = require("./ManagementUtilsConfigs");
 
 const {gitUsername, gitToken} = require('./Configs/Passwords');
-const mainConfigs = [
-  'confs.json',
-  'Passwords.js',
-  'hosts.json',
-]
 
-const customBlock = () => {}
-
-customBlock()
-
-const projectDir = '/usr/projects/';
-const projectName = 'SuperCoachAI'
-
-const gitPath = `${projectDir}${projectName}`;
-const pathToConfigs = gitPath + '/CD'
-
-const frontendURL = 'http://supercoach.site/'
-const goToFrontendRoot = ''
-
-const uploadCertificates = true
-const uploadDefaultFiles = true
-const uploadNginxConfig  = true
-
-const sslFiles = [
-  "supercoach_site.crt",
-  "supercoach.site.key",
-  "supercoach_site_chain.crt",
-  "supercoach_site.ca-bundle"
-]
-
-const hostsJSONPath = "./Configs/hosts.json";
-// customs?
+const runServices = services => {
+  services.forEach(async cfg => {
+    await RunService(cfg.ip, cfg.scriptName, cfg.app)
+  })
+}
 
 const RunSystem = async () => {
-  customBlock()
+  runServices(runSystemConfigs)
 
   // DB
-  await RunService(servers.DB_IP, 'server/server', 'DB');
+  // await RunService(servers.DB_IP, 'server/server', 'DB');
 
   // FRONTEND
   await RestartFrontend();
@@ -53,6 +28,8 @@ const RestartFrontend = async () => {
   console.log('RestartFrontend');
 
   const ssh = await conn(servers.FRONTEND_IP)
+
+  runServices(runFrontendConfigs)
 
   await BuildFrontendApp(ssh)
 
@@ -160,18 +137,8 @@ const prepareServer = async (ip, forceProjectRemoval = false) => {
   await checkEnvironmentStatus(ssh, ip)
 }
 
-// const uploadFile = (ssh, local, remote) => {
-//   return ssh.putFile(local, remote)
-//     .then(r => {
-//       //console.log(`UPLOADED ${remote}`);
-//     })
-//     .catch(r => {
-//       //console.log(`FAILED to upload ${remote}`)
-//     })
-// }
-
 const uploadAndLog = async (ssh, local, remote) => {
-  return ssh.putFile(local, remote) // uploadFile(ssh, local, remote)
+  return ssh.putFile(local, remote)
     .then(r => {
       console.log(`${local} uploaded OK`);
     })
