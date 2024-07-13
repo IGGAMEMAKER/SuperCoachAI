@@ -1214,7 +1214,7 @@ class RacingPage extends Component {
 
   startGame = () => {
     this.setState({
-      color: COLOR_GRAY
+      color: COLOR_RED
     })
 
     this.toNextStage()
@@ -1237,8 +1237,8 @@ class RacingPage extends Component {
 
   onTap = () => {
     switch (this.state.color) {
-      case COLOR_GRAY: this.startGame(); break; // start
-      case COLOR_RED: this.resetGame(); break; // restart
+      case COLOR_GRAY:  this.startGame(); break; // start
+      case COLOR_RED:   this.resetGame(); break; // restart
       case COLOR_GREEN: this.showScore(); break; // finish
     }
   }
