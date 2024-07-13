@@ -1211,10 +1211,15 @@ class RacingPage extends Component {
   }
 
   render() {
-    var users = this.state.users;
-
     return <div>
       RACING
+
+      {/*<image width="100%" height="300px"></image>*/}
+      <div className={"light-strip"}>
+        <div className={"light"}></div>
+        <div className={"light"}></div>
+        <div className={"light"}></div>
+      </div>
     </div>
   }
 }

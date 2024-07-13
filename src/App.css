@@ -689,3 +689,19 @@ button.remove {
     transform: rotate(360deg);
   }
 }
+
+
+
+
+
+.light {
+  border-radius: 100%;
+  background: #222;
+  margin: 10px;
+}
+.light-strip {
+  margin: 0 5px;
+  border-radius: 14px;
+
+  background: black;
+}
