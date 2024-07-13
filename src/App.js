@@ -1181,10 +1181,46 @@ function App() {
           <Route path='/habits'                     element={<HabitsPage/>}/>
           <Route path='/edit'                 element={<EditHabitPage/>}/>
           <Route path='/admin'                element={<AdminPage/>}/>
+          <Route path='/racing'                element={<RacingPage/>}/>
         </Routes>
       </header>
     </div>
   </div>
+}
+
+class RacingPage extends Component {
+  state = {
+    users: []
+  }
+
+  saveUsers() {
+    this.setState({
+      users: storage.getUsers()
+    })
+  }
+
+  componentWillMount() {
+    storage.addChangeListener(() => {
+      console.log('store listener')
+      this.saveUsers()
+    })
+
+    this.loadUsers()
+
+    setInterval(this.loadUsers, 10 * 1000)
+  }
+
+  loadUsers = () => {
+    actions.loadUsersInAdminPanel(storage.getTelegramId())
+  }
+
+  render() {
+    var users = this.state.users;
+
+    return <div>
+      {users.map(u => <UserView user={u} onAnswer={() => {this.loadUsers()}} />)}
+    </div>
+  }
 }
 
 export default App;

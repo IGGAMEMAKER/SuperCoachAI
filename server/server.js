@@ -545,6 +545,7 @@ app.get('/quiz', renderSPA)
 app.get('/coach', renderSPA)
 app.get('/quiz/1', renderSPA)
 app.get('/quiz/2', renderSPA)
+app.get('/racing', renderSPA)
 
 app.all('/admin/users', getAllUsers)
 

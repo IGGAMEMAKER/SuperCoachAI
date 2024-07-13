@@ -4,7 +4,7 @@ const {NodeSSH} = require('node-ssh')
 
 const servers = require("./Configs/servers");
 const {formatServerName} = require("./Configs/servers");
-const {hostsJSONPath, runSystemConfigs, mainConfigs, pathToConfigs, sslFiles, projectName, uploadNginxConfig, uploadCertificates, uploadDefaultFiles, gitPath, projectDir, runFrontendConfigs, frontendURL, goToFrontendRoot} = require("./ManagementUtilsConfigs");
+const {hostsJSONPath, serviceList, mainConfigs, pathToConfigs, sslFiles, projectName, uploadNginxConfig, uploadCertificates, uploadDefaultFiles, gitPath, projectDir, runFrontendConfigs, frontendURL, goToFrontendRoot} = require("./ManagementUtilsConfigs");
 
 const {gitUsername, gitToken} = require('./Configs/Passwords');
 
@@ -15,7 +15,7 @@ const runServices = services => {
 }
 
 const RunSystem = async () => {
-  runServices(runSystemConfigs)
+  runServices(serviceList)
 
   // DB
   // await RunService(servers.DB_IP, 'server/server', 'DB');
@@ -176,20 +176,22 @@ const uploadConfigs = async (ssh, ip) => {
     const nginxName = projectName.toLowerCase()
 
     try {
-
-    await uploadAndLog(ssh, './Configs/nginx', '/etc/nginx/sites-available/' + nginxName)
-    await ssh.exec(`ln -s /etc/nginx/sites-available/${nginxName} /etc/nginx/sites-enabled/${nginxName}`, [], crawlerOptions)
+      await uploadAndLog(ssh, './Configs/nginx', '/etc/nginx/sites-available/' + nginxName)
+      await ssh.exec(`ln -s /etc/nginx/sites-available/${nginxName} /etc/nginx/sites-enabled/${nginxName}`, [], crawlerOptions)
     } catch (e) {
-
+      console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+      console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+      console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+      console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+      console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
     }
-    await ssh.exec(`nginx -t`, [], crawlerOptions)
-    await ssh.exec(`service nginx restart`, [], crawlerOptions)
 
-    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
-    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
-    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
-    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
-    console.log('MAKE A SYMLINK FOR NGINX CONFIG! + RESTART NGINX MAYBE?')
+    try{
+      await ssh.exec(`nginx -t`, [], crawlerOptions)
+    } catch (e) {}
+    try {
+      await ssh.exec(`service nginx restart`, [], crawlerOptions)
+    } catch (e) {}
   }
 }
 

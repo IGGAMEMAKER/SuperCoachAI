@@ -26,7 +26,7 @@ const mainConfigs = [
   'hosts.json',
 ]
 
-const runSystemConfigs = [
+const serviceList = [
   {ip: servers.DB_IP, scriptName: 'server/server', app: 'DB'}
 ]
 
@@ -47,7 +47,7 @@ module.exports = {
   sslFiles,
   hostsJSONPath,
 
-  runSystemConfigs,
+  serviceList,
   runFrontendConfigs,
 
   mainConfigs,
