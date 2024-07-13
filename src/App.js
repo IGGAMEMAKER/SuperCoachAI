@@ -1260,20 +1260,43 @@ class RacingPage extends Component {
         break;
     }
 
+    const stageRender = (i) => {
+      const isColumnActive = this.state.stage >= i
+      const isGameOn = this.state.color !== COLOR_GRAY
+      const activeColor = this.state.color == COLOR_RED ? 'red' : 'green'
+      let color = 'gray'
+
+      if (isGameOn) {
+        if (isColumnActive) {
+          color = activeColor
+        }
+      }
+
+      return <div className={"light-strip"}>
+        <div className={`light`}></div>
+        <div className={`light`}></div>
+        <div className={`light ${color}`}></div>
+        <div className={`light ${color}`}></div>
+      </div>
+    }
 
     return <div onClick={() => this.onTap()}>
       <div className={"racing-title"}>RACING GAME!</div>
       <div className={"racing-subtitle"}>{phrase}</div>
 
 
-      <div className={"light-strip"}>
-        <div className={`light ${color}`}></div>
-        <div className={`light ${color}`}></div>
-        <div className={`light ${color}`}></div>
-        <div className={`light ${color}`}></div>
-      </div>
+      {/*<div className={"light-strip"}>*/}
+      {/*  <div className={`light ${color}`}></div>*/}
+      {/*  <div className={`light ${color}`}></div>*/}
+      {/*  <div className={`light ${color}`}></div>*/}
+      {/*  <div className={`light ${color}`}></div>*/}
+      {/*</div>*/}
+      {stageRender(0)}
+      {stageRender(1)}
+      {stageRender(2)}
+      {stageRender(3)}
       <h2>Your result: 0.125s</h2>
-      ${this.state.stage} ${this.state.color}
+      {this.state.stage} {this.state.color}
     </div>
   }
 }
