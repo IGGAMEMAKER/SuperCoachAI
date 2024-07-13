@@ -1292,7 +1292,9 @@ class RacingPage extends Component {
       {/*  <div className={`light ${color}`}></div>*/}
       {/*  <div className={`light ${color}`}></div>*/}
       {/*</div>*/}
-      {stageRender(0)}
+      <div className={"racing-strip-container"}>
+        {stageRender(0)}
+      </div>
       {/*{stageRender(1)}*/}
       {/*{stageRender(2)}*/}
       {/*{stageRender(3)}*/}
