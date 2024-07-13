@@ -1205,10 +1205,25 @@ class RacingPage extends Component {
   }
 
   toNextStage =() => {
-    if (this.state.stage) {
-      this.setState({
-        stage: this.state.stage + 1
-      })
+    const stage = this.state.stage;
+
+    if (this.state.color === COLOR_RED) {
+      const nextWillBeGreen = stage >= 2
+      const timeToGreen = stage === 3
+
+      if (!nextWillBeGreen) {
+        this.setState({stage: stage + 1})
+
+        setTimeout(this.toNextStage, 300)
+      }
+
+      if (nextWillBeGreen) {
+        setTimeout(this.toNextStage, 300 + Math.random() * 400)
+      }
+
+      if (timeToGreen) {
+        this.setState({greenedAt: Date.now()})
+      }
     }
   }
 
@@ -1218,7 +1233,8 @@ class RacingPage extends Component {
       stage: 0
     })
 
-    this.toNextStage()
+    // setTimeout(this.toNextStage, 300)
+    // this.toNextStage()
   }
 
   restartGame = () => {
@@ -1227,7 +1243,9 @@ class RacingPage extends Component {
   }
 
   showScore = () => {
-
+    this.setState({
+      score: (Date.now() - this.state.greenedAt) / 1000
+    })
   }
 
   resetGame = () => {
@@ -1265,7 +1283,7 @@ class RacingPage extends Component {
     const stageRender = (i) => {
       const isColumnActive = this.state.stage >= i
       const isGameOn = this.state.color !== COLOR_GRAY
-      const activeColor = this.state.color == COLOR_RED ? 'red' : 'green'
+      const activeColor = this.state.color === COLOR_RED ? 'red' : 'green'
       let color = 'gray'
 
       if (isGameOn) {
