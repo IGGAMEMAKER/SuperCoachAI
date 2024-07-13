@@ -1234,7 +1234,8 @@ class RacingPage extends Component {
       stage: 0
     })
 
-    this.toNextStage()
+    setTimeout(this.toNextStage, 50)
+    // this.toNextStage()
   }
 
   showScore = () => {
@@ -1316,7 +1317,8 @@ class RacingPage extends Component {
         {stageRender(2)}
         {/*{stageRender(3)}*/}
       </div>
-      <h2>Your result: ${this.state.score}s</h2>
+      {/*<h2>Your result: {this.state.score}s</h2>*/}
+      <h2>{this.state.score}s</h2>
       {this.state.stage} {this.state.color}
     </div>
   }
