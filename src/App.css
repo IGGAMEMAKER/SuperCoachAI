@@ -698,10 +698,15 @@ button.remove {
   border-radius: 100%;
   background: #222;
   margin: 10px;
+
+  height: 74px;
+  width: 74px;
 }
 .light-strip {
   margin: 0 5px;
   border-radius: 14px;
 
   background: black;
+  height: 350px;
+  width: 94px;
 }
