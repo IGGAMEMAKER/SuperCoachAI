@@ -1231,16 +1231,10 @@ class RacingPage extends Component {
   startGame = () => {
     this.setState({
       color: COLOR_RED,
-      stage: -1
+      stage: 0
     })
 
-    // setTimeout(this.toNextStage, 300)
     this.toNextStage()
-  }
-
-  restartGame = () => {
-    // restart = start + "too early" phrase
-    this.startGame()
   }
 
   showScore = () => {
@@ -1250,10 +1244,13 @@ class RacingPage extends Component {
   }
 
   resetGame = () => {
+    // restart = start + "too early" phrase
+    // this.startGame()
     this.setState({
       stage: 0,
-
     })
+
+    this.startGame()
   }
 
   onTap = () => {
