@@ -1292,9 +1292,9 @@ class RacingPage extends Component {
       {/*  <div className={`light ${color}`}></div>*/}
       {/*</div>*/}
       {stageRender(0)}
-      {stageRender(1)}
-      {stageRender(2)}
-      {stageRender(3)}
+      {/*{stageRender(1)}*/}
+      {/*{stageRender(2)}*/}
+      {/*{stageRender(3)}*/}
       <h2>Your result: 0.125s</h2>
       {this.state.stage} {this.state.color}
     </div>
