@@ -1193,28 +1193,54 @@ const COLOR_RED = 1;
 const COLOR_GREEN = 2;
 class RacingPage extends Component {
   state = {
+    stage: 0,
     color: 0,
-  }
+    greenedAt: 0,
 
-  saveUsers() {
-    this.setState({})
+    score: 0,
   }
 
   componentWillMount() {
-    // storage.addChangeListener(() => {
-    //   console.log('store listener')
-    //   this.saveUsers()
-    // })
-    //
-    // this.loadUsers()
-    //
-    // setInterval(this.loadUsers, 10 * 1000)
+
+  }
+
+  toNextStage =() => {
+    if (this.state.stage) {
+      this.setState({
+        stage: this.state.stage + 1
+      })
+    }
   }
 
   startGame = () => {
     this.setState({
       color: COLOR_GRAY
     })
+
+    this.toNextStage()
+  }
+
+  restartGame = () => {
+    // restart = start + "too early" phrase
+  }
+
+  showScore = () => {
+
+  }
+
+  resetGame = () => {
+    this.setState({
+      stage: 0,
+
+    })
+  }
+
+  onTap = () => {
+    switch (this.state.color) {
+      case COLOR_GRAY: this.startGame(); break; // start
+      case COLOR_RED: this.resetGame(); break; // restart
+      case COLOR_GREEN: this.showScore(); break; // finish
+    }
   }
 
   render() {
@@ -1235,13 +1261,11 @@ class RacingPage extends Component {
     }
 
 
-    return <div>
-      <h1>
-        RACING GAME!
-      </h1>
-      <h2>{phrase}</h2>
+    return <div onClick={() => this.onTap()}>
+      <div className={"racing-title"}>RACING GAME!</div>
+      <div className={"racing-subtitle"}>${phrase}</div>
 
-      {/*<image width="100%" height="300px"></image>*/}
+
       <div className={"light-strip"}>
         <div className={`light ${color}`}></div>
         <div className={`light ${color}`}></div>

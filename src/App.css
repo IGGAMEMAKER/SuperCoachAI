@@ -710,3 +710,7 @@ button.remove {
   height: 350px;
   width: 94px;
 }
+
+.racing-title {
+  font-size: 64px;
+}
