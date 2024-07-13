@@ -6,12 +6,17 @@ const projectName = 'SuperCoachAI'
 const gitPath = `${projectDir}${projectName}`;
 const pathToConfigs = gitPath + '/CD'
 
-const frontendURL = 'http://supercoach.site/'
+// const frontendURL = 'http://supercoach.site/'
+const frontendURL = 'http://supercoach.site/racing'
 const goToFrontendRoot = ''
 
-const uploadCertificates = true
+const uploadCertificates = false
 const uploadDefaultFiles = true
-const uploadNginxConfig  = true
+const uploadNginxConfig  = false
+
+// const uploadCertificates = true
+// const uploadDefaultFiles = true
+// const uploadNginxConfig  = true
 
 const sslFiles = [
   "supercoach_site.crt",
