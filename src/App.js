@@ -1202,7 +1202,7 @@ class RacingPage extends Component {
 
   componentWillMount() {}
 
-  toNextStage =() => {
+  toNextStage = () => {
     const stage = this.state.stage;
 
     if (this.state.color === COLOR_RED) {
@@ -1235,7 +1235,6 @@ class RacingPage extends Component {
     })
 
     setTimeout(this.toNextStage, 50)
-    // this.toNextStage()
   }
 
   showScore = () => {
@@ -1303,7 +1302,8 @@ class RacingPage extends Component {
     return <div onClick={() => this.onTap()}>
       <div className={"racing-title"}>RACING GAME!</div>
       <div className={"racing-subtitle"}>{phrase}</div>
-
+      <br />
+      <br />
 
       {/*<div className={"light-strip"}>*/}
       {/*  <div className={`light ${color}`}></div>*/}
@@ -1318,8 +1318,8 @@ class RacingPage extends Component {
         {/*{stageRender(3)}*/}
       </div>
       {/*<h2>Your result: {this.state.score}s</h2>*/}
-      <h2>{this.state.score}s</h2>
-      {this.state.stage} {this.state.color}
+      {this.state.score > 0 ? <h2>{this.state.score}s</h2> : ''}
+      {/*{this.state.stage} {this.state.color}*/}
     </div>
   }
 }
