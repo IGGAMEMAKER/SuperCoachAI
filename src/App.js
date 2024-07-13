@@ -1230,11 +1230,11 @@ class RacingPage extends Component {
   startGame = () => {
     this.setState({
       color: COLOR_RED,
-      stage: 0
+      stage: -1
     })
 
     // setTimeout(this.toNextStage, 300)
-    // this.toNextStage()
+    this.toNextStage()
   }
 
   restartGame = () => {
