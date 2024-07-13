@@ -708,7 +708,7 @@ button.remove {
 
   background: black;
   height: 350px;
-  width: 94px;
+  /*width: 94px;*/
 
 
   flex: 0 0 25%;
