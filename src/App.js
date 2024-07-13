@@ -1223,6 +1223,7 @@ class RacingPage extends Component {
 
   restartGame = () => {
     // restart = start + "too early" phrase
+    this.startGame()
   }
 
   showScore = () => {
@@ -1294,10 +1295,10 @@ class RacingPage extends Component {
       {/*</div>*/}
       <div className={"racing-strip-container"}>
         {stageRender(0)}
+        {stageRender(1)}
+        {stageRender(2)}
+        {/*{stageRender(3)}*/}
       </div>
-      {/*{stageRender(1)}*/}
-      {/*{stageRender(2)}*/}
-      {/*{stageRender(3)}*/}
       <h2>Your result: 0.125s</h2>
       {this.state.stage} {this.state.color}
     </div>
