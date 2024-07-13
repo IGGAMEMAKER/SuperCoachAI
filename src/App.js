@@ -1188,15 +1188,16 @@ function App() {
   </div>
 }
 
+const COLOR_GRAY = 0;
+const COLOR_RED = 1;
+const COLOR_GREEN = 2;
 class RacingPage extends Component {
   state = {
-    users: []
+    color: 0,
   }
 
   saveUsers() {
-    this.setState({
-      users: storage.getUsers()
-    })
+    this.setState({})
   }
 
   componentWillMount() {
@@ -1210,15 +1211,41 @@ class RacingPage extends Component {
     // setInterval(this.loadUsers, 10 * 1000)
   }
 
+  startGame = () => {
+    this.setState({
+      color: COLOR_GRAY
+    })
+  }
+
   render() {
+    let color = 'gray'
+    let phrase = 'click to start'
+
+    switch (this.state.color) {
+      case COLOR_GRAY:
+        color='gray';
+        break;
+      case COLOR_RED:
+        color='red';
+        phrase = ''
+        break;
+      case COLOR_GREEN:
+        color='green';
+        break;
+    }
+
+
     return <div>
-      RACING
+      <h1>
+        RACING GAME!
+      </h1>
+      <h2>{phrase}</h2>
 
       {/*<image width="100%" height="300px"></image>*/}
       <div className={"light-strip"}>
-        <div className={"light"}></div>
-        <div className={"light"}></div>
-        <div className={"light"}></div>
+        <div className={`light ${color}`}></div>
+        <div className={`light ${color}`}></div>
+        <div className={`light ${color}`}></div>
       </div>
     </div>
   }
