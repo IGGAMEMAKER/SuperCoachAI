@@ -1263,7 +1263,7 @@ class RacingPage extends Component {
 
     return <div onClick={() => this.onTap()}>
       <div className={"racing-title"}>RACING GAME!</div>
-      <div className={"racing-subtitle"}>${phrase}</div>
+      <div className={"racing-subtitle"}>{phrase}</div>
 
 
       <div className={"light-strip"}>
@@ -1273,6 +1273,7 @@ class RacingPage extends Component {
         <div className={`light ${color}`}></div>
       </div>
       <h2>Your result: 0.125s</h2>
+      ${this.state.stage} ${this.state.color}
     </div>
   }
 }
