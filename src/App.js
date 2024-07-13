@@ -1200,25 +1200,21 @@ class RacingPage extends Component {
   }
 
   componentWillMount() {
-    storage.addChangeListener(() => {
-      console.log('store listener')
-      this.saveUsers()
-    })
-
-    this.loadUsers()
-
-    setInterval(this.loadUsers, 10 * 1000)
-  }
-
-  loadUsers = () => {
-    actions.loadUsersInAdminPanel(storage.getTelegramId())
+    // storage.addChangeListener(() => {
+    //   console.log('store listener')
+    //   this.saveUsers()
+    // })
+    //
+    // this.loadUsers()
+    //
+    // setInterval(this.loadUsers, 10 * 1000)
   }
 
   render() {
     var users = this.state.users;
 
     return <div>
-      {users.map(u => <UserView user={u} onAnswer={() => {this.loadUsers()}} />)}
+      RACING
     </div>
   }
 }

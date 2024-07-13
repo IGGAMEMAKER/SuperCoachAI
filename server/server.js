@@ -537,6 +537,7 @@ const saveHabitProgress = (req, res) => {
 }
 
 
+
 // ROUTES
 app.get('/', renderSPA)
 app.get('/edit', renderSPA)

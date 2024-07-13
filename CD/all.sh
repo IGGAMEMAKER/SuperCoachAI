@@ -1,4 +1,8 @@
-pm2 delete all
+#pm2 delete all
+pm2 delete LogServer
+pm2 delete Worker
+pm2 delete DB
+pm2 delete index
 pm2 flush
 
 sleep 1
