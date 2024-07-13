@@ -703,7 +703,7 @@ button.remove {
   width: 74px;
 }
 .light-strip {
-  margin: 0 5px;
+  /*margin: 0 5px;*/
   border-radius: 14px;
 
   background: black;

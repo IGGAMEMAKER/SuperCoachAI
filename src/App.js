@@ -1247,6 +1247,7 @@ class RacingPage extends Component {
         <div className={`light ${color}`}></div>
         <div className={`light ${color}`}></div>
       </div>
+      <div>Your result: 0.125s</div>
     </div>
   }
 }
