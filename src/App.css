@@ -712,5 +712,6 @@ button.remove {
 }
 
 .racing-title {
-  font-size: 64px;
+  padding-top: 10px;
+  font-size: 20px;
 }
