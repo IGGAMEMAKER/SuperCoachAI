@@ -1200,9 +1200,7 @@ class RacingPage extends Component {
     score: 0,
   }
 
-  componentWillMount() {
-
-  }
+  componentWillMount() {}
 
   toNextStage =() => {
     const stage = this.state.stage;
@@ -1212,14 +1210,16 @@ class RacingPage extends Component {
       const nextWillBeGreen = stage === 2
       const timeToGreen = stage === 3
 
+      const BASIC_DELAY = 500
+
       if (progressing) {
         this.setState({stage: stage + 1})
 
-        setTimeout(this.toNextStage, 300)
+        setTimeout(this.toNextStage, BASIC_DELAY)
       }
 
       if (nextWillBeGreen) {
-        setTimeout(this.toNextStage, 300 + Math.random() * 400)
+        setTimeout(this.toNextStage, BASIC_DELAY + Math.random() * 4000)
       }
 
       if (timeToGreen) {
