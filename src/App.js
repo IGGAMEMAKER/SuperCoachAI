@@ -1210,7 +1210,7 @@ class RacingPage extends Component {
       const nextWillBeGreen = stage === 2
       const timeToGreen = stage === 3
 
-      const BASIC_DELAY = 500
+      const BASIC_DELAY = 1000
 
       if (progressing) {
         this.setState({stage: stage + 1})
@@ -1219,12 +1219,12 @@ class RacingPage extends Component {
       }
 
       if (nextWillBeGreen) {
+        this.setState({stage: stage + 1})
         setTimeout(this.toNextStage, BASIC_DELAY + Math.random() * 4000)
       }
 
-      if (timeToGreen) {
+      if (timeToGreen)
         this.setState({greenedAt: Date.now(), color: COLOR_GREEN, stage: 0})
-      }
     }
   }
 
