@@ -1239,7 +1239,8 @@ class RacingPage extends Component {
 
   showScore = () => {
     this.setState({
-      score: (Date.now() - this.state.greenedAt) / 1000
+      score: (Date.now() - this.state.greenedAt) / 1000,
+      color: COLOR_GRAY
     })
   }
 
@@ -1315,7 +1316,7 @@ class RacingPage extends Component {
         {stageRender(2)}
         {/*{stageRender(3)}*/}
       </div>
-      <h2>Your result: 0.125s</h2>
+      <h2>Your result: ${this.state.score}s</h2>
       {this.state.stage} {this.state.color}
     </div>
   }
