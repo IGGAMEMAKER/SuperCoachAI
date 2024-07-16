@@ -1299,6 +1299,7 @@ class RacingPage extends Component {
       </div>
     }
 
+
     return <div onClick={() => this.onTap()}>
       <div className={"racing-title"}>RACING GAME!</div>
       <div className={"racing-subtitle"}>{phrase}</div>
@@ -1317,6 +1318,7 @@ class RacingPage extends Component {
         {stageRender(2)}
         {/*{stageRender(3)}*/}
       </div>
+      <br />
       {/*<h2>Your result: {this.state.score}s</h2>*/}
       {this.state.score > 0 ? <h2>{this.state.score}s</h2> : ''}
       {/*{this.state.stage} {this.state.color}*/}
