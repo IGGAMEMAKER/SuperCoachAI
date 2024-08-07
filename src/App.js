@@ -11,6 +11,8 @@ const TIME_FROM_MORNING = "9:00"
 const TIME_FROM_AFTERNOON = "12:00"
 const TIME_FROM_EVENING = "16:00"
 
+const SITE = 'decompose.site'
+
 const getLiteralDayOfWeek = (val) => {
   switch (val) {
     case 0: return 'SUN'

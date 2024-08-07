@@ -11,13 +11,13 @@ const pathToConfigs = gitPath + '/CD'
 const frontendURL = 'http://decompose.site/'
 const goToFrontendRoot = ''
 
-// const uploadCertificates = false
-// const uploadDefaultFiles = true
-// const uploadNginxConfig  = false
-
-const uploadCertificates = true
 const uploadDefaultFiles = true
-const uploadNginxConfig  = true
+const uploadCertificates = false
+const uploadNginxConfig  = false
+
+// const uploadCertificates = true
+// const uploadDefaultFiles = true
+// const uploadNginxConfig  = true
 
 const sslFiles = [
   // "supercoach_site.crt",
