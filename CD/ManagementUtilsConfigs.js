@@ -8,10 +8,10 @@ const pathToConfigs = gitPath + '/CD'
 
 // const frontendURL = 'http://supercoach.site/'
 // const frontendURL = 'http://supercoach.site/racing'
-const frontendURL = 'http://decompose.site/'
+const frontendURL = 'https://decompose.site/'
 const goToFrontendRoot = ''
 
-const uploadDefaultFiles = true
+const uploadDefaultFiles = false //true
 const uploadCertificates = false
 const uploadNginxConfig  = false
 
