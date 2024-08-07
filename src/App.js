@@ -111,7 +111,7 @@ function HabitEditor({habit, onCloseEditor}) {
       <div className="new-habit-footer-wrapper">
         <div className="new-habit-footer">
           <button className="remove" onClick={removeAndExit}>
-            <img alt="delete habit" src="https://supercoach.site/public/can.png" />
+            <img alt="delete habit" src="https://decompose.site/public/can.png" />
             Delete</button>
           <button className="primary" onClick={close}>Save</button>
         </div>
@@ -154,7 +154,7 @@ function HabitAdder({isOpen, onCloseAddingPopup}) {
 
   if (isHabitCreated) {
     return <div className="wrapper">
-      <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
+      <img alt="habit created" className="thumbs-up" src="https://decompose.site/public/thumbs_up_symbol.png" />
       {/*<div className="thumbs-up" />*/}
       <div className="habit-created-title">Habit added!</div>
       <div className="habit-created-description">You can edit this any time</div>
@@ -534,7 +534,7 @@ class Footer extends Component {
     // return ''
     const menu = (name, text, url, needsClick) => {
       var isChosen = document.location.pathname === url
-      var src = `https://supercoach.site/public/${name}${isChosen ? '-chosen' : ''}.png`
+      var src = `https://decompose.site/public/${name}${isChosen ? '-chosen' : ''}.png`
       var badge;
       if (needsClick)
         badge = <div className="footer-menu-click-badge" />
@@ -686,7 +686,7 @@ class QuizPageBase extends Component {
     if (this.state.passed) {
       return <div>
         <div className="wrapper">
-          <img alt="habit created" className="thumbs-up" src="https://supercoach.site/public/thumbs_up_symbol.png" />
+          <img alt="habit created" className="thumbs-up" src="https://decompose.site/public/thumbs_up_symbol.png" />
           <div className="habit-created-title" style={{marginBottom: '42px'}}>Thank you!</div>
           <Link to={"/"}>
             <button onClick={() => {actions.loadProfile()}} className="secondary full habit-created-close">{this.isFirstQuiz() ? 'Start' : 'Close'}</button>
@@ -1007,7 +1007,7 @@ class CoachPage extends Component {
           <div className="menu-title">Coach</div>
         </div>
         <div className="wrapper">
-          <img alt="session started" className="coach-session-started-already-img" src="https://supercoach.site/public/mobile.png" />
+          <img alt="session started" className="coach-session-started-already-img" src="https://decompose.site/public/mobile.png" />
           <div className="coach-title">
             You've already started a coaching session in Telegram chat!
           </div>
@@ -1036,7 +1036,7 @@ class CoachPage extends Component {
           Sessions take place in the Telegram chat.
           It's recommended to allocate about 25 minutes per session, but you can also respond throughout the day. If no reply is given within 12 hours, the coach will conclude the session.
         </div>
-        {/*<img alt="start session" className="coach-session-start-img" src="https://supercoach.site/public/medical_cross.png" />*/}
+        {/*<img alt="start session" className="coach-session-start-img" src="https://decompose.site/public/medical_cross.png" />*/}
         <Link to={"/quiz/2"}>
           <button className="primary full">Start session</button>
         </Link>
@@ -1109,7 +1109,7 @@ class MainPage extends Component {
     var startAddingHabitsImage;
     if (!habits.length) {
       startAddingHabitsImage = <div className="wrapper">
-        <img alt="no habits yet" className="no-habits-img" src="https://supercoach.site/public/magnifying_glass.png" />
+        <img alt="no habits yet" className="no-habits-img" src="https://decompose.site/public/magnifying_glass.png" />
         <div className="habit-created-description">Here's nothing yet...</div>
       </div>
     }
