@@ -7,7 +7,8 @@ const gitPath = `${projectDir}${projectName}`;
 const pathToConfigs = gitPath + '/CD'
 
 // const frontendURL = 'http://supercoach.site/'
-const frontendURL = 'http://supercoach.site/racing'
+// const frontendURL = 'http://supercoach.site/racing'
+const frontendURL = 'http://decompose.site/'
 const goToFrontendRoot = ''
 
 // const uploadCertificates = false
@@ -19,10 +20,14 @@ const uploadDefaultFiles = true
 const uploadNginxConfig  = true
 
 const sslFiles = [
-  "supercoach_site.crt",
-  "supercoach.site.key",
-  "supercoach_site_chain.crt",
-  "supercoach_site.ca-bundle"
+  // "supercoach_site.crt",
+  // "supercoach.site.key",
+  // "supercoach_site_chain.crt",
+  // "supercoach_site.ca-bundle"
+  "decompose_site.crt",
+  "decompose.site.key",
+  "decompose_site_chain.crt",
+  "decompose_site.ca-bundle"
 ]
 
 const mainConfigs = [
